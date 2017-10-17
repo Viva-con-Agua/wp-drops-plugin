@@ -22,6 +22,21 @@ class DropsDataHandler
         $this->dbConnection = $wpdb;
     }
 
+    public function persistTemporarySession($sessionData)
+    {
+
+        $time = $this->createExpiryTime();
+
+        return $this->dbConnection->insert(
+            Config::get('DB_SESSION_TABLE'),
+            array(
+                'temporary_session_id' => $sessionData['id'],
+                'user_session' => $sessionData['session'],
+                'expiry_timestamp' => $time
+            ));
+
+    }
+
     public function getTemporarySession($sessionId)
     {
         $sessionData = $this->dbConnection->get_results("SELECT * FROM " . Config::get('DB_SESSION_TABLE') . " WHERE temporary_session_id = '" . $sessionId . "'");
@@ -42,29 +57,51 @@ class DropsDataHandler
 
         $time = $this->createExpiryTime();
 
-        return $this->dbConnection->query(
-            $this->dbConnection->prepare(
-                "UPDATE `" . Config::get('DB_SESSION_TABLE') . "` 
-                SET `drops_session_id` = '%s',
-                `expiry_timestamp` = '%s',
-                `user_id` = %s
-                WHERE temporary_session_id = '%s'",
-                $dropsSessionId, $time, $userId, $temorarySessionId) );
+        return $this->dbConnection->update(
+            Config::get('DB_SESSION_TABLE'),
+            array(
+                'drops_session_id' => $dropsSessionId,
+                'user_id' => $userId,
+                'expiry_timestamp' => $time,
+            ),
+            array('temporary_session_id' => $temorarySessionId));
 
     }
 
-    public function persistTemporarySession($sessionArray)
+    public function persistAccessToken($temorarySessionId, $sessionData)
     {
 
         $time = $this->createExpiryTime();
 
-        return $this->dbConnection->query(
-            $this->dbConnection->prepare(
-                "INSERT IGNORE INTO `" . Config::get('DB_SESSION_TABLE') . "` 
-                ( `temporary_session_id`, `user_session`, `expiry_timestamp` ) VALUES 
-                (%s, %s, %s)",
-                $sessionArray['id'], $sessionArray['session'], $time) );
+        return $this->dbConnection->update(
+            Config::get('DB_SESSION_TABLE'),
+            array(
+                'token_type' => $sessionData['token_type'],
+                'access_token' => $sessionData['access_token'],
+                'refresh_token' => $sessionData['refresh_token'],
+                'expiry_timestamp' => $time,
+            ),
+            array('temporary_session_id' => $temorarySessionId));
 
+    }
+
+    public function createUser($userData)
+    {
+        return $this->dbConnection->insert(Config::get('DB_USER_TABLE'), $userData);
+    }
+
+    public function createUserMeta($userId, $userMetaData)
+    {
+        foreach ($userMetaData AS $key => $value) {
+            $this->dbConnection->insert(
+                Config::get('DB_USERMETA_TABLE'),
+                array(
+                    'user_id' => $userId,
+                    'meta_key' => $key,
+                    'meta_value' => $value
+                )
+            );
+        }
     }
 
     private function createExpiryTime()
@@ -72,21 +109,13 @@ class DropsDataHandler
         return date('Y-m-d H:i:s', strtotime('30 minute'));
     }
 
-    public function persistAccessToken($id, $response)
+    public function getUser($userData)
     {
-
-        $time = $this->createExpiryTime();
-
-        return $this->dbConnection->query(
-            $this->dbConnection->prepare(
-                "UPDATE `" . Config::get('DB_SESSION_TABLE') . "` 
-                SET `token_type` = '%s',
-                `access_token` = '%s',
-                `refresh_token` = '%s',
-                `expiry_timestamp` = '%s'
-                WHERE temporary_session_id = '%s'",
-                $response['token_type'], $response['access_token'], $response['refresh_token'], $time, $id) );
-
+        return $this->dbConnection->get_row(
+            'SELECT * ' .
+            'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
+            'WHERE ID = ' . $userData['ID']
+        );
     }
 
 }

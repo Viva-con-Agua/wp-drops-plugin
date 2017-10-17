@@ -122,7 +122,7 @@ class DropsConnector
 
         //$context  = stream_context_create($options);
         //$result = file_get_contents(Config::get('DROPS_ACCESSTOKEN_URL'), false, $context);
-        //$result = file_get_contents(self::DROPS_ACCESSTOKEN_URL, false, $context);
+
         $result = $this->fakeCall();
 
         if ($result === FALSE) {
@@ -230,8 +230,8 @@ class DropsConnector
     private function fakeCall()
     {
         $response = array(
-            "token_type" => "some_string",
-            "access_token" => "a random string",
+            "token_type" => "fdkfiuuuskdn48hf",
+            "access_token" => "stringarandomdasda",
             "expires_in" => 1212121212,
             "refresh_token" => "a random string"
         );
