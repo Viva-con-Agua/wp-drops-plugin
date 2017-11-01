@@ -55,6 +55,8 @@ class DropsDataHandler
     public function persistDropsSession($temorarySessionId, $dropsSessionId, $userId)
     {
 
+        $this->clearSessions($userId);
+
         $time = $this->createExpiryTime();
 
         return $this->dbConnection->update(
@@ -66,6 +68,12 @@ class DropsDataHandler
             ),
             array('temporary_session_id' => $temorarySessionId));
 
+    }
+
+    public function clearSessions($userId) {
+
+        $this->dbConnection->delete(Config::get('DB_SESSION_TABLE'), array('user_id' => $userId));
+        $this->dbConnection->delete(Config::get('DB_SESSION_TABLE'), array('expiry_timestamp < now()'));
     }
 
     public function persistAccessToken($temorarySessionId, $sessionData)
@@ -92,8 +100,9 @@ class DropsDataHandler
 
     public function createUserMeta($userId, $userMetaData)
     {
+        $return = array();
         foreach ($userMetaData AS $key => $value) {
-            $this->dbConnection->insert(
+            $result = $this->dbConnection->insert(
                 Config::get('DB_USERMETA_TABLE'),
                 array(
                     'user_id' => $userId,
@@ -101,7 +110,9 @@ class DropsDataHandler
                     'meta_value' => $value
                 )
             );
+            $return[$result] = true;
         }
+        return !isset($return[false]);
     }
 
     private function createExpiryTime()
@@ -115,6 +126,15 @@ class DropsDataHandler
             'SELECT * ' .
             'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
             'WHERE ID = ' . $userData['ID']
+        );
+    }
+
+    public function getAccessToken($userId)
+    {
+        return $this->dbConnection->get_var(
+            'SELECT access_token ' .
+            'FROM ' . Config::get('DB_SESSION_TABLE') . ' ' .
+            'WHERE user_id = ' . $userId
         );
     }
 

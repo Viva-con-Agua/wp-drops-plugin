@@ -1,5 +1,7 @@
 <?php
 
+require_once ('api/client/restclient.php');
+
 /**
  * Created by PhpStorm.
  * User: tobias
@@ -91,7 +93,6 @@ class DropsConnector
         // Trigger request
         $response = $this->requestAccessToken($parameters);
 
-        //
         $sessionId = $this->getParameter('sessionId', $params);
         $temporarySession = $this->dataHandler->getTemporarySession($sessionId);
         $this->dataHandler->persistAccessToken($sessionId, $response);
@@ -105,7 +106,7 @@ class DropsConnector
     /**
      * Creates HTTP request and receives the access token
      * @param $parameters
-     * @return array|mixed|object|string|void
+     * @return array|null
      */
     private function requestAccessToken($parameters)
     {
@@ -113,24 +114,18 @@ class DropsConnector
         // TODO Use the correct call to the DROPS URL to get the access token
 
         $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method'  => 'POST',
-                'content' => http_build_query($parameters)
-            )
+            'parameters' => $parameters
         );
 
-        //$context  = stream_context_create($options);
-        //$result = file_get_contents(Config::get('DROPS_ACCESSTOKEN_URL'), false, $context);
+        $restClient = new RestClient($options);
+        $response = $restClient->get(Config::get('DROPS_ACCESSTOKEN_URL'));
 
-        $result = $this->fakeCall();
-
-        if ($result === FALSE) {
-            $this->handleLoginRedirect();
-            die(__FILE__ . '#' . __CLASS__ . ':' . __FUNCTION__ . '#' . __LINE__);
+        if ($response->info->http_code == 200) {
+            return json_decode($response->response, true);
         }
 
-        return json_decode($result, true);
+        $this->handleLoginRedirect();
+        die();
 
     }
 
@@ -170,6 +165,7 @@ class DropsConnector
     {
 
         session_start();
+        session_regenerate_id(true);
 
         $_SESSION['url'] = $url;
         $temporarySession = [
@@ -225,9 +221,10 @@ class DropsConnector
 
     /**
      * Fakes the call to the drops API for token exchange
+     * // TODO REMOVE THIS FUNCTION AND ITS CALLS
      * @return string
      */
-    private function fakeCall()
+    public function fakeCall()
     {
         $response = array(
             "token_type" => "fdkfiuuuskdn48hf",
