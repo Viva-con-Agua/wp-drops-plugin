@@ -8,11 +8,11 @@
 class DropsUserCreator
 {
 
-    private $requiredUserData = array('ID', 'user_login', 'user_nicename', 'user_email', 'display_name', 'usermeta');
+    private $requiredUserData = array('user_login', 'user_nicename', 'user_email', 'display_name', 'usermeta');
     private $requiredUserMeta = array('nickname', 'first_name', 'last_name', 'mobile', 'residence', 'birthday', 'gender', 'nation', 'city', 'region');
 
     /**
-     * @var DropsDataHandler $dataHandler
+     * @var UserDataHandlerInterface $dataHandler
      */
     private $dataHandler;
 
@@ -30,17 +30,20 @@ class DropsUserCreator
      * Initializing function on calling the entry of an user
      * Checks if there is an existing user with the given id
      * If there is no user, a user with its usermeta data will be created
+     * @return DropsResponse
      */
     public function run()
     {
+
         // Check if userdata is complete
-        $isValid = $this->validateUserData();
+        $invalidFields = $this->validateUserData();
+        $isValid = empty($invalidFields);
 
         if (!$isValid) {
-            return array(
-                'code' => 400,
-                'message' => 'User could not be created! Missing parameters!'
-            );
+            return (new DropsResponse())
+                ->setCode(400)
+                ->setContext(__CLASS__)
+                ->setMessage('Missing parameters: ' . implode(", ", $invalidFields));
         }
 
         // Check if user already exists
@@ -48,42 +51,42 @@ class DropsUserCreator
 
         if (empty($user)) {
 
-            $isUserCreated = $this->createUser();
+            $userId = $this->createUser();
 
-            if (!$isUserCreated) {
-                return array(
-                    'code' => 400,
-                    'message' => 'User could not be created! Error during user creation'
-                );
+            if (!$userId) {
+                return (new DropsResponse())
+                    ->setCode(400)
+                    ->setContext(__CLASS__)
+                    ->setMessage('Database error during user creation! Parameters: ' . implode(', ', $this->userData));
             }
 
             $isUserMetaCreated = $this->createUserMeta();
 
             if (!$isUserMetaCreated) {
-                return array(
-                    'code' => 400,
-                    'message' => 'User could not be created! Error during usermeta creation'
-                );
+                return (new DropsResponse())
+                    ->setCode(400)
+                    ->setContext(__CLASS__)
+                    ->setMessage('Database error during usermeta creation! [ID => ' .  $userId . '] Parameters: ' . implode(', ', $this->userData));
             }
 
-        } else {
-            return array(
-                'code' => 400,
-                'message' => 'User already exists!'
-            );
+            return (new DropsResponse())
+                ->setCode(200)
+                ->setContext(__CLASS__)
+                ->setMessage('User has been created! [ID => ' .  $userId . ']');
+
         }
 
-        return array(
-            'code' => 200,
-            'message' => 'User has been created!'
-        );
+        return (new DropsResponse())
+            ->setCode(400)
+            ->setContext(__CLASS__)
+            ->setMessage('User already exists! [ID => ' .  $user->ID . ']');
 
     }
 
     /**
-     * @param DropsDataHandler $dataHandler
+     * @param UserDataHandlerInterface $dataHandler
      */
-    public function setDataHandler(DropsDataHandler $dataHandler)
+    public function setDataHandler(UserDataHandlerInterface $dataHandler)
     {
         $this->dataHandler = $dataHandler;
     }
@@ -152,24 +155,26 @@ class DropsUserCreator
 
     /**
      * Validate the received userdata for completeness
-     * @return bool
+     * @return array
      */
     private function validateUserData()
     {
 
+        $invalidFields = array();
+
         foreach ($this->requiredUserData as $entry) {
             if (!isset($this->userData[$entry])) {
-                return false;
+                $invalidFields[] = $entry;
             }
         }
 
         foreach ($this->requiredUserMeta as $entry) {
             if (!isset($this->userData['usermeta'][$entry])) {
-                return false;
+                $invalidFields[] = $entry;
             }
         }
 
-        return true;
+        return $invalidFields;
 
     }
 

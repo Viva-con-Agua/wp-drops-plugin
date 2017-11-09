@@ -1,6 +1,6 @@
 <?php
 
-require_once ('client/restclient.php');
+require_once 'client/restclient.php';
 
 /**
  * Class DropsUserUpater
@@ -13,7 +13,7 @@ class DropsUserUpdater
     private $requiredUserMeta = array('first_name', 'last_name', 'mobile', 'residence', 'birthday', 'gender', 'nation', 'city', 'region');
 
     /**
-     * @var DropsDataHandler $dataHandler
+     * @var UserDataHandlerInterface $dataHandler
      */
     private $dataHandler;
 
@@ -27,27 +27,45 @@ class DropsUserUpdater
      * Checks if there is an existing user with the given id
      * If there is no user, a user with its usermeta data will be created
      * @param $userId
-     * @return array
+     * @return DropsResponse
      */
     public function run($userId)
     {
+
+        $currentUserId = get_current_user_id();
+
+        $sessionDataHandler = new DropsSessionDataHandler();
+        $accessToken = $sessionDataHandler->getAccessToken($currentUserId);
+
+        if (empty($accessToken)) {
+            return (new DropsResponse())
+                ->setCode(401)
+                ->setContext(__CLASS__)
+                ->setMessage('Missing access token! [ID => ' .  $currentUserId . ']');
+        }
+
         // Create userdata in array
+
         $this->createUserData($userId);
 
-        $parameters = $this->dataHandler->getAccessToken($userId);
-
         $options = array(
-            'parameters' => array_merge($this->userData, $parameters)
+            'parameters' => array_merge($this->userData, array('access_token' => $accessToken))
         );
-
-        // TODO HIER DIE URL FÜR DAS UPDATEN DER USER IN DROPS EINFUEGEN
 
         $restClient = new RestClient($options);
         $response = $restClient->post(Config::get('DROPS_ACCESSTOKEN_URL'));
 
         if ($response->info->http_code == 200) {
-            die('Gut');
+            return (new DropsResponse())
+                ->setCode($response->info->http_code)
+                ->setContext(__CLASS__)
+                ->setMessage('Update for user successful! [ID => ' . $currentUserId . '; USER => ' .  $userId . ']');
         }
+
+        return (new DropsResponse())
+            ->setCode($response->info->http_code)
+            ->setContext(__CLASS__)
+            ->setMessage('User update failed! [ID => ' . $currentUserId . '; USER => ' .  $userId . '] Response message: ' . $response->error);
 
     }
 
@@ -73,6 +91,14 @@ class DropsUserUpdater
             $this->userData['usermeta'][$entry] = $userMeta;
         }
 
+    }
+
+    /**
+     * @param UserDataHandlerInterface $dataHandler
+     */
+    public function setDataHandler(UserDataHandlerInterface $dataHandler)
+    {
+        $this->dataHandler = $dataHandler;
     }
 
 }

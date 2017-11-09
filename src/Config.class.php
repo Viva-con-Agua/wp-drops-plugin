@@ -9,7 +9,6 @@
 class Config
 {
 
-    private static $SALT = '';
     private static $instance;
 
     private function __construct()
