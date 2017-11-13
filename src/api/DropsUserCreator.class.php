@@ -60,7 +60,7 @@ class DropsUserCreator
                     ->setMessage('Database error during user creation! Parameters: ' . implode(', ', $this->userData));
             }
 
-            $isUserMetaCreated = $this->createUserMeta();
+            $isUserMetaCreated = $this->createUserMeta($userId);
 
             if (!$isUserMetaCreated) {
                 return (new DropsResponse())
@@ -99,7 +99,6 @@ class DropsUserCreator
     {
 
         $userData = array(
-            'ID' => $this->userData['id'],
             'user_login' => $this->userData['user_login'],
             'user_pass' => '',
             'user_nicename' => $this->userData['user_nicename'],
@@ -118,7 +117,7 @@ class DropsUserCreator
     /**
      * Prepares the data and creates the usermeta data entry
      */
-    private function createUserMeta()
+    private function createUserMeta($userId)
     {
 
         $userMetaData = array(
@@ -149,7 +148,7 @@ class DropsUserCreator
             'region' => $this->userData['usermeta']['region']
         );
 
-        return $this->dataHandler->createUserMeta($this->userData['ID'], $userMetaData);
+        return $this->dataHandler->createUserMeta($userId, $userMetaData);
 
     }
 

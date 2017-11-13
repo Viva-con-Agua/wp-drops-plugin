@@ -98,6 +98,8 @@ class DropsConnector
             $this->handleLoginRedirect();
         }
 
+        // TODO CHECK IF USER WITH ID REALLY EXISTS
+
         $this->sessionDataHander->persistAccessToken($sessionId, $response);
         $this->loginUser($temporarySession['user_id']);
 

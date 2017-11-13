@@ -12,7 +12,8 @@ require_once 'src/api/server/DropsUserController.class.php';
 
 require_once 'src/api/DropsResponse.class.php';
 require_once 'src/api/DropsUserCreator.class.php';
-require_once 'src/api/DropsUserUpdater.class.php';
+require_once 'src/api/actions/DropsUserUpdater.class.php';
+require_once 'src/api/actions/DropsUserDeleter.class.php';
 require_once 'src/api/DropsConnector.class.php';
 
 require_once 'src/DropsSessionDataHandler.class.php';
@@ -20,11 +21,13 @@ require_once 'src/DropsUserDataHandler.class.php';
 
 require_once 'src/DropsLogger.class.php';
 
+require_once 'src/api/client/restclient.php';
+
 // Handling login of an existing user
 function handleDropsLogin() {
 
     if (!is_user_logged_in()) {
-        DropsSessionController::run();
+        (new DropsSessionController)->run();
     } else {
         $dataHandler = new DropsSessionDataHandler();
         if ($dataHandler->isSessionExpired(get_current_user_id())) {
@@ -38,13 +41,22 @@ function handleDropsLogin() {
 
 // Handling creation of a new user
 function handleDropsUserCreation() {
-    DropsUserController::run();
+    (new DropsUserController())->run();
 }
 
 // Handling update of an existing user
 function handleUserUpdate($userId) {
     $dataHandler = new DropsUserDataHandler();
     $userUpdater = new DropsUserUpdater();
+    $userUpdater->setDataHandler($dataHandler);
+    $response = $userUpdater->run($userId);
+    DropsController::logResponse($response);
+}
+
+// Handling the deletion of an user
+function handleUserDelete($userId) {
+    $dataHandler = new DropsUserDataHandler();
+    $userUpdater = new DropsUserDeleter();
     $userUpdater->setDataHandler($dataHandler);
     $response = $userUpdater->run($userId);
     DropsController::logResponse($response);
@@ -60,6 +72,7 @@ function handleUserLogout() {
 add_action('parse_request', 'handleDropsUserCreation');
 add_action('parse_request', 'handleDropsLogin' );
 add_action('profile_update', 'handleUserUpdate', 10, 1);
+add_action('delete_user', 'handleUserDelete', 10, 1);
 add_action('wp_logout', 'handleUserLogout');
 
 ?>

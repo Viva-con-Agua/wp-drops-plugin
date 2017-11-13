@@ -3,10 +3,12 @@
 /**
  * Class DropsResponse
  */
-class DropsController
+abstract class DropsController
 {
 
-    protected static function getParsedUrl() {
+    abstract public function run();
+
+    protected function getParsedUrl() {
         $actualLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         return parse_url($actualLink);
     }

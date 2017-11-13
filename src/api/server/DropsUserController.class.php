@@ -10,28 +10,24 @@ class DropsUserController extends DropsController
 
     const CREATE = '/usercreate/';
 
-    public static function run()
+    public function run()
     {
-        self::handleUserCreation();
+        $this->handleUserCreation();
     }
 
-    private static function handleUserCreation()
+    private function handleUserCreation()
     {
 
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        if (!$this->isRequestValid()) {
             return;
         }
 
-        $url = self::getParsedUrl();
+        $url = $this->getParsedUrl();
 
         switch ($url['path']) {
             case self::CREATE:
 
-                if ($_POST['hash'] !== Config::get('USER_ACCESS_HASH')) {
-                    return;
-                }
-
-                $userData = self::getFakeUserData();
+                $userData = $this->getFakeUserData();
 
                 $dataHandler = new DropsUserDataHandler();
                 $userReceiver = new DropsUserCreator($userData);
@@ -50,7 +46,7 @@ class DropsUserController extends DropsController
 
     }
 
-    private static function getFakeUserData()
+    private function getFakeUserData()
     {
         return array(
             'user_login' => 'tobichka',
@@ -71,6 +67,26 @@ class DropsUserController extends DropsController
                 'region' => '1'
             )
         );
+
+    }
+
+    /**
+     * @return bool
+     */
+    private function isRequestValid()
+    {
+
+        return true;
+
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            return false;
+        }
+
+        if ($_POST['hash'] !== Config::get('USER_ACCESS_HASH')) {
+            return false;
+        }
+
+        return true;
 
     }
 

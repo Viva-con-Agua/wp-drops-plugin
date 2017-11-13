@@ -12,18 +12,18 @@ class DropsSessionController extends DropsController
     const LOGIN = '/userlogin/';
     const ACCESS = '/useraccess/';
 
-    public static function run()
+    public function run()
     {
-        self::handleLogin();
+        $this->handleLogin();
     }
 
-    private static function handleLogin()
+    private function handleLogin()
     {
 
         $drops = new DropsConnector();
         $drops->setSessionDataHander(new DropsSessionDataHandler());
 
-        $url = self::getParsedUrl();
+        $url = $this->getParsedUrl();
 
         // TODO REMOVE THIS; THIS IS ONLY FOR TESTING THE ACCESS TOKEN REQUEST
         if ($url['path'] == '/access_url/') {
@@ -41,7 +41,6 @@ class DropsSessionController extends DropsController
                 break;
 
             case self::INITIAL:
-            default:
                 $drops->handleLoginRedirect();
             break;
         }
