@@ -67,12 +67,21 @@ class DropsUserDataHandler implements UserDataHandlerInterface
 
     }
 
-    public function getUser($userData)
+    public function getUserByEMail($email)
     {
         return $this->dbConnection->get_row(
             'SELECT * ' .
             'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
-            "WHERE user_email = '" . $userData['user_email'] . "'"
+            "WHERE user_email = '" . $email . "'"
+        );
+    }
+
+    public function getUserById($userId)
+    {
+        return $this->dbConnection->get_row(
+            'SELECT * ' .
+            'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
+            "WHERE ID = '" . $userId . "'"
         );
     }
 

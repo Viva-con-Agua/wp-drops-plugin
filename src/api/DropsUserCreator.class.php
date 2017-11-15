@@ -47,7 +47,7 @@ class DropsUserCreator
         }
 
         // Check if user already exists
-        $user = $this->dataHandler->getUser($this->userData);
+        $user = $this->dataHandler->getUserByEMail($this->userData['user_email']);
 
         if (empty($user)) {
 

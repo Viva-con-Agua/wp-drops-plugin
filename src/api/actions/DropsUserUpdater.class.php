@@ -5,7 +5,6 @@ require_once 'DropsUserAction.class.php';
 /**
  * Class DropsUserUpater
  * The class updates the user in drops
- * First it creates the userdata and posts it to drops
  */
 class DropsUserUpdater extends DropsUserAction
 {

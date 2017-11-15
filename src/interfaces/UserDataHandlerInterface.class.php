@@ -20,9 +20,16 @@ interface UserDataHandlerInterface
 
     /**
      * Returns the user data
-     * @param $userData
+     * @param $email
      * @return mixed
      */
-    public function getUser($userId);
+
+    public function getUserByEMail($email);
+    /**
+     * Returns the user data
+     * @param $userId
+     * @return mixed
+     */
+    public function getUserById($userId);
 
 }

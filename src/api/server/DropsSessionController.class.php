@@ -8,28 +8,25 @@ require_once 'DropsController.class.php';
 class DropsSessionController extends DropsController
 {
 
+    /** A call to this path will initialize the drops login routine */
     const INITIAL = '/autologin/';
+
+    /** After the drops login has succeeded, the user has to be redireted to this path */
     const LOGIN = '/userlogin/';
+
+    /** The user gets redirected to this path after getting the authorization code to get the access token */
     const ACCESS = '/useraccess/';
 
+    /**
+     * The routine checks which path is called and calls the corresponding function
+     */
     public function run()
-    {
-        $this->handleLogin();
-    }
-
-    private function handleLogin()
     {
 
         $drops = new DropsConnector();
         $drops->setSessionDataHander(new DropsSessionDataHandler());
 
         $url = $this->getParsedUrl();
-
-        // TODO REMOVE THIS; THIS IS ONLY FOR TESTING THE ACCESS TOKEN REQUEST
-        if ($url['path'] == '/access_url/') {
-            echo $drops->fakeCall();
-            exit;
-        }
 
         switch ($url['path']) {
             case self::LOGIN:
@@ -42,7 +39,7 @@ class DropsSessionController extends DropsController
 
             case self::INITIAL:
                 $drops->handleLoginRedirect();
-            break;
+                break;
         }
 
     }

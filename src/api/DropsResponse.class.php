@@ -78,8 +78,9 @@ class DropsResponse
     }
 
     /**
+     * Returns the response in the given format
      * @param $format
-     * @return array|mixed|string|void
+     * @return array|mixed|string
      */
     public function getFormat($format)
     {

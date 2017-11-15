@@ -3,10 +3,7 @@
 require_once 'client/restclient.php';
 
 /**
- * Created by PhpStorm.
- * User: tobias
- * Date: 29.09.2017
- * Time: 12:18
+ * Class DropsConnector
  */
 class DropsConnector
 {
@@ -98,7 +95,13 @@ class DropsConnector
             $this->handleLoginRedirect();
         }
 
-        // TODO CHECK IF USER WITH ID REALLY EXISTS
+        // Check if user really exists
+        $userDataHandler = new DropsUserDataHandler();
+        $user = $userDataHandler->getUserById($temporarySession['user_id']);
+
+        if (empty($user)) {
+            $this->handleLoginRedirect();
+        }
 
         $this->sessionDataHander->persistAccessToken($sessionId, $response);
         $this->loginUser($temporarySession['user_id']);
@@ -109,14 +112,21 @@ class DropsConnector
     }
 
     /**
+     * Setter for the datahandler
+     * @param SessionDataHandlerInterface $sessionDataHander
+     */
+    public function setSessionDataHander(SessionDataHandlerInterface $sessionDataHander)
+    {
+        $this->sessionDataHander = $sessionDataHander;
+    }
+
+    /**
      * Creates HTTP request and receives the access token
      * @param $parameters
      * @return array|null
      */
     private function requestAccessToken($parameters)
     {
-
-        // TODO Use the correct call to the DROPS URL to get the access token
 
         $options = array(
             'parameters' => $parameters
@@ -131,15 +141,6 @@ class DropsConnector
 
         $this->handleLoginRedirect();
 
-    }
-
-    /**
-     * Setter for the datahandler
-     * @param SessionDataHandlerInterface $sessionDataHander
-     */
-    public function setSessionDataHander(SessionDataHandlerInterface $sessionDataHander)
-    {
-        $this->sessionDataHander = $sessionDataHander;
     }
 
     /**
@@ -221,22 +222,6 @@ class DropsConnector
 
         do_action('wp_login', $user->user_login);
 
-    }
-
-    /**
-     * Fakes the call to the drops API for token exchange
-     * // TODO REMOVE THIS FUNCTION AND ITS CALLS
-     * @return string
-     */
-    public function fakeCall()
-    {
-        $response = array(
-            "token_type" => "fdkfiuuuskdn48hf",
-            "access_token" => "stringarandomdasda",
-            "expires_in" => 1212121212,
-            "refresh_token" => "a random string"
-        );
-        return json_encode($response);
     }
 
 }

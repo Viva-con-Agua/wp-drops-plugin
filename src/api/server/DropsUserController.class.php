@@ -3,19 +3,18 @@
 require_once 'DropsController.class.php';
 
 /**
- * Class DropsResponse
+ * Class DropsUserController
  */
 class DropsUserController extends DropsController
 {
 
+    /** Path to post userdata to, to create a user in the good ol' pool */
     const CREATE = '/usercreate/';
 
+    /**
+     * Checks if the parameters are valid and calls the user creation action
+     */
     public function run()
-    {
-        $this->handleUserCreation();
-    }
-
-    private function handleUserCreation()
     {
 
         if (!$this->isRequestValid()) {
@@ -27,7 +26,7 @@ class DropsUserController extends DropsController
         switch ($url['path']) {
             case self::CREATE:
 
-                $userData = $this->getFakeUserData();
+                $userData = $this->getUserData();
 
                 $dataHandler = new DropsUserDataHandler();
                 $userReceiver = new DropsUserCreator($userData);
@@ -46,48 +45,32 @@ class DropsUserController extends DropsController
 
     }
 
-    private function getFakeUserData()
-    {
-        return array(
-            'user_login' => 'tobichka',
-            'user_nicename' => 'tobi-chka',
-            'user_email' => 'tobi@chka.de',
-            'display_name' => 'Tobi Ka',
-            'user_name' => 'Tobias Chkastle',
-            'usermeta' => array(
-                'nickname' => 'Tobichi Kachi',
-                'first_name' => 'Tobias',
-                'last_name' => 'Chkastle',
-                'mobile' => '017670199782',
-                'residence' => 'Hamburg',
-                'birthday' => '585352800',
-                'gender' => 'male',
-                'nation' => '40',
-                'city' => '1',
-                'region' => '1'
-            )
-        );
-
-    }
-
     /**
      * @return bool
      */
     private function isRequestValid()
     {
 
-        return true;
-
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             return false;
         }
 
-        if ($_POST['hash'] !== Config::get('USER_ACCESS_HASH')) {
+        if (!isset($_POST['hash']) || $_POST['hash'] !== Config::get('USER_ACCESS_HASH')) {
+            return false;
+        }
+
+        if (!isset($_POST['user'])) {
             return false;
         }
 
         return true;
 
+    }
+
+    private function getUserData()
+    {
+        $userData = $_POST['user'];
+        return json_decode($userData, true);
     }
 
 }

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class DropsUserUpater
- * The class updates the user in drops
- * First it creates the userdata and posts it to drops
+ * Class DropsUserAction
+ * Abstract class for API Action calls to the drops service
+ * Provides the funtion of connecting to the datahandler, creating the user data and sending the reqeuest
  */
 abstract class DropsUserAction
 {
@@ -20,8 +20,8 @@ abstract class DropsUserAction
 
     /**
      * Initializing function on calling the entry of an user
-     * Checks if there is an existing user with the given id
-     * If there is no user, a user with its usermeta data will be created
+     * Checks if there is a access token for the existing user with the given id in the session table
+     * The user data parameters are created by its implementation, merged with the access token and amd sent to the API
      * @param $userId
      * @return DropsResponse
      */
