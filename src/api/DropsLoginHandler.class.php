@@ -5,13 +5,18 @@ require_once 'client/restclient.php';
 /**
  * Class DropsConnector
  */
-class DropsConnector
+class DropsLoginHandler
 {
 
     /**
-     * @var SessionDataHandlerInterface $sessionDataHander
+     * @var SessionDataHandlerInterface $sessionDataHandler
      */
-    private $sessionDataHander;
+    private $sessionDataHandler;
+
+    /**
+     * @var DropsMetaDataHandler $metaDataHandler
+     */
+    private $metaDataHandler;
 
     /**
      * Initializing function on users first visit on the page
@@ -25,10 +30,12 @@ class DropsConnector
         $session = $this->createTemporarySession($this->getCurrentUrl());
 
         // Store the current URL to it and redirect it to the login page
-        $this->sessionDataHander->persistTemporarySession($session);
+        $this->sessionDataHandler->persistTemporarySession($session);
 
         // Redirect to drops
-        $url = str_replace('<temporarySessionId>', $session['id'], Config::get('DROPS_LOGIN_URL'));
+        $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsLoginUrl'));
+        $url = str_replace('<clientId>', get_option('clientId'), $url);
+
         $this->redirect($url);
 
     }
@@ -41,27 +48,27 @@ class DropsConnector
      * We can call this the second step
      *
      * @param array $params
+     * @return string
      */
     public function handleLoginResponse($params)
     {
 
         // If there is no temporary session with the id, redirect to the login process
         $sessionId = $this->getParameter('sessionId', $params);
-        $temporarySession = $this->sessionDataHander->getTemporarySession($sessionId);
+        $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
-            $this->handleLoginRedirect();
+            $session = $this->createTemporarySession(get_site_url());
+            $this->sessionDataHandler->persistTemporarySession($session);
+            $sessionId = $session['id'];
         }
 
         // Read the parameters from the URL and persists them
         $dropsSessionId = $this->getParameter('dropsSessionId', $params);
-        $userId = $this->getParameter('userId', $params);
 
-        $this->sessionDataHander->persistDropsSessionId($sessionId, $dropsSessionId, $userId);
+        $this->sessionDataHandler->persistDropsSessionId($sessionId, $dropsSessionId);
 
-        // Redirect to drops
-        $url = str_replace('<temporarySessionId>', $sessionId, Config::get('DROPS_AUTHORIZATION_URL'));
-        $this->redirect($url);
+        return $sessionId;
 
     }
 
@@ -80,7 +87,7 @@ class DropsConnector
 
         $parameters = [
             'grant_type'    => 'authorization_code',
-            'client_id'     => Config::get('CLIENT_ID'),
+            'client_id'     => get_option('dropsClientId'),
             'code'          => $authorizationCode,
             'redirect_uri'  => ''
         ];
@@ -89,22 +96,37 @@ class DropsConnector
         $response = $this->requestAccessToken($parameters);
 
         $sessionId = $this->getParameter('sessionId', $params);
-        $temporarySession = $this->sessionDataHander->getTemporarySession($sessionId);
+        $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
             $this->handleLoginRedirect();
         }
 
+        $this->sessionDataHandler->persistAccessToken($sessionId, $response);
+        $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(0);
+
+        DropsController::logResponse($userDataResponse);
+
+        if ($userDataResponse->getCode() != 200) {
+            $this->handleLoginRedirect();
+        }
+
+        $userData = $userDataResponse->getResponse();
+
         // Check if user really exists
         $userDataHandler = new DropsUserDataHandler();
-        $user = $userDataHandler->getUserById($temporarySession['user_id']);
+        $user = $userDataHandler->getUserById($userData->id);
 
         if (empty($user)) {
             $this->handleLoginRedirect();
         }
 
-        $this->sessionDataHander->persistAccessToken($sessionId, $response);
-        $this->loginUser($temporarySession['user_id']);
+        $this->loginUser($userData->id);
+        $this->sessionDataHandler->persistUserId($sessionId, $userData->id);
+
+        if (isset($this->metaDataHandler)) {
+            $this->metaDataHandler->addMetaData();
+        }
 
         $url = $temporarySession['user_session']['url'];
         $this->redirect($url);
@@ -113,11 +135,24 @@ class DropsConnector
 
     /**
      * Setter for the datahandler
-     * @param SessionDataHandlerInterface $sessionDataHander
+     * @param SessionDataHandlerInterface $sessionDataHandler
+     * @return $this
      */
-    public function setSessionDataHander(SessionDataHandlerInterface $sessionDataHander)
+    public function setSessionDataHandler(SessionDataHandlerInterface $sessionDataHandler)
     {
-        $this->sessionDataHander = $sessionDataHander;
+        $this->sessionDataHandler = $sessionDataHandler;
+        return $this;
+    }
+
+    /**
+     * Setter for the datahandler
+     * @param DropsMetaDataHandler $metaDataHandler
+     * @return $this
+     */
+    public function setMetaDataHandler(DropsMetaDataHandler $metaDataHandler)
+    {
+        $this->metaDataHandler = $metaDataHandler;
+        return $this;
     }
 
     /**
@@ -133,8 +168,7 @@ class DropsConnector
         );
 
         $restClient = new RestClient($options);
-        $response = $restClient->get(Config::get('DROPS_ACCESSTOKEN_URL'));
-
+        $response = $restClient->get(get_option('dropsAccessUrl'));
         if ($response->info->http_code == 200) {
             return json_decode($response->response, true);
         }
@@ -167,6 +201,9 @@ class DropsConnector
      */
     private function createTemporarySession($url)
     {
+
+        session_destroy();
+        session_unset();
 
         session_start();
         session_regenerate_id(true);

@@ -14,6 +14,11 @@ abstract class DropsUserAction
     private $dataHandler;
 
     /**
+     * @var string $accessToken
+     */
+    private $accessToken;
+
+    /**
      * @var array $userData
      */
     private $userData;
@@ -30,10 +35,7 @@ abstract class DropsUserAction
 
         $currentUserId = get_current_user_id();
 
-        $sessionDataHandler = new DropsSessionDataHandler();
-        $accessToken = $sessionDataHandler->getAccessToken($currentUserId);
-
-        if (empty($accessToken)) {
+        if (empty($this->accessToken)) {
             return (new DropsResponse())
                 ->setCode(401)
                 ->setContext(__CLASS__)
@@ -45,32 +47,46 @@ abstract class DropsUserAction
         $this->userData = $this->createUserData($userId);
 
         $options = array(
-            'parameters' => array_merge($this->userData, array('access_token' => $accessToken, 'action' => $this->getAction()))
+            'parameters' => array_merge($this->userData, array('access_token' => $this->accessToken, 'action' => $this->getAction()))
         );
 
         $restClient = new RestClient($options);
-        $response = $restClient->post(Config::get('DROPS_ACCESSTOKEN_URL'));
+        $response = $restClient->post(get_option('dropsActionUrl'));
 
         if ($response->info->http_code == 200) {
             return (new DropsResponse())
                 ->setCode($response->info->http_code)
                 ->setContext(__CLASS__)
+                ->setResponse(json_decode($response->response))
                 ->setMessage('Action ' . $this->getAction() . ' successful! [ID => ' . $currentUserId . '; USER => ' .  $userId . ']');
         }
 
         return (new DropsResponse())
             ->setCode($response->info->http_code)
             ->setContext(__CLASS__)
+            ->setResponse(json_decode($response->response))
             ->setMessage('Action ' . $this->getAction() . ' failed! [ID => ' . $currentUserId . '; USER => ' .  $userId . '] Response message: ' . $response->error);
 
     }
 
     /**
+     * @param string $accessToken
+     * @return $this
+     */
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+        return $this;
+    }
+
+    /**
      * @param UserDataHandlerInterface $dataHandler
+     * @return $this
      */
     public function setDataHandler(UserDataHandlerInterface $dataHandler)
     {
         $this->dataHandler = $dataHandler;
+        return $this;
     }
 
     /**

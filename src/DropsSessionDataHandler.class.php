@@ -55,14 +55,13 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
      */
     public function getTemporarySession($sessionId)
     {
-        $sessionData = $this->dbConnection->get_row("SELECT * FROM " . Config::get('DB_SESSION_TABLE') . " WHERE temporary_session_id = '" . $sessionId . "'");
+        $session = $this->dbConnection->get_row("SELECT * FROM " . Config::get('DB_SESSION_TABLE') . " WHERE temporary_session_id = '" . $sessionId . "'", ARRAY_A);
 
-        if (empty($sessionData)) {
+        if (empty($session)) {
             return array();
         }
 
-        $session = (array)$sessionData;
-        $session['user_session'] = json_decode($sessionData->user_session, true);
+        $session['user_session'] = json_decode($session['user_session'], true);
 
         return $session;
     }
@@ -71,14 +70,10 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
      * Saves the drops session id send from drops to the session table
      * @param string $temorarySessionId
      * @param string $dropsSessionId
-     * @param int $userId
      * @return false|int
      */
-    public function persistDropsSessionId($temorarySessionId, $dropsSessionId, $userId)
+    public function persistDropsSessionId($temorarySessionId, $dropsSessionId)
     {
-        // Clear existing user
-        $this->clearSessions($userId);
-
         // Update the existing temporary session
 
         $time = $this->createExpiryTime();
@@ -86,8 +81,29 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
             Config::get('DB_SESSION_TABLE'),
             array(
                 'drops_session_id' => $dropsSessionId,
+                'expiry_timestamp' => $time
+            ),
+            array('temporary_session_id' => $temorarySessionId)
+        );
+    }
+
+    /**
+     * Saves the drops session id send from drops to the session table
+     * @param string $temorarySessionId
+     * @param string $userId
+     * @return false|int
+     */
+    public function persistUserId($temorarySessionId, $userId)
+    {
+        // Update the existing temporary session
+
+        $time = $this->createExpiryTime();
+
+        return $this->dbConnection->update(
+            Config::get('DB_SESSION_TABLE'),
+            array(
                 'user_id' => $userId,
-                'expiry_timestamp' => $time,
+                'expiry_timestamp' => $time
             ),
             array('temporary_session_id' => $temorarySessionId)
         );

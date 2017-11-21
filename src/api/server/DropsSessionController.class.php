@@ -23,18 +23,16 @@ class DropsSessionController extends DropsController
     public function run()
     {
 
-        $drops = new DropsConnector();
-        $drops->setSessionDataHander(new DropsSessionDataHandler());
+        $drops = (new DropsLoginHandler())
+            ->setSessionDataHandler(new DropsSessionDataHandler())
+            ->setMetaDataHandler(new DropsMetaDataHandler());
 
         $url = $this->getParsedUrl();
 
         switch ($url['path']) {
             case self::LOGIN:
-                $drops->handleLoginResponse($_GET);
-                break;
-
-            case self::ACCESS:
-                $drops->handleAuthorizationCodeResponse($_GET);
+                $sessionId = $drops->handleLoginResponse($_GET);
+                $drops->handleAuthorizationCodeResponse(array_merge($_GET, array('sessionId' => $sessionId)));
                 break;
 
             case self::INITIAL:

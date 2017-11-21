@@ -21,10 +21,9 @@ interface SessionDataHandlerInterface
      * Saves the drops session id send from drops to the session table
      * @param string $temorarySessionId
      * @param string $dropsSessionId
-     * @param int $userId
      * @return false|int
      */
-    public function persistDropsSessionId($temorarySessionId, $dropsSessionId, $userId);
+    public function persistDropsSessionId($temorarySessionId, $dropsSessionId);
 
     /**
      * Deletes exired sessions or sessions with the given user id
@@ -39,6 +38,14 @@ interface SessionDataHandlerInterface
      * @return false|int
      */
     public function persistAccessToken($temorarySessionId, array $sessionData);
+
+    /**
+     * Updates the existing temporary session and adds the data received from drops MS
+     * @param string $temorarySessionId
+     * @param int $userId
+     * @return false|int
+     */
+    public function persistUserId($temorarySessionId, $userId);
 
     /**
      * Read acccess token from the user

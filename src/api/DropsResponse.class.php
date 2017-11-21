@@ -9,6 +9,10 @@ class DropsResponse
     const JSON = 'json';
 
     /**
+     * @var array $response
+     */
+    private $response;
+    /**
      * @var string $context
      */
     private $context;
@@ -42,7 +46,25 @@ class DropsResponse
     }
 
     /**
-     * @return int
+     * @return array
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * @param array $response
+     * @return $this
+     */
+    public function setResponse($response)
+    {
+        $this->response = $response;
+        return $this;
+    }
+
+    /**
+     * @return string
      */
     public function getContext()
     {
@@ -50,7 +72,7 @@ class DropsResponse
     }
 
     /**
-     * @param int $code
+     * @param string $context
      * @return $this
      */
     public function setContext($context)

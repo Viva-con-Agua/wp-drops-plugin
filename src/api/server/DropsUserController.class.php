@@ -55,7 +55,7 @@ class DropsUserController extends DropsController
             return false;
         }
 
-        if (!isset($_POST['hash']) || $_POST['hash'] !== Config::get('USER_ACCESS_HASH')) {
+        if (!isset($_POST['hash']) || $_POST['hash'] !== get_option('dropsUserAccessHash')) {
             return false;
         }
 

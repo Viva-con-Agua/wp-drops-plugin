@@ -1,0 +1,1 @@
+<h2><?= __( 'Drops - CiviCRM user management integration', 'drops' ); ?></h2>
