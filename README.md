@@ -35,8 +35,6 @@ $_CONFIG['DB_USER_TABLE'] = ''; // predefined table from wordpress
 $_CONFIG['DB_USERMETA_TABLE'] = ''; // predefined table from wordpress
 $_CONFIG['DB_SESSION_TABLE'] = ''; // table will be created
 $_CONFIG['DB_META_TABLE'] = ''; // table will be created
-
-$_CONFIG['CLIENT_ID'] = '';
 ```
 
 After editing the config file, the necessary tables will be added to the database on plugin actionvation.
