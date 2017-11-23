@@ -27,40 +27,21 @@ To install the plugin, you have to navigate to the plugins folder of the wordpre
 git clone https://github.com/Viva-con-Agua/wp-drops-plugin.git
 ```
 
-After the repository has been cloned, it is necessary to add the session table to the database
-
-```
-CREATE TABLE `<SESSION_TABLE_NAME>` (
-  `temporary_session_id` varchar(64) NOT NULL,
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `user_session` text NOT NULL,
-  `drops_session_id` varchar(64) NOT NULL,
-  `token_type` varchar(64) DEFAULT NULL,
-  `access_token` text NOT NULL,
-  `refresh_token` varchar(64) DEFAULT NULL,
-  `expiry_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-```
-
-After the database has been updated, the third step is to go to the plugin folder and create the config.inc.php out of the 
+After clonig the repository to the plugins folder, the second step is to go to the plugin folder and create the config.inc.php out of the 
 config.inc.php.scel file and fill out the configuration for the database and the connection to drops
 
 ```
-$_CONFIG['DB_SESSION_TABLE'] = '';
-$_CONFIG['DB_USER_TABLE'] = '';
-$_CONFIG['DB_USERMETA_TABLE'] = '';
+$_CONFIG['DB_USER_TABLE'] = ''; // predefined table from wordpress
+$_CONFIG['DB_USERMETA_TABLE'] = ''; // predefined table from wordpress
+$_CONFIG['DB_SESSION_TABLE'] = ''; // table will be created
+$_CONFIG['DB_META_TABLE'] = ''; // table will be created
 
 $_CONFIG['CLIENT_ID'] = '';
-
-$_CONFIG['USER_ACCESS_HASH'] = '';
-$_CONFIG['DROPS_LOGFILE'] = '';
-
-$_CONFIG['DROPS_BASE_URL'] = '';
-$_CONFIG['DROPS_LOGIN_URL'] = '';
-$_CONFIG['DROPS_AUTHORIZATION_URL'] = '';
-$_CONFIG['DROPS_ACCESSTOKEN_URL'] = '';
 ```
+
+After editing the config file, the necessary tables will be added to the database on plugin actionvation.
+
+You can now see the menu point <b>Drops</b> in your Wordpress admin area. Go there and navigate to the settings tab. To set the required options for the communication with drops.
 
 Usage
 =======
@@ -71,26 +52,27 @@ After that it establishes an handshake to exchange the access token for further 
 
 - User creation:
 New user data will be pushed from the drops microservice to the plugin, which adds a new user.
+Just POST the parameters <i>hash</i> as a string for the vailation and the parameter <i>user</i> as a json data model
 The expected data model must be:
 
 ```
 {
-    'user_login' => 'exampleuser',
-    'user_nicename' => 'example-user',
-    'user_email' => 'example@user.de',
-    'display_name' => 'Example U.',
-    'user_name' => 'Example User',
+    'user_login' => 'exampleuser', // string
+    'user_nicename' => 'example-user', // string
+    'user_email' => 'example@user.de', // string
+    'display_name' => 'Example U.', // string
+    'user_name' => 'Example User', // string
     'usermeta' => {
-        'nickname' => 'Example User',
-        'first_name' => 'Example',
-        'last_name' => 'User',
-        'mobile' => '123456789',
-        'residence' => 'ExampleCity',
-        'birthday' => '585352800',
-        'gender' => 'male',
-        'nation' => '40',
-        'city' => '1',
-        'region' => '1'
+        'nickname' => 'Example User', // string
+        'first_name' => 'Example', // string
+        'last_name' => 'User', // string
+        'mobile' => '123456789', // string
+        'residence' => 'ExampleCity', // string
+        'birthday' => 585352800, // long
+        'gender' => 'male', // string
+        'nation' => 40, // int
+        'city' => 1, // int
+        'region' => 1 // int
     }
 }
 ```
@@ -109,7 +91,7 @@ sending the following data structure:
         ["last_name"] => string
         ["mobile"] => string
         ["residence"] => string
-        ["birthday"] => string
+        ["birthday"] => long
         ["gender"] => string 
         ["nation"] => int
         ["city"] => int 
