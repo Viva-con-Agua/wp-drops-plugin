@@ -10,4 +10,8 @@ $_CONFIG['DB_META_TABLE'] = 'wp_drops_meta';
 
 $_CONFIG['DROPS_LOGFILE'] = 'dropslog.txt';
 
+$_CONFIG['DROPS_HOSTS'] = [
+    'vca.informatik.hu-berlin.de/'
+];
+
 ?>
