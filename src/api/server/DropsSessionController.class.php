@@ -36,6 +36,7 @@ class DropsSessionController extends DropsController
                 break;
 
             case self::INITIAL:
+            default:
                 $drops->handleLoginRedirect();
                 break;
         }
