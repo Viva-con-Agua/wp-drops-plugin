@@ -20,7 +20,7 @@ if ( ! defined( 'DROPSHOME' ) ) {
     define( 'DROPSHOME', dirname(__FILE__));
 }
 
-//require_once 'install.php';
+require_once 'install.php';
 
 require_once 'src/api/server/DropsSessionController.class.php';
 require_once 'src/api/server/DropsUserController.class.php';
