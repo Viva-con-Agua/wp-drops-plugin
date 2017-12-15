@@ -34,7 +34,7 @@ class DropsLoginHandler
 
         // Redirect to drops
         $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsLoginUrl'));
-        $url = str_replace('<clientId>', get_option('clientId'), $url);
+        $url = str_replace('<clientId>', get_option('dropsClientId'), $url);
 
         $this->redirect($url);
 
