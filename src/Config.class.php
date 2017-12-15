@@ -11,7 +11,7 @@ class Config
 
     private function __construct()
     {
-        require_once dirname( __FILE__ ) . '\..\config.inc.php';
+        require_once DROPSHOME . '/config.inc.php';
         $this->_config = $_CONFIG;
     }
 
