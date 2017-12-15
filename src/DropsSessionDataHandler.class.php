@@ -1,7 +1,7 @@
 <?php
 
-require_once 'Config.class.php';
-require_once 'interfaces/SessionDataHandlerInterface.class.php';
+require_once dirname(__FILE__) . '/Config.class.php';
+require_once dirname(__FILE__) . '/interfaces/SessionDataHandlerInterface.class.php';
 
 /**
  * Created by PhpStorm.
