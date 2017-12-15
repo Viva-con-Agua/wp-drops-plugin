@@ -106,15 +106,6 @@ function createAdminMenu() {
     }
 }
 
-function allowedRedirectHosts($content) {
-    $redirectHosts = Config::get('DROPS_HOSTS');
-    array_merge($content, $redirectHosts);
-    return $content;
-}
-
-add_filter( 'allowed_redirect_hosts' , 'allowedRedirectHosts' , 10 );
-
-
 add_action('parse_request', 'handleDropsUserCreation');
 add_action('parse_request', 'handleDropsLogin' );
 add_action('admin_menu', 'createAdminMenu' );
