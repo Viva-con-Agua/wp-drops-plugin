@@ -30,6 +30,7 @@ class DropsSessionController extends DropsController
         $url = $this->getParsedUrl();
 
         switch ($url['path']) {
+            case self::ACCESS:
             case self::LOGIN:
                 $sessionId = $drops->handleLoginResponse($_GET);
                 $drops->handleAuthorizationCodeResponse(array_merge($_GET, array('sessionId' => $sessionId)));
