@@ -1,6 +1,6 @@
 <?php
 
-require_once DROPSPATH . '/src/api/client/restclient.php';
+require_once DROPSHOME . '/src/api/client/restclient.php';
 
 /**
  * Class DropsConnector
