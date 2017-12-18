@@ -34,7 +34,7 @@ class DropsLogger
             throw new InvalidArgumentException('Log file ' . $logfile . ' is not writeable');
         }
 
-        $this->logFile = ABSPATH . '/logs/' . $logfile;
+        $this->logFile = DROPSHOME . '/logs/' . $logfile;
 
     }
 
