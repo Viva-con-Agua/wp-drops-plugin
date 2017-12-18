@@ -8,14 +8,16 @@ require_once 'DropsController.class.php';
 class DropsSessionController extends DropsController
 {
 
+    const DROPSFNC = 'loginFnc';
+
     /** A call to this path will initialize the drops login routine */
-    const INITIAL = '/autologin/';
+    const INITIAL = 'autologin';
 
     /** After the drops login has succeeded, the user has to be redireted to this path */
-    const LOGIN = '/userlogin/';
+    const LOGIN = 'userlogin';
 
     /** The user gets redirected to this path after getting the authorization code to get the access token */
-    const ACCESS = '/useraccess/';
+    const ACCESS = 'useraccess';
 
     /**
      * The routine checks which path is called and calls the corresponding function
@@ -27,9 +29,18 @@ class DropsSessionController extends DropsController
             ->setSessionDataHandler(new DropsSessionDataHandler())
             ->setMetaDataHandler(new DropsMetaDataHandler());
 
-        $url = $this->getParsedUrl();
+        $parameter = $drops->getParameter(self::DROPSFNC, $_GET);
 
-        switch ($url['path']) {
+        if (empty($parameter)) {
+            $parameter = self::INITIAL;
+        }
+
+        $url = $this->getParsedUrl();
+        if (isset($url['path']) && stristr('wp-admin', $url['path'])) {
+            return;
+        }
+
+        switch ($parameter) {
             case self::ACCESS:
             case self::LOGIN:
                 $sessionId = $drops->handleLoginResponse($_GET);

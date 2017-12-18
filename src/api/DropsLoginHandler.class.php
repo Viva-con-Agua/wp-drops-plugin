@@ -184,7 +184,7 @@ class DropsLoginHandler
      * @param array $params Array of params
      * @return mixed
      */
-    private function getParameter($id, $params)
+    public function getParameter($id, $params)
     {
         if (!isset($params[$id])) {
             return null;
