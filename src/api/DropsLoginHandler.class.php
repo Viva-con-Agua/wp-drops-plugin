@@ -95,6 +95,10 @@ class DropsLoginHandler
         // Trigger request
         $response = $this->requestAccessToken($parameters);
 
+        if (empty($response)) {
+            $this->handleLoginRedirect();
+        }
+
         $sessionId = $this->getParameter('sessionId', $params);
         $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
@@ -169,11 +173,13 @@ class DropsLoginHandler
 
         $restClient = new RestClient($options);
         $response = $restClient->get(get_option('dropsAccessUrl'));
+
         if ($response->info->http_code == 200) {
             return json_decode($response->response, true);
+        } else {
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, '(' . $response->error . ') ');
+            return null;
         }
-
-        $this->handleLoginRedirect();
 
     }
 
