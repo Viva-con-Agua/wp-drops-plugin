@@ -177,6 +177,9 @@ class DropsLoginHandler
         if ($response->info->http_code == 200) {
             return json_decode($response->response, true);
         } else {
+            var_dump($response->error);
+            var_dump($response);
+            die();
             //(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, '(' . $response->error . ') ');
             return null;
         }
