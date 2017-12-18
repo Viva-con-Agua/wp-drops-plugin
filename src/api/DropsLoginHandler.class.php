@@ -202,8 +202,10 @@ class DropsLoginHandler
     private function createTemporarySession($url)
     {
 
-        session_destroy();
-        session_unset();
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            session_destroy();
+            session_unset();
+        }
 
         session_start();
         session_regenerate_id(true);
