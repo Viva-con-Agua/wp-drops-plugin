@@ -88,8 +88,7 @@ class DropsLoginHandler
         $parameters = [
             'grant_type'    => 'authorization_code',
             'client_id'     => get_option('dropsClientId'),
-            'code'          => $authorizationCode,
-            'redirect_uri'  => ''
+            'code'          => $authorizationCode
         ];
 
         // Trigger request
