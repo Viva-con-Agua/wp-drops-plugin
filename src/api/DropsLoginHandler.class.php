@@ -85,11 +85,13 @@ class DropsLoginHandler
         // Create parameters needed to request the access token
         $authorizationCode = $this->getParameter('authorizationCode', $params);
 
+        $actualLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
         $parameters = [
             'grant_type'    => 'authorization_code',
             'client_id'     => get_option('dropsClientId'),
             'code'          => $authorizationCode,
-            'redirect_uri'  => $actualLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"
+            'redirect_uri'  => urlencode($actualLink)
         ];
 
         // Trigger request
