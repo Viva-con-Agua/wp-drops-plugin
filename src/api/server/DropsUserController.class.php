@@ -9,7 +9,7 @@ class DropsUserController extends DropsController
 {
 
     /** Path to post userdata to, to create a user in the good ol' pool */
-    const CREATE = '/usercreate/';
+    const CREATE = 'usercreate';
 
     /**
      * Checks if the parameters are valid and calls the user creation action
@@ -21,9 +21,9 @@ class DropsUserController extends DropsController
             return;
         }
 
-        $url = $this->getParsedUrl();
+        $parameter = $this->getParameter(DropsSessionController::DROPSFNC, $_POST);
 
-        switch ($url['path']) {
+        switch ($parameter) {
             case self::CREATE:
 
                 $userData = $this->getUserData();
@@ -43,6 +43,22 @@ class DropsUserController extends DropsController
                 break;
         }
 
+    }
+
+    /**
+     * Gets a parameter out of an array
+     *
+     * @param string $id Index of the searched params
+     * @param array $params Array of params
+     * @return mixed
+     */
+    private function getParameter($id, $params)
+    {
+        if (!isset($params[$id])) {
+            return null;
+        }
+
+        return $params[$id];
     }
 
     /**
