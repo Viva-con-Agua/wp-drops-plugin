@@ -88,7 +88,8 @@ class DropsLoginHandler
         $parameters = [
             'grant_type'    => 'authorization_code',
             'client_id'     => get_option('dropsClientId'),
-            'code'          => $authorizationCode
+            'code'          => $authorizationCode,
+            'redirect_uri'  => $actualLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"
         ];
 
         // Trigger request
