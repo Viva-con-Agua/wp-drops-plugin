@@ -89,7 +89,7 @@ class DropsLoginHandler
             'grant_type'    => 'authorization_code',
             'client_id'     => get_option('dropsClientId'),
             'code'          => $authorizationCode,
-            'redirect_uri'  => 'https://vca.informatik.hu-berlin.de/pool/?loginFnc=useraccess&authorizationCode=' . $authorizationCode
+            'redirect_uri'  => 'https://vca.informatik.hu-berlin.de/pool/?loginFnc=useraccess&authorizationCode='
         ];
 
         // Trigger request
