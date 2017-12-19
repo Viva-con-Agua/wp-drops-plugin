@@ -172,7 +172,7 @@ class DropsLoginHandler
         );
 
         $restClient = new RestClient($options);
-        $response = $restClient->post(get_option('dropsAccessUrl'));
+        $response = $restClient->get(get_option('dropsAccessUrl'));
 
         if ($response->info->http_code == 200) {
             return json_decode($response->response, true);
