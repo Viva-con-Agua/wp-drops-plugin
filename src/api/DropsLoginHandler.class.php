@@ -107,15 +107,15 @@ class DropsLoginHandler
             $this->handleLoginRedirect();
         }
 
-        var_dump($response);
+        //var_dump($response);
 
 
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
         $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(0);
 
-        echo "<br/>";
-        var_dump($userDataResponse);
-        die();
+        //echo "<br/>";
+        //var_dump($userDataResponse);
+        //die();
 
         DropsController::logResponse($userDataResponse);
 
