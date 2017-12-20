@@ -128,8 +128,8 @@ class DropsLoginHandler
             $this->handleLoginRedirect();
         }
 
-        $this->loginUser($userData->ID);
-        $this->sessionDataHandler->persistUserId($sessionId, $userData->ID);
+        $this->loginUser($user->ID);
+        $this->sessionDataHandler->persistUserId($sessionId, $user->ID);
 
         if (isset($this->metaDataHandler)) {
             $this->metaDataHandler->addMetaData();
