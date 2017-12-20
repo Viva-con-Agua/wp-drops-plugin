@@ -119,12 +119,13 @@ class DropsLoginHandler
 
         $userData = $userDataResponse->getResponse();
         $userEmail = $userData->profiles[0]->email;
-        var_dump($userEmail);
-        die();
 
         // Check if user really exists
         $userDataHandler = new DropsUserDataHandler();
         $user = $userDataHandler->getUserByEMail($userEmail);
+
+        var_dump($user);
+        die();
 
         if (empty($user)) {
             $this->handleLoginRedirect();
