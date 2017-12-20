@@ -109,6 +109,7 @@ class DropsLoginHandler
             $this->handleLoginRedirect();
         }
 
+        echo "<br/>";
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
         $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(1);
 
