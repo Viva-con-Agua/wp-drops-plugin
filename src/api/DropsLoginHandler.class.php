@@ -95,8 +95,6 @@ class DropsLoginHandler
         // Trigger request
         $response = $this->requestAccessToken($parameters);
 
-        var_dump($response);
-
         if (empty($response)) {
             $this->handleLoginRedirect();
         }
@@ -109,7 +107,6 @@ class DropsLoginHandler
             $this->handleLoginRedirect();
         }
 
-        echo "<br/>";
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
         $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(1);
 
@@ -121,12 +118,13 @@ class DropsLoginHandler
         }
 
         $userData = $userDataResponse->getResponse();
-        var_dump($userData->profiles);
+        $userEmail = $userData->profiles[0]->email;
+        var_dump($userEmail);
         die();
 
         // Check if user really exists
         $userDataHandler = new DropsUserDataHandler();
-        $user = $userDataHandler->getUserById($userData->id);
+        $user = $userDataHandler->getUserByEMail($userEmail);
 
         if (empty($user)) {
             $this->handleLoginRedirect();
