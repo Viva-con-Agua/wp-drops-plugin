@@ -110,7 +110,7 @@ class DropsLoginHandler
         }
 
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
-        $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(0);
+        $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(1);
 
         echo "<br/>";
         var_dump($userDataResponse);
