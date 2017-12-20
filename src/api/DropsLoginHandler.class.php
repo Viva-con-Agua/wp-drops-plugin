@@ -124,15 +124,12 @@ class DropsLoginHandler
         $userDataHandler = new DropsUserDataHandler();
         $user = $userDataHandler->getUserByEMail($userEmail);
 
-        var_dump($user);
-        die();
-
         if (empty($user)) {
             $this->handleLoginRedirect();
         }
 
-        $this->loginUser($userData->id);
-        $this->sessionDataHandler->persistUserId($sessionId, $userData->id);
+        $this->loginUser($userData->ID);
+        $this->sessionDataHandler->persistUserId($sessionId, $userData->ID);
 
         if (isset($this->metaDataHandler)) {
             $this->metaDataHandler->addMetaData();
