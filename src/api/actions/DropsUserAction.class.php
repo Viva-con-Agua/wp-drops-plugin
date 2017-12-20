@@ -58,11 +58,10 @@ abstract class DropsUserAction
         $restClient = new RestClient($options);
         $response = $restClient->post(get_option('dropsActionUrl'));
 
+        var_dump($response);
+        die();
         if ($response->info->http_code == 200) {
 
-            var_dump(
-                $response->response
-            );
             return (new DropsResponse())
                 ->setCode($response->info->http_code)
                 ->setContext(__CLASS__)
