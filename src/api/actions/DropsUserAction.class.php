@@ -56,7 +56,7 @@ abstract class DropsUserAction
         );
 
         $restClient = new RestClient($options);
-        $response = $restClient->post(get_option('dropsActionUrl'));
+        $response = $restClient->get(get_option('dropsActionUrl'));
 
         var_dump($response);
         die();
