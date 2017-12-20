@@ -47,7 +47,12 @@ abstract class DropsUserAction
         $this->userData = $this->createUserData($userId);
 
         $options = array(
-            'parameters' => array_merge($this->userData, array('access_token' => $this->accessToken, 'action' => $this->getAction()))
+            'parameters' => array_merge($this->userData,
+                array(
+                    'client_id' => get_option('dropsClientId'),
+                    'access_token' => $this->accessToken,
+                    'action' => $this->getAction())
+                )
         );
 
         $restClient = new RestClient($options);
