@@ -268,7 +268,7 @@ class DropsLoginHandler
 
         update_user_meta( $user->ID, 'vca_asm_last_activity', time() );
 
-        do_action('wp_login', $user->user_login);
+        do_action('wp_login', $user->user_login, $user);
 
     }
 
