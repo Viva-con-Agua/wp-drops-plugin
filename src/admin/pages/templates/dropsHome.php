@@ -4,7 +4,10 @@
             <div class="postbox ">
                 <h3 class="no-hover"><span><?= __('Drops - the ultimate user management connector'); ?></span></h3>
                 <div class="inside"><p>
-<?php
+
+                        <a href="index.php">Hier</a>
+
+                        <?php
 
 
 
