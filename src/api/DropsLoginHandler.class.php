@@ -112,10 +112,6 @@ class DropsLoginHandler
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
         $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(1);
 
-        echo "<br/>";
-        var_dump($userDataResponse);
-        die();
-
         DropsController::logResponse($userDataResponse);
 
         if ($userDataResponse->getCode() != 200) {
@@ -123,6 +119,9 @@ class DropsLoginHandler
         }
 
         $userData = $userDataResponse->getResponse();
+
+        var_dump($userData);
+        die();
 
         // Check if user really exists
         $userDataHandler = new DropsUserDataHandler();
