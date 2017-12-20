@@ -109,9 +109,6 @@ function createAdminMenu() {
         new AdminMenu();
     }
 }
-$site_url = parse_url( site_url() );
-var_dump($site_url);
-die();
 
 add_action('parse_request', 'handleDropsUserCreation');
 add_action('parse_request', 'handleDropsLogin' );
