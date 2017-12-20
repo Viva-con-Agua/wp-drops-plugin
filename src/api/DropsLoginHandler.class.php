@@ -112,14 +112,18 @@ class DropsLoginHandler
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
         $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(1);
 
+        echo "<br/>";
+        var_dump($userDataResponse);
+        echo "<br/>";
+
         DropsController::logResponse($userDataResponse);
 
         if ($userDataResponse->getCode() != 200) {
+            die('GOT WRONG RESPONSE CODE: ' . $userDataResponse->getCode());
             $this->handleLoginRedirect();
         }
 
         $userData = $userDataResponse->getResponse();
-
         var_dump($userData);
         die();
 
