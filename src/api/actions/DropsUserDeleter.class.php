@@ -22,8 +22,7 @@ class DropsUserDeleter extends DropsUserAction
         $user = wp_get_current_user();
 
         return array(
-            'ID' => $userId,
-            'user_login' => $user->login,
+            'email' => $user->user_email,
         );
 
     }
@@ -41,7 +40,14 @@ class DropsUserDeleter extends DropsUserAction
      */
     protected function getActionUrl()
     {
-        return get_option('dropsUserDeleteUrl');
+
+        $user = wp_get_current_user();
+
+        $actionUrl = get_option('dropsUserDeleteUrl');
+        $actionUrl = str_replace('<id>', $user->ID, $actionUrl);
+
+        return $actionUrl;
+
     }
 
     /**

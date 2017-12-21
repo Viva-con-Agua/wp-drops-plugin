@@ -107,7 +107,7 @@ class DropsLoginHandler
         }
 
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
-        $userDataResponse = (new DropsUserReader())->setAccessToken($response['access_token'])->run(1);
+        $userDataResponse = (new DropsUserProfileReader())->setAccessToken($response['access_token'])->run(1);
 
         DropsController::logResponse($userDataResponse);
 

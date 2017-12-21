@@ -24,17 +24,15 @@ class DropsUserUpdater extends DropsUserAction
         $user = wp_get_current_user();
 
         $userData = array(
-            'ID' => $userId,
-            'user_login' => $user->login,
-            'user_email' => $user->user_email,
-            'user_name' => get_user_meta($userId, 'first_name', true) . ' ' . get_user_meta($userId, 'last_name', true),
-            'usermeta' => array()
+            'email' => $user->user_email,
+            'firstName' => get_user_meta($userId, 'first_name', true),
+            'lastName' => get_user_meta($userId, 'last_name', true),
+            'mobilePhone' => get_user_meta($userId, 'mobile', true),
+            'placeOfResidence' => get_user_meta($userId, 'residence', true),
+            'birthday' => get_user_meta($userId, 'birthday', true),
+            'sex' => get_user_meta($userId, 'gender', true),
+            'profileImageUrl' => get_user_meta($userId, 'last_name', true)
         );
-
-        foreach ($this->requiredUserMeta as $entry) {
-            $userMeta = get_user_meta($userId, $entry, true);
-            $userData['usermeta'][$entry] = $userMeta;
-        }
 
         return $userData;
 
