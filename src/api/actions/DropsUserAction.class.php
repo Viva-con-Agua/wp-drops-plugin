@@ -8,6 +8,11 @@
 abstract class DropsUserAction
 {
 
+    const ACTIONTYPE_GET = 'get';
+    const ACTIONTYPE_POST = 'post';
+    const ACTIONTYPE_PUT = 'put';
+    const ACTIONTYPE_DELETE = 'delete';
+
     /**
      * @var UserDataHandlerInterface $dataHandler
      */
@@ -56,7 +61,27 @@ abstract class DropsUserAction
         );
 
         $restClient = new RestClient($options);
-        $response = $restClient->get(get_option('dropsActionUrl'));
+
+        $actionUrl = $this->getActionUrl();
+
+        switch ($this->getActionType()) {
+
+            case self::ACTIONTYPE_PUT:
+                $response = $restClient->put($actionUrl);
+                break;
+            case self::ACTIONTYPE_POST:
+                $response = $restClient->post($actionUrl);
+                break;
+            case self::ACTIONTYPE_DELETE:
+                $response = $restClient->delete($actionUrl);
+                break;
+            case self::ACTIONTYPE_GET:
+            default:
+                $response = $restClient->get($actionUrl);
+                break;
+
+        }
+
         if ($response->info->http_code == 200) {
             return (new DropsResponse())
                 ->setCode($response->info->http_code)
@@ -104,5 +129,15 @@ abstract class DropsUserAction
      * Returns the action to add it to the parameters
      */
     abstract protected function getAction();
+
+    /**
+     * Returns the actionUrl
+     */
+    abstract protected function getActionUrl();
+
+    /**
+     * Returns the action to add it to the parameters
+     */
+    abstract protected function getActionType();
 
 }

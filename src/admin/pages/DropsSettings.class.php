@@ -57,10 +57,22 @@ class DropsSettings extends DropsMain
             'description' => __('The drops wordpress plugin will call this URL to receive the access token for the user', 'drops')
         );
 
-        $this->page['settings']['dropsActionUrl'] = array(
+        $this->page['settings']['dropsUserDeleteUrl'] = array(
+            'title' => __('Delete User URL of drops', 'drops'),
+            'value' => isset($_POST['dropsUserDeleteUrl']) ? $_POST['dropsUserDeleteUrl'] : get_option( 'dropsUserDeleteUrl' ),
+            'description' => __('The drops wordpress plugin will call this URL to trigger delete action for an user', 'drops')
+        );
+
+        $this->page['settings']['dropsUserReadUrl'] = array(
             'title' => __('Action URL of drops', 'drops'),
-            'value' => isset($_POST['dropsActionUrl']) ? $_POST['dropsActionUrl'] : get_option( 'dropsActionUrl' ),
-            'description' => __('The drops wordpress plugin will call this URL to trigger actions', 'drops')
+            'value' => isset($_POST['dropsUserReadUrl']) ? $_POST['dropsUserReadUrl'] : get_option( 'dropsUserReadUrl' ),
+            'description' => __('The drops wordpress plugin will call this URL to trigger read action', 'drops')
+        );
+
+        $this->page['settings']['dropsUserUpdateUrl'] = array(
+            'title' => __('Action URL of drops', 'drops'),
+            'value' => isset($_POST['dropsUserUpdateUrl']) ? $_POST['dropsUserUpdateUrl'] : get_option( 'dropsUserUpdateUrl' ),
+            'description' => __('The drops wordpress plugin will call this URL to trigger update action', 'drops')
         );
 
     }
@@ -77,7 +89,9 @@ class DropsSettings extends DropsMain
         update_option('dropsLoginUrl', $_POST['dropsLoginUrl']);
         update_option('dropsAuthUrl', $_POST['dropsAuthUrl']);
         update_option('dropsAccessUrl', $_POST['dropsAccessUrl']);
-        update_option('dropsActionUrl', $_POST['dropsActionUrl']);
+        update_option('dropsUserUpdateUrl', $_POST['dropsUserUpdateUrl']);
+        update_option('dropsUserReadUrl', $_POST['dropsUserReadUrl']);
+        update_option('dropsUserDeleteUrl', $_POST['dropsUserDeleteUrl']);
     }
 
 }

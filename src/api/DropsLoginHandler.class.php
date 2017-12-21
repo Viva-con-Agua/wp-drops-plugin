@@ -103,7 +103,6 @@ class DropsLoginHandler
         $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
-            die('NO TEMP SESSION');
             $this->handleLoginRedirect();
         }
 
@@ -113,7 +112,6 @@ class DropsLoginHandler
         DropsController::logResponse($userDataResponse);
 
         if ($userDataResponse->getCode() != 200) {
-            die('GOT WRONG RESPONSE CODE: ' . $userDataResponse->getCode());
             $this->handleLoginRedirect();
         }
 

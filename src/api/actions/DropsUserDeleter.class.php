@@ -36,4 +36,20 @@ class DropsUserDeleter extends DropsUserAction
         return self::ACTION_TYPE;
     }
 
+    /**
+     * Returns the actionUrl
+     */
+    protected function getActionUrl()
+    {
+        return get_option('dropsUserDeleteUrl');
+    }
+
+    /**
+     * Returns the action to add it to the parameters
+     */
+    protected function getActionType()
+    {
+        return parent::ACTIONTYPE_DELETE;
+    }
+
 }

@@ -48,4 +48,20 @@ class DropsUserUpdater extends DropsUserAction
         return self::ACTION_TYPE;
     }
 
+    /**
+     * Returns the actionUrl
+     */
+    protected function getActionUrl()
+    {
+        return get_option('dropsUserUpdateUrl');
+    }
+
+    /**
+     * Returns the action to add it to the parameters
+     */
+    protected function getActionType()
+    {
+        return parent::ACTIONTYPE_PUT;
+    }
+
 }
