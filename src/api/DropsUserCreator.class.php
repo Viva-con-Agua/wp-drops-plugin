@@ -66,20 +66,20 @@ class DropsUserCreator
                 return (new DropsResponse())
                     ->setCode(400)
                     ->setContext(__CLASS__)
-                    ->setMessage('Database error during usermeta creation! [ID => ' .  $userId . '] Parameters: ' . implode(', ', $this->userData));
+                    ->setMessage('Database error during usermeta creation! [ID: ' .  $userId . '] Parameters: ' . implode(', ', $this->userData));
             }
 
             return (new DropsResponse())
                 ->setCode(200)
                 ->setContext(__CLASS__)
-                ->setMessage('User has been created! [ID => ' .  $userId . ']');
+                ->setMessage('User has been created! [ID: ' .  $userId . ']');
 
         }
 
         return (new DropsResponse())
             ->setCode(400)
             ->setContext(__CLASS__)
-            ->setMessage('User already exists! [ID => ' .  $user->ID . ']');
+            ->setMessage('User already exists! [ID: ' .  $user->ID . ']');
 
     }
 
