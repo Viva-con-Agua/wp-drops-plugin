@@ -8,10 +8,8 @@ $_CONFIG['DB_USERMETA_TABLE'] = 'wp_usermeta';
 $_CONFIG['DB_SESSION_TABLE'] = 'wp_drops_sessions';
 $_CONFIG['DB_META_TABLE'] = 'wp_drops_meta';
 
-$_CONFIG['DROPS_LOGFILE'] = 'dropslog.txt';
+$_CONFIG['DB_DROPS_LOG'] = 'wp_drops_logs';
 
-$_CONFIG['DROPS_HOSTS'] = [
-    'vca.informatik.hu-berlin.de/'
-];
+$_CONFIG['DROPS_LOGFILE'] = 'dropslog.txt';
 
 ?>

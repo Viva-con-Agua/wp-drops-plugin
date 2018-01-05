@@ -45,9 +45,23 @@ class DropsLogger
      */
     public function log($level, $message, array $context = array())
     {
+        /*
+        * @var wpdb $dbConnection
+        */
+        global $wpdb;
+
         $logline = '[' . date('Y-m-d H:i:s') . '] ' . strtoupper($level) . ': ' . $this->interpolate($message, $context) . "\n";
         //file_put_contents($this->logFile, $logline, FILE_APPEND | LOCK_EX);
-        mail('t.kaestle@vivaconagua.org', 'DropsLogger logging logs', $logline);
+
+        $wpdb->insert(
+            Config::get('DB_DROPS_LOG'),
+            array(
+                'time' => date('Y-m-d H:i:s'),
+                'level' => strtoupper($level),
+                'message' => $logline
+            )
+        );
+
     }
 
     /**
