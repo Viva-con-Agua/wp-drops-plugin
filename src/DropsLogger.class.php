@@ -47,6 +47,7 @@ class DropsLogger
     {
         $logline = '[' . date('Y-m-d H:i:s') . '] ' . strtoupper($level) . ': ' . $this->interpolate($message, $context) . "\n";
         //file_put_contents($this->logFile, $logline, FILE_APPEND | LOCK_EX);
+        mail('t.kaestle@vivaconagua.org', 'DropsLogger logging logs', $logline);
     }
 
     /**
