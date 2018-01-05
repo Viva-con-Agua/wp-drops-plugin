@@ -40,10 +40,15 @@ class DropsUserCreator
         $isValid = empty($invalidFields);
 
         if (!$isValid) {
+
+            ob_start();
+            var_dump($this->userData);
+            $userData = ob_get_clean();
+
             return (new DropsResponse())
                 ->setCode(400)
                 ->setContext(__CLASS__)
-                ->setMessage('Missing parameters: ' . implode(", ", $invalidFields));
+                ->setMessage('Missing parameters: ' . implode(", ", $invalidFields) . ' | userdata: [' . $userData . ']');
         }
 
         // Check if user already exists

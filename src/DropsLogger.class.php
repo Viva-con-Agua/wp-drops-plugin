@@ -50,7 +50,7 @@ class DropsLogger
         */
         global $wpdb;
 
-        $logline = '[' . date('Y-m-d H:i:s') . '] ' . strtoupper($level) . ': ' . $this->interpolate($message, $context) . "\n";
+        $logline = '[' . date('Y-m-d H:i:s') . '] ' . strtoupper($level) . ': ' . $this->interpolate($message, $context);
         //file_put_contents($this->logFile, $logline, FILE_APPEND | LOCK_EX);
 
         $wpdb->insert(
