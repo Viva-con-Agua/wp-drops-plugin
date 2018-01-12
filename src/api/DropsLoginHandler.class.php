@@ -266,7 +266,9 @@ class DropsLoginHandler
         wp_set_auth_cookie($userId);
         update_user_caches($user);
 
-        update_user_meta( $user->ID, 'vca_asm_last_activity', time() );
+        update_user_meta( $userId, 'vca_asm_last_activity', time() );
+
+        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Did login user ' . $user->user_login . ' with id ' . $userId);
 
         do_action('wp_login', $user->user_login, $user);
 
