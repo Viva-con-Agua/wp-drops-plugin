@@ -60,9 +60,6 @@ abstract class DropsUserAction
                 )
         );
 
-        var_dump($options);
-        echo "<hr>";
-
         $restClient = new RestClient($options);
 
         $actionUrl = $this->getActionUrl();
@@ -84,9 +81,6 @@ abstract class DropsUserAction
                 break;
 
         }
-
-        var_dump($response);
-        die(__LINE__);
 
         if ($response->info->http_code == 200) {
             return (new DropsResponse())
