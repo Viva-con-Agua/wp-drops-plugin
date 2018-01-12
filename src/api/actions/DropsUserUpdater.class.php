@@ -57,6 +57,9 @@ class DropsUserUpdater extends DropsUserAction
         $actionUrl = get_option('dropsUserUpdateUrl');
         $actionUrl = str_replace('<id>', $uuid, $actionUrl);
 
+        echo $actionUrl;
+        echo "<hr>";
+
         return $actionUrl;
 
     }
