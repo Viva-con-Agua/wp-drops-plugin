@@ -43,7 +43,6 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
             array(
                 'temporary_session_id' => $sessionData['id'],
                 'user_session' => $sessionData['session'],
-                'drops_session_id' => (isset($sessionData['drops_session_id']) ? $sessionData['drops_session_id'] : 'hund'),
                 'expiry_timestamp' => $time
             ));
 
@@ -94,7 +93,7 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
      * @param string $userId
      * @return false|int
      */
-    public function persistUserId($temorarySessionId, $userId)
+    public function persistUserId($temorarySessionId, $userId, $uuid = '')
     {
         // Update the existing temporary session
 
@@ -104,6 +103,7 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
             Config::get('DB_SESSION_TABLE'),
             array(
                 'user_id' => $userId,
+                'drops_session_id' => $uuid,
                 'expiry_timestamp' => $time
             ),
             array('temporary_session_id' => $temorarySessionId)
@@ -136,6 +136,7 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
             array(
                 'token_type' => $sessionData['token_type'],
                 'access_token' => $sessionData['access_token'],
+                'drops_session_id' => isset($sessionData['drops_session_id']) ? $sessionData['drops_session_id'] : '',
                 'refresh_token' => $sessionData['refresh_token'],
                 'expiry_timestamp' => $time,
             ),

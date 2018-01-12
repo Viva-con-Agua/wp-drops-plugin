@@ -121,13 +121,6 @@ class DropsLoginHandler
         $userData = $userDataResponse->getResponse();
         $userEmail = $userData->profiles[0]->email;
 
-        $temporarySession['drops_session_id'] = $userData->id;
-
-        $this->sessionDataHandler->persistTemporarySession($temporarySession);
-
-        var_dump($temporarySession);
-        die(__LINE__);
-
         // Check if user really exists
         $userDataHandler = new DropsUserDataHandler();
         $user = $userDataHandler->getUserByEMail($userEmail);
@@ -137,7 +130,7 @@ class DropsLoginHandler
         }
 
         $this->loginUser($user->ID);
-        $this->sessionDataHandler->persistUserId($sessionId, $user->ID);
+        $this->sessionDataHandler->persistUserId($sessionId, $user->ID, $userData->id);
 
         if (isset($this->metaDataHandler)) {
             $this->metaDataHandler->addMetaData();
