@@ -39,7 +39,13 @@ abstract class DropsController
             default:
         }
 
-        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log($logLevel, '(' . $response->getContext() . ') ' . $response->getMessage());
+        $logLine = '(' . $response->getContext() . ') ' . $response->getMessage();
+
+        if (!empty($response->getResponse())) {
+            $logLine .= ' [' . $response->getResponse() . ']';
+        }
+
+        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log($logLevel, $logLine);
 
     }
 

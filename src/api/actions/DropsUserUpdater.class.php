@@ -31,7 +31,6 @@ class DropsUserUpdater extends DropsUserAction
             'placeOfResidence' => get_user_meta($userId, 'residence', true),
             'birthday' => get_user_meta($userId, 'birthday', true),
             'sex' => get_user_meta($userId, 'gender', true),
-            'profileImageUrl' => get_user_meta($userId, 'last_name', true)
         );
 
         return $userData;
