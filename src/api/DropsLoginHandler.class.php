@@ -126,7 +126,7 @@ class DropsLoginHandler
             array('uuid' => $userData->id)
         );
 
-        $temporarySession['session'] = $extendedSession;
+        $temporarySession['session'] = json_encode($extendedSession);
         $this->sessionDataHandler->persistTemporarySession($temporarySession);
 
         var_dump($temporarySession);
