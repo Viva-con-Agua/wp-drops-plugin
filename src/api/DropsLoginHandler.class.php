@@ -114,6 +114,7 @@ class DropsLoginHandler
         DropsController::logResponse($userDataResponse);
 
         if ($userDataResponse->getCode() != 200) {
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart from line . ' . __LINE__);
             $this->handleLoginRedirect();
         }
 

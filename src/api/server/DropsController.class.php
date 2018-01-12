@@ -41,7 +41,7 @@ abstract class DropsController
 
         $logLine = '(' . $response->getContext() . ') ' . $response->getMessage();
 
-        if (!empty($response->getResponse())) {
+        if (!empty($response->getResponse()) && is_string($response->getResponse())) {
             $logLine .= ' [' . $response->getResponse() . ']';
         }
 
