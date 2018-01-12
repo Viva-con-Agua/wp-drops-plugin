@@ -52,7 +52,7 @@ class DropsUserUpdater extends DropsUserAction
     {
 
         $userSession = (new DropsSessionDataHandler())->getTemporarySession(session_id());
-        $uuid = $userSession['uuid'];
+        $uuid = $userSession['drops_session_id'];
 
         $actionUrl = get_option('dropsUserUpdateUrl');
         $actionUrl = str_replace('<id>', $uuid, $actionUrl);

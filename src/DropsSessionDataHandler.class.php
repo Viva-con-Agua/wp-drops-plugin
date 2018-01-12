@@ -43,6 +43,7 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
             array(
                 'temporary_session_id' => $sessionData['id'],
                 'user_session' => $sessionData['session'],
+                'drops_session_id' => (isset($sessionData['uuid']) ? $sessionData['uuid'] : ''),
                 'expiry_timestamp' => $time
             ));
 

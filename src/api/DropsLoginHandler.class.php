@@ -121,12 +121,8 @@ class DropsLoginHandler
         $userData = $userDataResponse->getResponse();
         $userEmail = $userData->profiles[0]->email;
 
-        $extendedSession = array_merge(
-            $temporarySession['user_session'],
-            array('uuid' => $userData->id)
-        );
+        $temporarySession['uuid'] = $userData->id;
 
-        $temporarySession['session'] = json_encode($extendedSession);
         $this->sessionDataHandler->persistTemporarySession($temporarySession);
 
         var_dump($temporarySession);
