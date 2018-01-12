@@ -51,10 +51,11 @@ class DropsUserUpdater extends DropsUserAction
     protected function getActionUrl()
     {
 
-        $user = wp_get_current_user();
+        $userSession = (new DropsSessionDataHandler())->getTemporarySession(session_id());
+        $uuid = $userSession['uuid'];
 
         $actionUrl = get_option('dropsUserUpdateUrl');
-        $actionUrl = str_replace('<id>', $user->ID, $actionUrl);
+        $actionUrl = str_replace('<id>', $uuid, $actionUrl);
 
         return $actionUrl;
 

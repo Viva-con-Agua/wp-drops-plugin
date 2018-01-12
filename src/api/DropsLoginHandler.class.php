@@ -120,6 +120,13 @@ class DropsLoginHandler
         $userData = $userDataResponse->getResponse();
         $userEmail = $userData->profiles[0]->email;
 
+        $this->sessionDataHandler->persistTemporarySession(
+            array_merge(
+                $temporarySession,
+                array('uuid' => $userData->id)
+            )
+        );
+
         var_dump($userData->profiles[0]);die(__LINE__);
 
         // Check if user really exists
