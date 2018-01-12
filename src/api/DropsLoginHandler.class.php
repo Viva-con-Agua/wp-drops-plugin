@@ -120,6 +120,8 @@ class DropsLoginHandler
         $userData = $userDataResponse->getResponse();
         $userEmail = $userData->profiles[0]->email;
 
+        var_dump($userData->profiles[0]);die(__LINE__);
+
         // Check if user really exists
         $userDataHandler = new DropsUserDataHandler();
         $user = $userDataHandler->getUserByEMail($userEmail);
