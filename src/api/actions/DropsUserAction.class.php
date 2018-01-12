@@ -60,6 +60,8 @@ abstract class DropsUserAction
                 )
         );
 
+        var_dump($options);die();
+
         $restClient = new RestClient($options);
 
         $actionUrl = $this->getActionUrl();
@@ -89,8 +91,6 @@ abstract class DropsUserAction
                 ->setResponse(json_decode($response->response))
                 ->setMessage('Action ' . $this->getAction() . ' successful! [ID => ' . $currentUserId . '; USER => ' .  $userId . ']');
         }
-
-        var_dump($response->response);die(__LINE__);
 
         return (new DropsResponse())
             ->setCode($response->info->http_code)
