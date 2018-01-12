@@ -121,7 +121,7 @@ class DropsLoginHandler
         $userData = $userDataResponse->getResponse();
         $userEmail = $userData->profiles[0]->email;
 
-        $temporarySession['uuid'] = $userData->id;
+        $temporarySession['drops_session_id'] = $userData->id;
 
         $this->sessionDataHandler->persistTemporarySession($temporarySession);
 
