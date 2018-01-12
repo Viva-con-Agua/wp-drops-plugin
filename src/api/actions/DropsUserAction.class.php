@@ -90,6 +90,8 @@ abstract class DropsUserAction
                 ->setMessage('Action ' . $this->getAction() . ' successful! [ID => ' . $currentUserId . '; USER => ' .  $userId . ']');
         }
 
+        var_dump($response->response);die(__LINE__);
+
         return (new DropsResponse())
             ->setCode($response->info->http_code)
             ->setContext(__CLASS__)
@@ -132,6 +134,7 @@ abstract class DropsUserAction
 
     /**
      * Returns the actionUrl
+     * @return
      */
     abstract protected function getActionUrl();
 

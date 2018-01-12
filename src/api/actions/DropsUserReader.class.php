@@ -34,7 +34,14 @@ class DropsUserReader extends DropsUserAction
      */
     protected function getActionUrl()
     {
-        return get_option('dropsUserReadUrl');
+
+        $user = wp_get_current_user();
+
+        $actionUrl = get_option('dropsUserReadUrl');
+        $actionUrl = str_replace('<id>', $user->ID, $actionUrl);
+
+        return $actionUrl;
+
     }
 
     /**

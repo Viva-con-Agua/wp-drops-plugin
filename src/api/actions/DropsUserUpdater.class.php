@@ -50,7 +50,14 @@ class DropsUserUpdater extends DropsUserAction
      */
     protected function getActionUrl()
     {
-        return get_option('dropsUserUpdateUrl');
+
+        $user = wp_get_current_user();
+
+        $actionUrl = get_option('dropsUserUpdateUrl');
+        $actionUrl = str_replace('<id>', $user->ID, $actionUrl);
+
+        return $actionUrl;
+
     }
 
     /**
