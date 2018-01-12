@@ -60,7 +60,8 @@ abstract class DropsUserAction
                 )
         );
 
-        var_dump($options);die();
+        var_dump($options);
+        echo "<hr>";
 
         $restClient = new RestClient($options);
 
@@ -83,6 +84,9 @@ abstract class DropsUserAction
                 break;
 
         }
+
+        var_dump($response);
+        die(__LINE__);
 
         if ($response->info->http_code == 200) {
             return (new DropsResponse())
