@@ -122,7 +122,7 @@ class DropsLoginHandler
         $userEmail = $userData->profiles[0]->email;
 
         $extendedSession = array_merge(
-            $temporarySession['session'],
+            $temporarySession['user_session'],
             array('uuid' => $userData->id)
         );
 
