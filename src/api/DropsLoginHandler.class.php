@@ -96,6 +96,7 @@ class DropsLoginHandler
         $response = $this->requestAccessToken($parameters);
 
         if (empty($response)) {
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty response, will restart from line . ' . __LINE__);
             $this->handleLoginRedirect();
         }
 
@@ -103,6 +104,7 @@ class DropsLoginHandler
         $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart from line . ' . __LINE__);
             $this->handleLoginRedirect();
         }
 
@@ -178,7 +180,7 @@ class DropsLoginHandler
         if ($response->info->http_code == 200) {
             return json_decode($response->response, true);
         } else {
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, '(' . $response->error . ') ');
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, '(' . $response->info->http_code . ' ' . $response->error . ') URL: ' . get_option('dropsAccessUrl'));
             return null;
         }
 
