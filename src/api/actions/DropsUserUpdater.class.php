@@ -69,4 +69,8 @@ class DropsUserUpdater extends DropsUserAction
         return parent::ACTIONTYPE_PUT;
     }
 
+    protected function getFormat()
+    {
+        return self::FORMAT_JSON;
+    }
 }

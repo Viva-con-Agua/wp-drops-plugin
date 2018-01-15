@@ -52,4 +52,9 @@ class DropsUserReader extends DropsUserAction
         return parent::ACTIONTYPE_GET;
     }
 
+    protected function getFormat()
+    {
+        return self::FORMAT_ARRAY;
+    }
+
 }

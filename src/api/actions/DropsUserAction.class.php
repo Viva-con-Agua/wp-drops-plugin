@@ -13,6 +13,9 @@ abstract class DropsUserAction
     const ACTIONTYPE_PUT = 'put';
     const ACTIONTYPE_DELETE = 'delete';
 
+    const FORMAT_JSON = 'json';
+    const FORMAT_ARRAY = 'array';
+
     /**
      * @var UserDataHandlerInterface $dataHandler
      */
@@ -51,13 +54,21 @@ abstract class DropsUserAction
 
         $this->userData = $this->createUserData($userId);
 
+        $parameters = array_merge($this->userData,
+            array(
+                'client_id' => get_option('dropsClientId'),
+                'access_token' => $this->accessToken,
+                'action' => $this->getAction())
+        );
+
+        switch ($this->getFormat()) {
+            case self::FORMAT_JSON:
+                $parameters = json_encode($parameters);
+                break;
+        }
+
         $options = array(
-            'parameters' => array_merge($this->userData,
-                array(
-                    'client_id' => get_option('dropsClientId'),
-                    'access_token' => $this->accessToken,
-                    'action' => $this->getAction())
-                )
+            'parameters' => $parameters
         );
 
         $restClient = new RestClient($options);
@@ -144,5 +155,7 @@ abstract class DropsUserAction
      * Returns the action to add it to the parameters
      */
     abstract protected function getActionType();
+
+    abstract protected function getFormat();
 
 }

@@ -58,4 +58,9 @@ class DropsUserDeleter extends DropsUserAction
         return parent::ACTIONTYPE_DELETE;
     }
 
+    protected function getFormat()
+    {
+        return self::FORMAT_ARRAY;
+    }
+
 }
