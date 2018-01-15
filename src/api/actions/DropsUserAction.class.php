@@ -86,7 +86,9 @@ abstract class DropsUserAction
 
             case self::ACTIONTYPE_PUT:
                 $response = $restClient->put($actionUrl);
-                var_dump($actionUrl);
+                var_dump($restClient->options);
+                echo "<hr>";
+                var_dump($restClient->headers);
                 echo "<hr>";
                 var_dump($response);
                 die(__LINE__);
