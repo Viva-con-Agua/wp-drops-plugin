@@ -60,7 +60,7 @@ class DropsUserDeleter extends DropsUserAction
 
     protected function getFormat()
     {
-        return self::FORMAT_ARRAY;
+        return self::FORMAT_HTML;
     }
 
 }
