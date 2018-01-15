@@ -63,7 +63,7 @@ abstract class DropsUserAction
 
         switch ($this->getFormat()) {
             case self::FORMAT_JSON:
-                //$parameters = json_encode($parameters);
+                $parameters = json_encode($parameters);
                 $contentType = self::FORMAT_JSON;
                 break;
             default:
@@ -78,16 +78,17 @@ abstract class DropsUserAction
             )
         );
 
-        $restClient = new RestClient($options);
+        $restClient = new RestClient();
 
         $actionUrl = $this->getActionUrl();
 
         switch ($this->getActionType()) {
 
             case self::ACTIONTYPE_PUT:
-                $response = $restClient->put($actionUrl);
+                $response = $restClient->put($actionUrl, $parameters, array('Content-Type' => $contentType));
                 var_dump($restClient->options);
                 echo "<hr>";
+                $restClient->headers;
                 var_dump($restClient->headers);
                 echo "<hr>";
                 var_dump($response);
