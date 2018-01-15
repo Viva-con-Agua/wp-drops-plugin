@@ -63,7 +63,7 @@ abstract class DropsUserAction
 
         switch ($this->getFormat()) {
             case self::FORMAT_JSON:
-                $parameters = json_encode($parameters);
+                //$parameters = json_encode($parameters);
                 $contentType = self::FORMAT_JSON;
                 break;
             default:
