@@ -70,14 +70,21 @@ function handleDropsUserCreation() {
 function handleUserUpdate($userId) {
     $dataHandler = new DropsUserDataHandler();
     $userUpdater = new DropsUserUpdater();
+    $userImageUpdater = new DropsUserImageUpdater();
 
     $response = $userUpdater->setAccessToken(
         (new DropsSessionDataHandler())
             ->getAccessToken(
                 get_current_user_id()
             )
-    )->setDataHandler($dataHandler)
-    ->run($userId);
+    )->setDataHandler($dataHandler)->run($userId);
+
+    $response = $userImageUpdater->setAccessToken(
+        (new DropsSessionDataHandler())
+            ->getAccessToken(
+                get_current_user_id()
+            )
+    )->setDataHandler($dataHandler)->run($userId);
 
     DropsController::logResponse($response);
 }
