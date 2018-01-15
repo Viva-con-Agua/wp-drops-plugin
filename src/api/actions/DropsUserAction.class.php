@@ -79,10 +79,6 @@ abstract class DropsUserAction
 
             case self::ACTIONTYPE_PUT:
                 $response = $restClient->put($actionUrl, $parameters, array('Content-Type' => $contentType));
-                var_dump($this->userData);
-                echo "<hr>";
-                var_dump($response);
-                die(__LINE__);
                 break;
             case self::ACTIONTYPE_POST:
                 $response = $restClient->post($actionUrl, $parameters, array('Content-Type' => $contentType));
