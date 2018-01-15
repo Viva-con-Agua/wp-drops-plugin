@@ -54,6 +54,8 @@ abstract class DropsUserAction
 
         $this->userData = $this->createUserData($userId);
 
+        var_dump($this->userData);
+
         $parameters = array_merge($this->userData,
             array(
                 'client_id' => get_option('dropsClientId'),
@@ -61,18 +63,17 @@ abstract class DropsUserAction
                 'action' => $this->getAction())
         );
 
+        switch ($this->getFormat()) {
+            case self::FORMAT_JSON:
+                $parameters = json_encode($parameters);
+                break;
+        }
+
         $options = array(
             'parameters' => $parameters
         );
 
-        /** @var  $restClient */
         $restClient = new RestClient($options);
-
-        switch ($this->getFormat()) {
-            case self::FORMAT_JSON:
-                $restClient->set_option('format', "json");
-                break;
-        }
 
         $actionUrl = $this->getActionUrl();
 
