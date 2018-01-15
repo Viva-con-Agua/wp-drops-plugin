@@ -29,6 +29,7 @@ require_once 'src/api/DropsResponse.class.php';
 require_once 'src/api/DropsUserCreator.class.php';
 require_once 'src/api/actions/DropsUserReader.class.php';
 require_once 'src/api/actions/DropsUserUpdater.class.php';
+require_once 'src/api/actions/DropsUserImageUpdater.class.php';
 require_once 'src/api/actions/DropsUserProfileReader.class.php';
 require_once 'src/api/actions/DropsUserDeleter.class.php';
 require_once 'src/api/DropsLoginHandler.class.php';
