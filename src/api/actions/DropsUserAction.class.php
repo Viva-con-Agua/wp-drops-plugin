@@ -29,7 +29,7 @@ abstract class DropsUserAction
     /**
      * @var array $userData
      */
-    private $userData;
+    private $userData = array();
 
     /**
      * Initializing function on calling the entry of an user
@@ -53,6 +53,8 @@ abstract class DropsUserAction
         // Create userdata in array
 
         $this->userData = $this->createUserData($userId);
+
+        var_dump($this->userData);
 
         $parameters = array_merge($this->userData,
             array(
