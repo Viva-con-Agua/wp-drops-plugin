@@ -81,6 +81,12 @@ class DropsSettings extends DropsMain
             'description' => __('The drops wordpress plugin will call this URL to trigger update action', 'drops')
         );
 
+        $this->page['settings']['dropsUserImageUpdateUrl'] = array(
+            'title' => __('Update URL of drops (Profile Image)', 'drops'),
+            'value' => isset($_POST['dropsUserImageUpdateUrl']) ? $_POST['dropsUserImageUpdateUrl'] : get_option( 'dropsUserImageUpdateUrl' ),
+            'description' => __('The drops wordpress plugin will call this URL to trigger update action', 'drops')
+        );
+
     }
 
     public function render()
@@ -96,6 +102,7 @@ class DropsSettings extends DropsMain
         update_option('dropsAuthUrl', $_POST['dropsAuthUrl']);
         update_option('dropsAccessUrl', $_POST['dropsAccessUrl']);
         update_option('dropsUserUpdateUrl', $_POST['dropsUserUpdateUrl']);
+        update_option('dropsUserImageUpdateUrl', $_POST['dropsUserImageUpdateUrl']);
         update_option('dropsUserReadUrl', $_POST['dropsUserReadUrl']);
         update_option('dropsUserDeleteUrl', $_POST['dropsUserDeleteUrl']);
         update_option('dropsUserProfileUrl', $_POST['dropsUserProfileUrl']);

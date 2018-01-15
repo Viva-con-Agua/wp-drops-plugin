@@ -3,10 +3,10 @@
 require_once 'DropsUserAction.class.php';
 
 /**
- * Class DropsUserUpater
+ * Class DropsUserImageUpater
  * The class updates the user in drops
  */
-class DropsUserUpdater extends DropsUserAction
+class DropsUserImageUpdater extends DropsUserAction
 {
 
     const ACTION_TYPE = 'UPDATE';
@@ -21,14 +21,12 @@ class DropsUserUpdater extends DropsUserAction
 
         $user = wp_get_current_user();
 
+        $avatarInfo = get_user_meta($userId, 'simple_local_avatar', true);
+        $avatarUrl = empty($avatarInfo) ? '' : $avatarInfo['full'];
+
         $userData = array(
             'email' => $user->user_email,
-            'firstName' => get_user_meta($userId, 'first_name', true),
-            'lastName' => get_user_meta($userId, 'last_name', true),
-            'mobilePhone' => get_user_meta($userId, 'mobile', true),
-            'placeOfResidence' => get_user_meta($userId, 'residence', true),
-            'birthday' => (int)get_user_meta($userId, 'birthday', true),
-            'sex' => get_user_meta($userId, 'gender', true),
+            'url' => $avatarUrl
         );
 
         return $userData;
@@ -52,7 +50,7 @@ class DropsUserUpdater extends DropsUserAction
         $userSession = (new DropsSessionDataHandler())->getTemporarySession(session_id());
         $uuid = $userSession['drops_session_id'];
 
-        $actionUrl = get_option('dropsUserUpdateUrl');
+        $actionUrl = get_option('dropsUserImageUpdateUrl');
         $actionUrl = str_replace('<id>', $uuid, $actionUrl);
 
         return $actionUrl;
