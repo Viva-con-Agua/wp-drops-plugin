@@ -60,7 +60,7 @@ class DropsUserDeleter extends DropsUserAction
 
     protected function getFormat()
     {
-        return self::FORMAT_HTML;
+        return self::FORMAT_JSON;
     }
 
 }
