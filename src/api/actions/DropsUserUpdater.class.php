@@ -27,7 +27,7 @@ class DropsUserUpdater extends DropsUserAction
             'lastName' => get_user_meta($userId, 'last_name', true),
             'mobilePhone' => get_user_meta($userId, 'mobile', true),
             'placeOfResidence' => get_user_meta($userId, 'residence', true),
-            'birthday' => ((int)get_user_meta($userId, 'birthday', true) * 100),
+            'birthday' => ((int)get_user_meta($userId, 'birthday', true) * 1000),
             'sex' => get_user_meta($userId, 'gender', true),
         );
 
