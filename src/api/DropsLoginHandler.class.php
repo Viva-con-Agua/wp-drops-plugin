@@ -96,7 +96,7 @@ class DropsLoginHandler
         $response = $this->requestAccessToken($parameters);
 
         if (empty($response)) {
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty response, will restart from line . ' . __LINE__);
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty response, will restart routine from line ' . __LINE__);
             $this->handleLoginRedirect();
         }
 
@@ -104,7 +104,7 @@ class DropsLoginHandler
         $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart from line . ' . __LINE__);
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart routine from line ' . __LINE__);
             $this->handleLoginRedirect();
         }
 
@@ -114,7 +114,7 @@ class DropsLoginHandler
         DropsController::logResponse($userDataResponse);
 
         if ($userDataResponse->getCode() != 200) {
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart from line . ' . __LINE__);
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart routine from line ' . __LINE__);
             $this->handleLoginRedirect();
         }
 

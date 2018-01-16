@@ -2,6 +2,7 @@
 
 require_once 'DropsHome.class.php';
 require_once 'DropsSettings.class.php';
+require_once 'DropsStatistics.class.php';
 
 class DropsMain
 {
@@ -21,7 +22,7 @@ class DropsMain
 
         switch ($this->page['activeTab']) {
             case self::STATISTICS:
-                //(new DropsMetaStatistics())->render();
+                (new DropsStatistics())->render();
                 break;
             case self::SETTINGS:
                 (new DropsSettings())->render();

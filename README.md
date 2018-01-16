@@ -10,13 +10,13 @@ and user profile management.
 - It implements the user login of Viva con Agua supporters. If the supporter initially arrives on the pool, the user gets 
 redirected to the drops service for login/registration.
  
-- If the user executes a login, the service ensures the login in the Pool system.
+- If the user executes the login action, the service ensures the login into the Pool system.
  
 - When there is a registration of a new user in the drops microservice, it pushes the the necessary user data to the pool
 to provide synchronicity of the user data.
 
 - After the user updates it's profile in the pool, the plugin pushed the user data to the drops microservice to ensure 
-the synchronicity in reverse
+the synchronicity in reverse. Same on deleting an existing user from the pool.
 
 Install
 =======
@@ -35,11 +35,12 @@ $_CONFIG['DB_USER_TABLE'] = ''; // predefined table from wordpress
 $_CONFIG['DB_USERMETA_TABLE'] = ''; // predefined table from wordpress
 $_CONFIG['DB_SESSION_TABLE'] = ''; // table will be created
 $_CONFIG['DB_META_TABLE'] = ''; // table will be created
+$_CONFIG['DB_DROPS_LOG'] = ''; // table will be created
 ```
 
 After editing the config file, the necessary tables will be added to the database on plugin actionvation.
 
-You can now see the menu point <b>Drops</b> in your Wordpress admin area. Go there and navigate to the settings tab. To set the required options for the communication with drops.
+You can now see the menu point <b>Drops</b> in your Wordpress admin area. Go there and navigate to the settings tab. To set the required URL options for the communication with drops.
 
 Usage
 =======
@@ -75,26 +76,18 @@ The expected data model must be:
 }
 ```
 
-- User update: When a user profile is updated in wordpress, the plugin pushes the data to the drops service user a POST request
-sending the following data structure:
+- User update: When a user profile is updated in wordpress, the plugin pushes the data to the drops service user a PUT request
+sending the following JSON encoded data structure:
 
 ```
 { 
-    ["ID"] => int 
-    ["user_login"] => string 
-    ["user_email"] => string
-    ["user_name"] => string 
-    ["usermeta"] => { 
-        ["first_name"] => string
-        ["last_name"] => string
-        ["mobile"] => string
-        ["residence"] => string
-        ["birthday"] => long
-        ["gender"] => string 
-        ["nation"] => int
-        ["city"] => int 
-        ["region"] => int 
-    } 
+    ["email"] => string 
+    ["firstName"] => string
+    ["lastName"] => string 
+    ["mobilePhone"] => string 
+    ["placeOfResidence"] => string 
+    ["birthday"] => long (timestamp in ms)
+    ["sex"] => string 
 } 
     
 ```

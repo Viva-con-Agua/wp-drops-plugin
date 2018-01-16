@@ -73,6 +73,7 @@ function handleUserUpdate($userId) {
     $userUpdater = new DropsUserUpdater();
     $userImageUpdater = new DropsUserImageUpdater();
 
+    // Update the user itself
     $response = $userUpdater->setAccessToken(
         (new DropsSessionDataHandler())
             ->getAccessToken(
@@ -80,6 +81,9 @@ function handleUserUpdate($userId) {
             )
     )->setDataHandler($dataHandler)->run($userId);
 
+    DropsController::logResponse($response);
+
+    // Update the user image
     $response = $userImageUpdater->setAccessToken(
         (new DropsSessionDataHandler())
             ->getAccessToken(

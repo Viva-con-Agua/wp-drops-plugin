@@ -21,11 +21,20 @@ function installDropsDatabase()
           `expiry_timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
     );
+
+    $wpdb->query("CREATE TABLE `" . Config::get('DB_DROPS_LOG') . "` (
+          `id` int(11) NOT NULL,
+          `time` varchar(32) NOT NULL,
+          `level` varchar(16) NOT NULL,
+          `message` text NOT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;"
+    );
 }
 
 function removeDropsDatabase()
 {
     global $wpdb;
+    $wpdb->query("DROP TABLE `" . Config::get('DB_SESSION_TABLE') . "`");
     $wpdb->query("DROP TABLE `" . Config::get('DB_SESSION_TABLE') . "`");
 }
 

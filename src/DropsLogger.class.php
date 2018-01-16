@@ -24,7 +24,7 @@ class DropsLogger
     public function __construct($logfile)
     {
 
-        if (!file_exists($logfile)) {
+        /*if (!file_exists($logfile)) {
             if (!touch($logfile)) {
                 throw new InvalidArgumentException('Log file ' . $logfile . ' cannot be created');
             }
@@ -35,7 +35,7 @@ class DropsLogger
         }
 
         $this->logFile = DROPSHOME . '/logs/' . $logfile;
-
+*/
     }
 
     /**
