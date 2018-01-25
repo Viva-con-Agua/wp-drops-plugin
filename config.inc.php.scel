@@ -1,5 +1,7 @@
 <?php
 
+$_CONFIG['LOGIN_ENABLED'] = true;
+
 // Exitsting wordpress tables
 $_CONFIG['DB_USER_TABLE'] = 'wp_users';
 $_CONFIG['DB_USERMETA_TABLE'] = 'wp_usermeta';
@@ -11,5 +13,7 @@ $_CONFIG['DB_META_TABLE'] = 'wp_drops_meta';
 $_CONFIG['DB_DROPS_LOG'] = 'wp_drops_logs';
 
 $_CONFIG['DROPS_LOGFILE'] = 'dropslog.txt';
+
+$_CONFIG['NATS_SERVER'] = '';
 
 ?>
