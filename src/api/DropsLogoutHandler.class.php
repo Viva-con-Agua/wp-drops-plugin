@@ -15,20 +15,44 @@ class DropsLogoutHandler
 
         if (!empty($natsServer)) {
 
-            $connectionOptions = new \Nats\ConnectionOptions();
-            $connectionOptions->setHost($natsServer)->setPort(4222);
+            try {
 
-            $client = new \Nats\Connection($connectionOptions);
-            $client->connect();
+                $connectionOptions = new \Nats\ConnectionOptions();
+                $connectionOptions->setHost($natsServer)->setPort(4222);
 
-            $client->subscribe(
-                'LOGOUT',
-                function ($payload) {
-                    printf("Data: %s\r\n", $payload->getBody()[1]);
-                }
-            );
+                $client = new \Nats\Connection($connectionOptions);
+                $client->connect();
 
+                $client->subscribe(
+                    'LOGOUT',
+                    function ($payload) {
+                        $this->handleLogoutEvent($payload);
+                    }
+                );
+
+            } catch (Exception $e) {}
         }
 
+    }
+
+    /**
+     * Setter for the datahandler
+     * @param SessionDataHandlerInterface $sessionDataHandler
+     * @return $this
+     */
+    public function setSessionDataHandler(SessionDataHandlerInterface $sessionDataHandler)
+    {
+        $this->sessionDataHandler = $sessionDataHandler;
+        return $this;
+    }
+
+    private function handleLogoutEvent($payload)
+    {
+
+        $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
+
+        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+
+        //do_action('wp_login', $user->user_login, $user);
     }
 }

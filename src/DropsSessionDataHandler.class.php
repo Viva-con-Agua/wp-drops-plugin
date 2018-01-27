@@ -93,7 +93,7 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
      * @param string $userId
      * @return false|int
      */
-    public function persistUserId($temorarySessionId, $userId, $uuid = '')
+    public function persistUserId($temorarySessionId, $userId)
     {
         // Update the existing temporary session
 
@@ -103,7 +103,6 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
             Config::get('DB_SESSION_TABLE'),
             array(
                 'user_id' => $userId,
-                'drops_session_id' => $uuid,
                 'expiry_timestamp' => $time
             ),
             array('temporary_session_id' => $temorarySessionId)
