@@ -26,11 +26,14 @@ class DropsLogoutHandler
                 $client->subscribe(
                     'LOGOUT',
                     function ($payload) {
-                        $this->handleLogoutEvent($payload);
+                        $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
+                        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
                     }
                 );
 
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, $e->getMessage());
+            }
         }
 
     }
