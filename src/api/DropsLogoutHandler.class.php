@@ -32,6 +32,10 @@ class DropsLogoutHandler
                     }
                 );
 
+
+                $logLine = 'LOGOUT EVENT LISTENER STARTED';
+                (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+
                 $client->wait(1);
 
             } catch (Exception $e) {
