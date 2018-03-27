@@ -15,10 +15,11 @@ class DropsLogoutHandler
 
         if (!empty($natsServer)) {
 
-            try {
 
-                $logLine = 'LOGOUT EVENT LISTENER STARTED';
-                (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+            $logLine = 'LOGOUT EVENT LISTENER STARTED';
+            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+
+            try {
 
                 $connectionOptions = new \Nats\ConnectionOptions();
                 $connectionOptions->setHost($natsServer)->setPort(4222);
@@ -40,6 +41,7 @@ class DropsLogoutHandler
             } catch (Exception $e) {
                 (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, $e->getMessage());
             }
+
         } else {
             $logLine = 'LOGOUT EVENT LISTENER COULD NOT BE STARTED';
             (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);

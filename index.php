@@ -134,6 +134,7 @@ add_action('parse_request', 'handleDropsUserCreation');
 if (Config::get('LOGIN_ENABLED')) {
     add_action('parse_request', 'handleDropsLogin');
 }
+
 add_action('parse_request', 'handleNatsLogout');
 
 add_action('admin_menu', 'createAdminMenu' );
