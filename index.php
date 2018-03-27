@@ -66,6 +66,8 @@ function handleDropsLogin() {
 // Handling login of an existing user
 function handleNatsLogout() {
 
+    die('HERE');
+
     $logLine = 'LOGOUT EVENT LISTENER CALLED';
     (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
 
@@ -134,13 +136,12 @@ function createAdminMenu() {
     }
 }
 
+add_action('parse_request', 'handleNatsLogout');
 add_action('parse_request', 'handleDropsUserCreation');
 
 if (Config::get('LOGIN_ENABLED')) {
     add_action('parse_request', 'handleDropsLogin');
 }
-
-add_action('parse_request', 'handleNatsLogout');
 
 add_action('admin_menu', 'createAdminMenu' );
 add_action('profile_update', 'handleUserUpdate', 10, 1);
