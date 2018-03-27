@@ -24,12 +24,15 @@ class DropsLogoutHandler
                 $client->connect();
 
                 $client->subscribe(
-                    'LOGOUT',
+                    'logout',
                     function ($payload) {
+                        wp_logout();
                         $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
                         (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
                     }
                 );
+
+                $client->wait(1);
 
             } catch (Exception $e) {
                 (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, $e->getMessage());
