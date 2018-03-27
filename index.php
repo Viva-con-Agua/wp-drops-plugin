@@ -65,6 +65,10 @@ function handleDropsLogin() {
 
 // Handling login of an existing user
 function handleNatsLogout() {
+
+    $logLine = 'LOGOUT EVENT LISTENER CALLED';
+    (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+
     $drops = (new DropsLogoutHandler());
 }
 
