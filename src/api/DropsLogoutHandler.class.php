@@ -17,6 +17,9 @@ class DropsLogoutHandler
 
             try {
 
+                $logLine = 'LOGOUT EVENT LISTENER STARTED';
+                (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+
                 $connectionOptions = new \Nats\ConnectionOptions();
                 $connectionOptions->setHost($natsServer)->setPort(4222);
 
@@ -31,10 +34,6 @@ class DropsLogoutHandler
                         (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
                     }
                 );
-
-
-                $logLine = 'LOGOUT EVENT LISTENER STARTED';
-                (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
 
                 $client->wait(1);
 
