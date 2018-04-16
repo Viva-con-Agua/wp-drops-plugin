@@ -43,7 +43,7 @@ class DropsLogger
      * @param string $message
      * @param array $context
      */
-    public function log($level, $message, array $context = array())
+public function log($level, $message, array $context = array())
     {
         /*
         * @var wpdb $dbConnection

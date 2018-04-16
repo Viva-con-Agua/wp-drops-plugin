@@ -8,13 +8,29 @@ require_once DROPSHOME . '/src/api/nats/vendor/autoload.php';
 class DropsLogoutHandler
 {
 
+    /** @var  DropsSessionDataHandler $sessionDataHandler */
+    private $sessionDataHandler;
+
     public function __construct()
     {
+    }
+
+    /**
+     * Setter for the datahandler
+     * @param SessionDataHandlerInterface $sessionDataHandler
+     * @return $this
+     */
+    public function setSessionDataHandler(SessionDataHandlerInterface $sessionDataHandler)
+    {
+        $this->sessionDataHandler = $sessionDataHandler;
+        return $this;
+    }
+
+    public function natsSubscribe() {
 
         $natsServer = Config::get('NATS_SERVER');
 
         if (!empty($natsServer)) {
-
 
             $logLine = 'LOGOUT EVENT LISTENER STARTED';
             (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
@@ -34,17 +50,25 @@ class DropsLogoutHandler
                 $client->subscribe(
                     'LOGOUT',
                     function ($payload) {
+
+                        if (isset($payload->body)) {
+
+                            $uuid = $payload->body;
+                            $this->sessionDataHandler->clearSessionsByDropsId($uuid);
+
+                        }
+
                         wp_logout();
+
                         $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
                         (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+
                     }
                 );
 
                 if (count($client->getSubscriptions()) > 0) {
                     (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, print_r($client->getSubscriptions(), true));
                 }
-
-                $client->wait(0);
 
             } catch (Exception $e) {
                 (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, $e->getMessage());
@@ -55,17 +79,6 @@ class DropsLogoutHandler
             (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
         }
 
-    }
-
-    /**
-     * Setter for the datahandler
-     * @param SessionDataHandlerInterface $sessionDataHandler
-     * @return $this
-     */
-    public function setSessionDataHandler(SessionDataHandlerInterface $sessionDataHandler)
-    {
-        $this->sessionDataHandler = $sessionDataHandler;
-        return $this;
     }
 
     private function handleLogoutEvent($payload)

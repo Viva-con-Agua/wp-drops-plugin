@@ -29,7 +29,7 @@ interface SessionDataHandlerInterface
      * Deletes exired sessions or sessions with the given user id
      * @param int $userId
      */
-    public function clearSessions($userId);
+    public function clearSessionsByUserId($userId);
 
     /**
      * Updates the existing temporary session and adds the data received from drops MS

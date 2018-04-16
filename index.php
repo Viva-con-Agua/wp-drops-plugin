@@ -65,7 +65,12 @@ function handleDropsLogin() {
 
 // Handling login of an existing user
 function handleNatsLogout() {
-    $drops = (new DropsLogoutHandler());
+
+    if (is_user_logged_in()) {
+        $dataHandler = new DropsSessionDataHandler();
+        $drops = (new DropsLogoutHandler())->setSessionDataHandler($dataHandler)->natsSubscribe();
+    }
+
 }
 
 // Handling creation of a new user
@@ -120,7 +125,7 @@ function handleUserDelete($userId) {
 function handleUserLogout() {
     $userId = get_current_user_id();
     $dataHandler = new DropsSessionDataHandler();
-    $dataHandler->clearSessions($userId);
+    $dataHandler->clearSessionsByUserId($userId);
 }
 
 function createAdminMenu() {
