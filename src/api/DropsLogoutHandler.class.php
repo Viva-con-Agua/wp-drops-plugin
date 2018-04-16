@@ -40,7 +40,11 @@ class DropsLogoutHandler
                     }
                 );
 
-                //$client->wait(0);
+                if (count($client->getSubscriptions()) > 0) {
+                    (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, print_r($client->getSubscriptions(), true));
+                }
+
+                $client->wait(0);
 
             } catch (Exception $e) {
                 (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, $e->getMessage());
