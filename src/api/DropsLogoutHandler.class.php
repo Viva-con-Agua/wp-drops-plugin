@@ -47,7 +47,25 @@ class DropsLogoutHandler
                     (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Connection established');
                 }
 
-                $client->subscribe(
+                $client->request('LOGOUT', NULL, function ($payload) {
+
+                    if (isset($payload->body)) {
+
+                        $uuid = $payload->body;
+                        $this->sessionDataHandler->clearSessionsByDropsId($uuid);
+
+                    }
+
+                    wp_logout();
+
+                    $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
+                    (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+
+                    header('Location: pool.vivaconagua.org');
+
+                });
+
+                /*$client->subscribe(
                     'LOGOUT',
                     function ($payload) {
 
@@ -70,7 +88,7 @@ class DropsLogoutHandler
 
                 if (count($client->getSubscriptions()) > 0) {
                     (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, print_r($client->getSubscriptions(), true));
-                }
+                }*/
 
             } catch (Exception $e) {
                 (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, $e->getMessage());
