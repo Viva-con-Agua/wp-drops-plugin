@@ -27,8 +27,12 @@ class DropsLogoutHandler
                 $client = new \Nats\Connection($connectionOptions);
                 $client->connect();
 
+                if ($client->isConnected()) {
+                    (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Connection established');
+                }
+
                 $client->subscribe(
-                    'logout',
+                    'LOGOUT',
                     function ($payload) {
                         wp_logout();
                         $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
@@ -36,7 +40,7 @@ class DropsLogoutHandler
                     }
                 );
 
-                $client->wait(1);
+                //$client->wait(0);
 
             } catch (Exception $e) {
                 (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, $e->getMessage());
