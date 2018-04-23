@@ -61,7 +61,7 @@ function handleDropsLogin() {
             $dataHandler->clearSessionsByUserId(get_current_user_id());
 
             do_action('wp_logout');
-            wp_redirect(get_home_url());
+            wp_redirect(get_option('dropsLoginUrl'));
             exit;
 
         }
@@ -71,7 +71,7 @@ function handleDropsLogin() {
             $dataHandler->clearSessionsByUserId(get_current_user_id());
 
             do_action('wp_logout');
-            wp_redirect(get_home_url());
+            wp_redirect(get_option('dropsLoginUrl'));
             exit;
 
         }
