@@ -52,9 +52,11 @@ if (is_admin()) {
 function handleDropsLogin() {
 
     if (!is_user_logged_in()) {
+        die("1");
         (new DropsSessionController)->run();
     } else {
 
+        die("2");
         $dataHandler = new DropsSessionDataHandler();
 
         if ($dataHandler->isSessionExpired(get_current_user_id())
