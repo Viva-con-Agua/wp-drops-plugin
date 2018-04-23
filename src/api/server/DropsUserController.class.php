@@ -47,6 +47,7 @@ class DropsUserController extends DropsController
 
                 self::logResponse($response);
                 echo $response->getFormat(DropsResponse::JSON);
+                exit;
 
                 break;
             case self::CREATE:
