@@ -55,18 +55,21 @@ function handleDropsLogin() {
         die("1");
         (new DropsSessionController)->run();
     } else {
-
-        die("2");
         $dataHandler = new DropsSessionDataHandler();
 
         if ($dataHandler->isSessionExpired(get_current_user_id())
         || !$dataHandler->hasSession(get_current_user_id())) {
             $dataHandler->clearSessionsByUserId(get_current_user_id());
+
+
+            die("43");
             wp_logout();
             wp_redirect(get_home_url());
             die();
         }
 
+
+        die("2");
     }
 
 }
