@@ -36,8 +36,21 @@ class DropsUserController extends DropsController
 
                 if (isset($userData['uuid'])) {
                     $uuid = $userData['uuid'];
-                    (new DropsSessionDataHandler())->clearSessionsByDropsId($uuid);
-                    wp_logout();
+
+                    $sessionDataHandler = new DropsSessionDataHandler();
+                    $session = $sessionDataHandler->getTemporarySession($uuid);
+
+                    if (!empty($session)) {
+
+                        $userId = $session['user_id'];
+
+                        // get all sessions for user with ID $user_id
+                        $sessions = WP_Session_Tokens::get_instance($userId);
+
+                        // we have got the sessions, destroy them all!
+                        $sessions->destroy_all();
+
+                    }
 
                     $response = (new DropsResponse())->setCode(200)->setMessage('Logout successful')->setContext(__CLASS__);
 

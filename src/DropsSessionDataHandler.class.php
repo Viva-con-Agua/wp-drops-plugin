@@ -67,6 +67,24 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
     }
 
     /**
+     * Gets the temporary session from the wordpress database
+     * @param string $dropsId
+     * @return array
+     */
+    public function getSessionByDropsId($dropsId)
+    {
+        $session = $this->dbConnection->get_row("SELECT * FROM " . Config::get('DB_SESSION_TABLE') . " WHERE drops_session_id = '" . $dropsId . "'", ARRAY_A);
+
+        if (empty($session)) {
+            return array();
+        }
+
+        $session['user_session'] = json_decode($session['user_session'], true);
+
+        return $session;
+    }
+
+    /**
      * Saves the drops session id send from drops to the session table
      * @param string $temorarySessionId
      * @param string $dropsSessionId

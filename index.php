@@ -58,10 +58,14 @@ function handleDropsLogin() {
 
         if ($dataHandler->isSessionExpired(get_current_user_id())) {
 
-            $dataHandler->clearSessionsByUserId(get_current_user_id());
+            // get all sessions for user with ID $user_id
+            $sessions = WP_Session_Tokens::get_instance(get_current_user_id());
 
-            do_action('wp_logout');
+            // we have got the sessions, destroy them all!
+            $sessions->destroy_all();
+
             wp_redirect(get_option('dropsLoginUrl'));
+            
             exit;
 
         }
