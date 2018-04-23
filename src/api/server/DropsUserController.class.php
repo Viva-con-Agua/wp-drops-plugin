@@ -35,11 +35,18 @@ class DropsUserController extends DropsController
                 (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $uD);
 
                 if (isset($userData['uuid'])) {
-                    (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, "userdata");
                     $uuid = $userData['uuid'];
                     (new DropsSessionDataHandler())->clearSessionsByDropsId($uuid);
                     wp_logout();
+
+                    $response = (new DropsResponse())->setCode(200)->setMessage('Logout successful')->setContext(__CLASS__);
+
                 }
+
+                $response = (new DropsResponse())->setCode(400)->setMessage('UUID missing!')->setContext(__CLASS__);
+
+                self::logResponse($response);
+                echo $response->getFormat(DropsResponse::JSON);
 
                 break;
             case self::CREATE:
