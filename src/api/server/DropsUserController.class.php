@@ -20,19 +20,19 @@ class DropsUserController extends DropsController
     public function run()
     {
 
-        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, "join");
         if (!$this->isRequestValid()) {
             return;
         }
-        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, "valid");
 
         $parameter = $this->getParameter(DropsSessionController::DROPSFNC, $_GET);
 
         switch ($parameter) {
             case self::LOGOUT:
 
-                (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, "logout call");
                 $userData = $this->getUserData();
+
+                $uD = print_r($userData, true);
+                (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $uD);
 
                 if (isset($userData['uuid'])) {
                     (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, "userdata");
