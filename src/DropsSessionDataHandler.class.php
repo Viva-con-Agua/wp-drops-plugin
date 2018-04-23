@@ -204,4 +204,24 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
         );
     }
 
+    /**
+     * Checks if the session of the user is already expired
+     * @param int $userId
+     * @return bool
+     */
+    public function hasSession($userId)
+    {
+        $userSession = $this->getUserSession($userId);
+        return (count($userSession) > 0);
+    }
+
+    private function getUserSession($userId)
+    {
+        return $this->dbConnection->get_row(
+            'SELECT * ' .
+            'FROM ' . Config::get('DB_SESSION_TABLE') . ' ' .
+            'WHERE user_id = ' . $userId
+        );
+    }
+
 }

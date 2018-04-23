@@ -26,88 +26,14 @@ class DropsLogoutHandler
         return $this;
     }
 
-    public function natsSubscribe() {
+    public function handleProcessing() {
 
-        $natsServer = Config::get('NATS_SERVER');
+        $process = (new DropsLogoutProcess())->setSessionDataHandler($this->sessionDataHandler);
 
-        if (!empty($natsServer)) {
-
-            $logLine = 'LOGOUT EVENT LISTENER STARTED';
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
-
-            try {
-
-                $connectionOptions = new \Nats\ConnectionOptions();
-                $connectionOptions->setHost($natsServer)->setPort(4222);
-
-                $client = new \Nats\Connection($connectionOptions);
-                $client->connect();
-
-                if ($client->isConnected()) {
-                    (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Connection established');
-                }
-
-                $client->request('LOGOUT', NULL, function ($payload) {
-
-                    if (isset($payload->body)) {
-
-                        $uuid = $payload->body;
-                        $this->sessionDataHandler->clearSessionsByDropsId($uuid);
-
-                    }
-
-                    wp_logout();
-
-                    $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
-                    (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
-
-                    header('Location: pool.vivaconagua.org');
-
-                });
-
-                /*$client->subscribe(
-                    'LOGOUT',
-                    function ($payload) {
-
-                        if (isset($payload->body)) {
-
-                            $uuid = $payload->body;
-                            $this->sessionDataHandler->clearSessionsByDropsId($uuid);
-
-                        }
-
-                        wp_logout();
-
-                        $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
-                        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
-
-                        header('Location: pool.vivaconagua.org');
-
-                    }
-                );
-
-                if (count($client->getSubscriptions()) > 0) {
-                    (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, print_r($client->getSubscriptions(), true));
-                }*/
-
-            } catch (Exception $e) {
-                (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, $e->getMessage());
-            }
-
-        } else {
-            $logLine = 'LOGOUT EVENT LISTENER COULD NOT BE STARTED';
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
+        if (!$process->isRunning()) {
+            $process->start();
         }
 
     }
 
-    private function handleLogoutEvent($payload)
-    {
-
-        $logLine = 'LOGOUT EVENT TRIGGERED: ' . print_r($payload, true);
-
-        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, $logLine);
-
-        //do_action('wp_login', $user->user_login, $user);
-    }
 }

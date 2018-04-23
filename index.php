@@ -53,12 +53,17 @@ function handleDropsLogin() {
     if (!is_user_logged_in()) {
         (new DropsSessionController)->run();
     } else {
+
         $dataHandler = new DropsSessionDataHandler();
-        if ($dataHandler->isSessionExpired(get_current_user_id())) {
+
+        if ($dataHandler->isSessionExpired(get_current_user_id())
+        || !$dataHandler->hasSession(get_current_user_id())) {
+            $dataHandler->clearSessionsByUserId(get_current_user_id());
             wp_logout();
             wp_redirect(get_home_url());
             die();
         }
+
     }
 
 }
@@ -68,7 +73,7 @@ function handleNatsLogout() {
 
     if (is_user_logged_in()) {
         $dataHandler = new DropsSessionDataHandler();
-        $drops = (new DropsLogoutHandler())->setSessionDataHandler($dataHandler)->natsSubscribe();
+        (new DropsLogoutHandler())->setSessionDataHandler($dataHandler)->handleProcessing();
     }
 
 }
