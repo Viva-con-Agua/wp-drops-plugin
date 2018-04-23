@@ -68,7 +68,7 @@ function handleDropsLogin() {
 
         }
 
-        if (!$dataHandler->hasSession(get_current_user_id())) {
+        if ($dataHandler->hasSession(get_current_user_id())) {
 
             $dataHandler->clearSessionsByUserId(get_current_user_id());
 
