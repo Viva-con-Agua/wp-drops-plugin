@@ -62,20 +62,16 @@ function handleDropsLogin() {
 
             do_action('wp_logout');
             wp_redirect(get_home_url());
-
-            die("2");
             exit;
 
         }
 
-        if ($dataHandler->hasSession(get_current_user_id())) {
+        if (!$dataHandler->hasSession(get_current_user_id())) {
 
             $dataHandler->clearSessionsByUserId(get_current_user_id());
 
             do_action('wp_logout');
             wp_redirect(get_home_url());
-
-            die("43");
             exit;
 
         }

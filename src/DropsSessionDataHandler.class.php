@@ -212,7 +212,6 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
     public function hasSession($userId)
     {
         $userSession = $this->getUserSession($userId);
-        var_dump($userSession);
         return (count($userSession) > 0);
     }
 
