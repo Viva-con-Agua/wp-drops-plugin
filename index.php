@@ -66,16 +66,6 @@ function handleDropsLogin() {
 
         }
 
-        if (!$dataHandler->hasSession(get_current_user_id())) {
-
-            $dataHandler->clearSessionsByUserId(get_current_user_id());
-
-            do_action('wp_logout');
-            wp_redirect(get_option('dropsLoginUrl'));
-            exit;
-
-        }
-
     }
 
 }
