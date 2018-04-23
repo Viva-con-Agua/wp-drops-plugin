@@ -33,7 +33,7 @@ require_once 'src/api/actions/DropsUserImageUpdater.class.php';
 require_once 'src/api/actions/DropsUserProfileReader.class.php';
 require_once 'src/api/actions/DropsUserDeleter.class.php';
 require_once 'src/api/DropsLoginHandler.class.php';
-require_once 'src/api/DropsLogoutProcess.class.php';
+//require_once 'src/api/DropsLogoutProcess.class.php';
 require_once 'src/api/DropsLogoutHandler.class.php';
 
 require_once 'src/DropsSessionDataHandler.class.php';
