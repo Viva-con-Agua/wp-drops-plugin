@@ -41,9 +41,9 @@ class DropsUserController extends DropsController
 
                     $response = (new DropsResponse())->setCode(200)->setMessage('Logout successful')->setContext(__CLASS__);
 
+                } else {
+                    $response = (new DropsResponse())->setCode(400)->setMessage('UUID missing!')->setContext(__CLASS__);
                 }
-
-                $response = (new DropsResponse())->setCode(400)->setMessage('UUID missing!')->setContext(__CLASS__);
 
                 self::logResponse($response);
                 echo $response->getFormat(DropsResponse::JSON);
