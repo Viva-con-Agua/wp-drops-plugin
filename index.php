@@ -48,6 +48,7 @@ if (is_admin()) {
     require_once 'src/admin/AdminMenu.class.php';
 }
 
+phpinfo();die();
 // Handling login of an existing user
 function handleDropsLogin() {
 

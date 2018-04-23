@@ -15,7 +15,6 @@ class DropsLogoutProcess extends Thread
     private $pidFileRoot = './processes.pid';
 
     public function __construct() {
-        phpinfo();die();
     }
 
     /**
