@@ -123,13 +123,13 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
 
     /**
      * Deletes exired sessions or sessions with the given user id
-     * @param int $userId
+     * @param string $dropsId
      */
     public function clearSessionsByDropsId($dropsId)
     {
         $this->dbConnection->query(
             'DELETE FROM ' . Config::get('DB_SESSION_TABLE') . '
-            WHERE drops_session_id = ' . $dropsId . ' 
+            WHERE drops_session_id = "' . $dropsId . '" 
             OR expiry_timestamp < now()');
     }
 

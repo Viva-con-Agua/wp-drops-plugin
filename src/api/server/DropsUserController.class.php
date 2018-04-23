@@ -11,6 +11,9 @@ class DropsUserController extends DropsController
     /** Path to post userdata to, to create a user in the good ol' pool */
     const CREATE = 'usercreate';
 
+    /** Path to post userdata to, to logout a user from the good ol' pool */
+    const LOGOUT = 'logout';
+
     /**
      * Checks if the parameters are valid and calls the user creation action
      */
@@ -23,6 +26,17 @@ class DropsUserController extends DropsController
         $parameter = $this->getParameter(DropsSessionController::DROPSFNC, $_GET);
 
         switch ($parameter) {
+            case self::LOGOUT:
+
+                $userData = $this->getUserData();
+
+                if (isset($userData['uuid'])) {
+                    $uuid = $userData['uuid'];
+                    (new DropsSessionDataHandler())->clearSessionsByDropsId($uuid);
+                    wp_logout();
+                }
+
+                break;
             case self::CREATE:
 
                 $userData = $this->getUserData();

@@ -33,8 +33,8 @@ require_once 'src/api/actions/DropsUserImageUpdater.class.php';
 require_once 'src/api/actions/DropsUserProfileReader.class.php';
 require_once 'src/api/actions/DropsUserDeleter.class.php';
 require_once 'src/api/DropsLoginHandler.class.php';
-require_once 'src/api/DropsLogoutProcess.class.php';
-require_once 'src/api/DropsLogoutHandler.class.php';
+//require_once 'src/api/DropsLogoutProcess.class.php';
+//require_once 'src/api/DropsLogoutHandler.class.php';
 
 require_once 'src/DropsSessionDataHandler.class.php';
 require_once 'src/DropsUserDataHandler.class.php';
@@ -70,14 +70,14 @@ function handleDropsLogin() {
 }
 
 // Handling login of an existing user
-function handleNatsLogout() {
+/*function handleNatsLogout() {
 
     if (is_user_logged_in()) {
         $dataHandler = new DropsSessionDataHandler();
         (new DropsLogoutHandler())->setSessionDataHandler($dataHandler)->handleProcessing();
     }
 
-}
+}*/
 
 // Handling creation of a new user
 function handleDropsUserCreation() {
@@ -140,7 +140,7 @@ function createAdminMenu() {
     }
 }
 
-add_action('parse_request', 'handleNatsLogout');
+//add_action('parse_request', 'handleNatsLogout');
 add_action('parse_request', 'handleDropsUserCreation');
 
 if (Config::get('LOGIN_ENABLED')) {
