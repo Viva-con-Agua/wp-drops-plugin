@@ -38,7 +38,7 @@ class DropsUserController extends DropsController
                     $uuid = $userData['uuid'];
 
                     $sessionDataHandler = new DropsSessionDataHandler();
-                    $session = $sessionDataHandler->getTemporarySession($uuid);
+                    $session = $sessionDataHandler->getSessionByDropsId($uuid);
 
                     if (!empty($session)) {
 
