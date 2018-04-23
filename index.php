@@ -52,24 +52,34 @@ if (is_admin()) {
 function handleDropsLogin() {
 
     if (!is_user_logged_in()) {
-        die("1");
         (new DropsSessionController)->run();
     } else {
         $dataHandler = new DropsSessionDataHandler();
 
-        if ($dataHandler->isSessionExpired(get_current_user_id())
-        || !$dataHandler->hasSession(get_current_user_id())) {
+        if ($dataHandler->isSessionExpired(get_current_user_id())) {
+
             $dataHandler->clearSessionsByUserId(get_current_user_id());
 
-
-            die("43");
-            wp_logout();
+            do_action('wp_logout');
             wp_redirect(get_home_url());
-            die();
+
+            die("2");
+            exit;
+
         }
 
+        if (!$dataHandler->hasSession(get_current_user_id())) {
 
-        die("2");
+            $dataHandler->clearSessionsByUserId(get_current_user_id());
+
+            do_action('wp_logout');
+            wp_redirect(get_home_url());
+
+            die("43");
+            exit;
+
+        }
+
     }
 
 }
