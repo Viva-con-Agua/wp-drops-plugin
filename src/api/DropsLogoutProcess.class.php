@@ -2,6 +2,7 @@
 
 require_once DROPSHOME . '/src/api/nats/vendor/autoload.php';
 
+
 /**
  * Class DropsConnector
  */
@@ -14,6 +15,7 @@ class DropsLogoutProcess extends Thread
     private $pidFileRoot = './processes.pid';
 
     public function __construct() {
+        phpinfo();die();
     }
 
     /**
