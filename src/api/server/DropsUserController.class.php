@@ -42,7 +42,10 @@ class DropsUserController extends DropsController
 
                     if (!empty($session)) {
 
+
                         $userId = $session['user_id'];
+
+                        $sessionDataHandler->clearSessionsByUserId($userId);
 
                         // get all sessions for user with ID $user_id
                         $sessions = WP_Session_Tokens::get_instance($userId);
