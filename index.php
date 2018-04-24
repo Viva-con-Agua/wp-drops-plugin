@@ -66,7 +66,7 @@ function handleDropsLogin() {
             // we have got the sessions, destroy them all!
             $sessions->destroy_all();
 
-            wp_redirect(get_option('dropsLoginUrl'));
+            wp_redirect('');
 
             exit;
 
