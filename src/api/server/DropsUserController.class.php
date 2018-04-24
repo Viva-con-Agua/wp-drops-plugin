@@ -52,7 +52,7 @@ class DropsUserController extends DropsController
 
                         // we have got the sessions, destroy them all!
                         $sessions->destroy_all();
-                        $response = (new DropsResponse())->setCode(200)->setMessage('Logout successful for ' . $uuid)->setContext(__CLASS__);
+                        $response = (new DropsResponse())->setCode(200)->setMessage('Logout successful for ' . $uuid . '(' . $userId . ')')->setContext(__CLASS__);
 
                     } else {
                         $response = (new DropsResponse())->setCode(200)->setMessage('No session found for ' . $uuid)->setContext(__CLASS__);
