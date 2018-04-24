@@ -58,6 +58,8 @@ function handleDropsLogin() {
 
         if ($dataHandler->isSessionExpired(get_current_user_id())) {
 
+            $dataHandler->clearSessionsByUserId(get_current_user_id());
+
             // get all sessions for user with ID $user_id
             $sessions = WP_Session_Tokens::get_instance(get_current_user_id());
 
