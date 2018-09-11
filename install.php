@@ -37,7 +37,6 @@ function removeDropsDatabase()
     $wpdb->query("DROP TABLE `" . Config::get('DB_SESSION_TABLE') . "`");
     $wpdb->query("DROP TABLE `" . Config::get('DB_SESSION_TABLE') . "`");
 }
-
 register_activation_hook( PLUGINROOTFILE, 'installDropsDatabase' );
 register_deactivation_hook( PLUGINROOTFILE, 'removeDropsDatabase' );
 

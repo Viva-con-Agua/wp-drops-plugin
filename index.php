@@ -33,8 +33,6 @@ require_once 'src/api/actions/DropsUserImageUpdater.class.php';
 require_once 'src/api/actions/DropsUserProfileReader.class.php';
 require_once 'src/api/actions/DropsUserDeleter.class.php';
 require_once 'src/api/DropsLoginHandler.class.php';
-//require_once 'src/api/DropsLogoutProcess.class.php';
-//require_once 'src/api/DropsLogoutHandler.class.php';
 
 require_once 'src/DropsSessionDataHandler.class.php';
 require_once 'src/DropsUserDataHandler.class.php';
@@ -139,12 +137,19 @@ function handleUserLogout() {
     $userId = get_current_user_id();
     $dataHandler = new DropsSessionDataHandler();
     $dataHandler->clearSessionsByUserId($userId);
+	wp_redirect(handleLogoutUrl());
+	die();
 }
 
 function createAdminMenu() {
     if (is_admin()) {
         new AdminMenu();
     }
+}
+
+function handleLogoutUrl() {
+    $actualLink = get_option( 'dropsLogoutUrl' );
+    return $actualLink;
 }
 
 //add_action('parse_request', 'handleNatsLogout');
@@ -158,5 +163,6 @@ add_action('admin_menu', 'createAdminMenu' );
 add_action('profile_update', 'handleUserUpdate', 10, 1);
 add_action('delete_user', 'handleUserDelete', 10, 1);
 add_action('wp_logout', 'handleUserLogout');
+add_filter('logout_url', 'handleLogoutUrl');
 
 ?>

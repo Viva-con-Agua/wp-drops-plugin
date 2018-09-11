@@ -45,6 +45,12 @@ class DropsSettings extends DropsMain
             'description' => __('The user will be redirected to this page to login there', 'drops')
         );
 
+        $this->page['settings']['dropsLogoutUrl'] = array(
+            'title' => __('Logout URL of drops', 'drops'),
+            'value' => isset($_POST['dropsLogoutUrl']) ? $_POST['dropsLogoutUrl'] : get_option( 'dropsLogoutUrl' ),
+            'description' => __('The drops wordpress plugin will call this URL after logging out from wordpress', 'drops')
+        );
+
         $this->page['settings']['dropsAuthUrl'] = array(
             'title' => __('Authentication URL of drops', 'drops'),
             'value' => isset($_POST['dropsAuthUrl']) ? $_POST['dropsAuthUrl'] : get_option( 'dropsAuthUrl' ),
@@ -86,7 +92,6 @@ class DropsSettings extends DropsMain
             'value' => isset($_POST['dropsUserImageUpdateUrl']) ? $_POST['dropsUserImageUpdateUrl'] : get_option( 'dropsUserImageUpdateUrl' ),
             'description' => __('The drops wordpress plugin will call this URL to trigger update action', 'drops')
         );
-
     }
 
     public function render()
@@ -99,6 +104,7 @@ class DropsSettings extends DropsMain
         update_option('dropsClientId', $_POST['dropsClientId']);
         update_option('dropsUserAccessHash', $_POST['dropsUserAccessHash']);
         update_option('dropsLoginUrl', $_POST['dropsLoginUrl']);
+        update_option('dropsLogoutUrl', $_POST['dropsLogoutUrl']);
         update_option('dropsAuthUrl', $_POST['dropsAuthUrl']);
         update_option('dropsAccessUrl', $_POST['dropsAccessUrl']);
         update_option('dropsUserUpdateUrl', $_POST['dropsUserUpdateUrl']);
