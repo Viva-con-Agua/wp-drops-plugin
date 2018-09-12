@@ -137,7 +137,7 @@ function handleUserLogout() {
     $userId = get_current_user_id();
     $dataHandler = new DropsSessionDataHandler();
     $dataHandler->clearSessionsByUserId($userId);
-	wp_redirect(handleLogoutUrl());
+	wp_redirect(get_option( 'dropsLogoutUrl' ));
 	die();
 }
 
@@ -145,11 +145,6 @@ function createAdminMenu() {
     if (is_admin()) {
         new AdminMenu();
     }
-}
-
-function handleLogoutUrl() {
-    $actualLink = get_option( 'dropsLogoutUrl' );
-    return $actualLink;
 }
 
 //add_action('parse_request', 'handleNatsLogout');
@@ -163,6 +158,5 @@ add_action('admin_menu', 'createAdminMenu' );
 add_action('profile_update', 'handleUserUpdate', 10, 1);
 add_action('delete_user', 'handleUserDelete', 10, 1);
 add_action('wp_logout', 'handleUserLogout');
-add_filter('logout_url', 'handleLogoutUrl');
 
 ?>
