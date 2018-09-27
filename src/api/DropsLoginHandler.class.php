@@ -23,7 +23,23 @@ class DropsLoginHandler
      * We store the current called URL in a session and persist it, afterwards the user is redirected to the drops login page
      * We can call this the first step on the login process
      */
-    public function handleLoginRedirect()
+    public function handleFrontendLoginResponse()
+    {
+		
+		// Redirect to drops
+        $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsLoginUrl'));
+        $url = str_replace('<clientId>', get_option('dropsClientId'), $url);
+		
+        $this->redirect($url);
+
+    }
+	
+    /**
+     * Initializing function on users first visit on the page
+     * We store the current called URL in a session and persist it, afterwards the user is redirected to the drops login page
+     * We can call this the first step on the login process
+     */
+    public function handleFrontendLoginRedirect()
     {
 		
 		$currentUrl = $this->getCurrentUrl();
@@ -99,7 +115,7 @@ class DropsLoginHandler
 
         if (empty($response)) {
             (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty response, will restart routine from line ' . __LINE__);
-            $this->handleLoginRedirect();
+            $this->handleFrontendLoginRedirect();
         }
 
         $sessionId = $this->getParameter('sessionId', $params);
@@ -107,7 +123,7 @@ class DropsLoginHandler
 
         if (empty($temporarySession)) {
             (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart routine from line ' . __LINE__);
-            $this->handleLoginRedirect();
+            $this->handleFrontendLoginRedirect();
         }
 
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
@@ -117,7 +133,7 @@ class DropsLoginHandler
 
         if ($userDataResponse->getCode() != 200) {
             (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart routine from line ' . __LINE__);
-            $this->handleLoginRedirect();
+            $this->handleFrontendLoginRedirect();
         }
 
         $userData = $userDataResponse->getResponse();
@@ -128,7 +144,7 @@ class DropsLoginHandler
         $user = $userDataHandler->getUserByEMail($userEmail);
 
         if (empty($user)) {
-            $this->handleLoginRedirect();
+            $this->handleFrontendLoginRedirect();
         }
 
         $this->loginUser($user->ID);

@@ -47,12 +47,12 @@ class DropsSessionController extends DropsController
                 break;
 				
             case self::REDIRECT:
-				$drops->redirect(get_option('dropsLoginUrl'));
+                $drops->handleFrontendLoginResponse();
 				break;
 			
             case self::INITIAL:
             default:
-                $drops->handleLoginRedirect();
+                $drops->handleFrontendLoginRedirect();
                 break;
         }
 
