@@ -39,6 +39,12 @@ class DropsSettings extends DropsMain
 
         // URLS for the connection to drops
 
+        $this->page['settings']['dropsFrontendLoginUrl'] = array(
+            'title' => __('Frontend URL of login mask', 'drops'),
+            'value' => isset($_POST['dropsFrontendLoginUrl']) ? $_POST['dropsFrontendLoginUrl'] : get_option( 'dropsFrontendLoginUrl' ),
+            'description' => __('The user will be redirected to this page to login there', 'drops')
+        );
+		
         $this->page['settings']['dropsLoginUrl'] = array(
             'title' => __('Login URL of drops', 'drops'),
             'value' => isset($_POST['dropsLoginUrl']) ? $_POST['dropsLoginUrl'] : get_option( 'dropsLoginUrl' ),
@@ -104,6 +110,7 @@ class DropsSettings extends DropsMain
         update_option('dropsClientId', $_POST['dropsClientId']);
         update_option('dropsUserAccessHash', $_POST['dropsUserAccessHash']);
         update_option('dropsLoginUrl', $_POST['dropsLoginUrl']);
+        update_option('dropsFrontendLoginUrl', $_POST['dropsFrontendLoginUrl']);
         update_option('dropsLogoutUrl', $_POST['dropsLogoutUrl']);
         update_option('dropsAuthUrl', $_POST['dropsAuthUrl']);
         update_option('dropsAccessUrl', $_POST['dropsAccessUrl']);

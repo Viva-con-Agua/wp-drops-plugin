@@ -25,17 +25,19 @@ class DropsLoginHandler
      */
     public function handleLoginRedirect()
     {
+		
+		$currentUrl = $this->getCurrentUrl();
 
         // We have to create a temporary session
-        $session = $this->createTemporarySession($this->getCurrentUrl());
+        $session = $this->createTemporarySession($currentUrl);
 
         // Store the current URL to it and redirect it to the login page
         $this->sessionDataHandler->persistTemporarySession($session);
 
         // Redirect to drops
-        $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsLoginUrl'));
+        $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsFrontendLoginUrl'));
         $url = str_replace('<clientId>', get_option('dropsClientId'), $url);
-
+		
         $this->redirect($url);
 
     }

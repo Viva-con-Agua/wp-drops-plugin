@@ -12,6 +12,9 @@ class DropsSessionController extends DropsController
 
     /** A call to this path will initialize the drops login routine */
     const INITIAL = 'autologin';
+	
+    /** A call to this path will initialize the drops login routine */
+    const REDIRECT = 'login_redirect';
 
     /** The user gets redirected to this path after getting the authorization code to get the access token */
     const ACCESS = 'useraccess';
@@ -42,7 +45,11 @@ class DropsSessionController extends DropsController
                 $sessionId = $drops->handleLoginResponse($_GET);
                 $drops->handleAuthorizationCodeResponse(array_merge($_GET, array('sessionId' => $sessionId)));
                 break;
-
+				
+            case self::REDIRECT:
+				$drops->redirect(get_option('dropsLoginUrl'));
+				break;
+			
             case self::INITIAL:
             default:
                 $drops->handleLoginRedirect();
