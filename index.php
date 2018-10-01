@@ -23,7 +23,7 @@ if ( ! defined( 'DROPSHOME' ) ) {
 require_once DROPSHOME .'/install.php';
 
 require_once 'src/api/server/DropsSessionController.class.php';
-require_once 'src/api/server/DropsUserController.class.php';
+require_once 'src/api/server/DropsDataMapper.class.php';
 
 require_once 'src/api/DropsResponse.class.php';
 require_once 'src/api/actions/DropsUserReader.class.php';
@@ -36,6 +36,7 @@ require_once 'src/api/DropsLoginHandler.class.php';
 require_once 'src/DropsSessionDataHandler.class.php';
 require_once 'src/DropsUserDataHandler.class.php';
 require_once 'src/DropsMetaDataHandler.class.php';
+require_once 'src/DropsGeographyDataHandler.class.php';
 
 require_once 'src/DropsLogger.class.php';
 
@@ -82,11 +83,6 @@ function handleDropsLogin() {
     }
 
 }*/
-
-// Handling creation of a new user
-function handleDropsUserApi() {
-    (new DropsUserController())->run();
-}
 
 // Handling update of an existing user
 function handleUserUpdate($userId) {
@@ -141,18 +137,8 @@ function handleUserLogout() {
 }
 
 function handleAPIRequest() {
-
-	if (!isset($_SERVER['REQUEST_URI']) || empty($_SERVER['REQUEST_URI'])) {
-		return;
-	}
-	
-	$apiCall = explode('/api/', $_SERVER['REQUEST_URI']);
-	
-	if (count($apiCall) == 2) {
-		require_once 'src/api/server/DropsAPIController.class.php';
-		(new DropsAPIController)->run();
-	}
-	
+	require_once 'src/api/server/DropsAPIController.class.php';
+	(new DropsAPIController)->run();
 }
 
 function createAdminMenu() {
@@ -162,7 +148,6 @@ function createAdminMenu() {
 }
 
 //add_action('parse_request', 'handleNatsLogout');
-add_action('parse_request', 'handleDropsUserApi');
 
 if (Config::get('LOGIN_ENABLED')) {
     add_action('parse_request', 'handleDropsLogin');

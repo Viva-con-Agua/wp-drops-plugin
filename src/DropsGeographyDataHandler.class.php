@@ -1,7 +1,7 @@
 <?php
 
 require_once 'Config.class.php';
-require_once 'interfaces/UserDataHandlerInterface.class.php';
+require_once 'interfaces/GeographyDataHandlerInterface.class.php';
 
 /**
  * Created by PhpStorm.
@@ -9,7 +9,7 @@ require_once 'interfaces/UserDataHandlerInterface.class.php';
  * Date: 29.09.2017
  * Time: 15:56
  */
-class DropsUserDataHandler implements UserDataHandlerInterface
+class DropsGeographyDataHandler implements GeographyDataHandlerInterface
 {
 
     /**
@@ -33,31 +33,33 @@ class DropsUserDataHandler implements UserDataHandlerInterface
      * @param array $userData
      * @return bool|int
      */
-    public function createUser($userData)
+    public function createEntry($data)
     {
-        if ($this->dbConnection->insert(Config::get('DB_USER_TABLE'), $userData)) {
+        if ($this->dbConnection->insert(Config::get('DB_GEOGRAPHY'), $data)) {
             return $this->dbConnection->insert_id;
         };
         return false;
     }
 
     /**
-     * Creates an entry for every usermeta data
-     * @param int $userId
-     * @param array $userMetaData
+     * Creates an entry for every geography hierarchy data
+     * @param int $id
+     * @param array $groups
      * @return bool
      */
-    public function createUserMeta($userId, array $userMetaData)
+    public function createEntryHierarchy($id, array $groups)
     {
+		
         $return = array();
-
-        foreach ($userMetaData AS $key => $value) {
+		
+        foreach ($groups AS $value) {
+			
             $result = $this->dbConnection->insert(
-                Config::get('DB_USERMETA_TABLE'),
+                Config::get('DB_GEOGRAPHY') . '_hierarchy',
                 array(
-                    'user_id' => $userId,
-                    'meta_key' => $key,
-                    'meta_value' => $value
+                    'ancestor' => $value[0],
+                    'ancestor_type' => $value[1],
+                    'descendant' => $value[2]
                 )
             );
             $return[$result] = true;
@@ -67,38 +69,38 @@ class DropsUserDataHandler implements UserDataHandlerInterface
 
     }
 
-    public function getUserByEMail($email)
+    public function getEntryByName($name)
     {
         return $this->dbConnection->get_row(
             'SELECT * ' .
-            'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
-            "WHERE user_email = '" . $email . "'"
+            'FROM ' . Config::get('DB_GEOGRAPHY') . ' ' .
+            "WHERE name = '" . $name . "'"
         );
     }
 
-    public function getUserById($userId)
+    public function getEntryById($id)
     {
         return $this->dbConnection->get_row(
             'SELECT * ' .
-            'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
-			'WHERE ID = "' . $userId . '"'
+            'FROM ' . Config::get('DB_GEOGRAPHY') . ' ' .
+			'WHERE ID = "' . $id . '"'
         );
     }
 
-    public function updateUser($userId, array $userData, array $userMetaData)
+    public function updateEntry($id, array $data, array $hierarchyData)
     {
 		
 		$returnValue['true'] = 1;
 		
-		if (!empty($userData)) {
+		if (!empty($data)) {
 			
 			$userDataSql = implode(', ', array_map(
 				function ($v, $k) { return sprintf('%s="%s"', $k, $v); },
-				$userData,
-				array_keys($userData)
+				$data,
+				array_keys($data)
 			));
 			
-			$updateSql = 'UPDATE ' . Config::get('DB_USER_TABLE') . ' SET ' .
+			$updateSql = 'UPDATE ' . Config::get('DB_GEOGRAPHY') . ' SET ' .
 				$userDataSql . ' ' .
 				'WHERE ID = "' . $userId . '"';
 			
@@ -110,10 +112,10 @@ class DropsUserDataHandler implements UserDataHandlerInterface
 			
 		}
 		
-		if (!empty($userMetaData)) {
+		if (!empty($hierarchyData)) {
 			
-			foreach ($userMetaData AS $metaKey => $metaValue) {
-				$updateSql = 'UPDATE ' . Config::get('DB_USERMETA_TABLE') . ' SET ' .
+			foreach ($hierarchyData AS $metaKey => $metaValue) {
+				$updateSql = 'UPDATE ' . Config::get('DB_GEOGRAPHY') . '_hierarchy SET ' .
 					'meta_value = "' . $metaValue . '" ' . 
 					'WHERE user_id = "' . $userId . '" and meta_key = "' . $metaKey . '"';
 				$returnValueKey = $this->dbConnection->query($updateSql);

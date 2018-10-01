@@ -9,11 +9,11 @@ usermeta:
 
 
 /**
- * Class DropsUserUpdater
+ * Class DropsGeographyUpdater
  * The class updates a wordpress user out of the given data.
  * First it checks if there is already an existing user and if we update the user and its metadata
  */
-class DropsUserUpdater
+class DropsGeographyUpdater
 {
 
     private $requiredUserData = array('uuid');

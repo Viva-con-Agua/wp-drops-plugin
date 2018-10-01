@@ -9,17 +9,15 @@ require_once 'user/DropsUserUpdater.class.php';
  */
 class DropsUserController extends DropsController
 {
-
-    const DROPSFNC = 'apiFnc';
 	
     /** Path to post userdata to, to update a user in the good ol' pool */
-    const UPDATE = 'userupdate';
+    const UPDATE = 'update';
 	
     /** Path to post userdata to, to create a user in the good ol' pool */
-    const CREATE = 'usercreate';
+    const CREATE = 'create';
 
     /** Path to post userdata to, to logout a user from the good ol' pool */
-    const LOGOUT = 'userlogout';
+    const LOGOUT = 'logout';
 
     /**
      * Checks if the parameters are valid and calls the user creation action
@@ -30,10 +28,12 @@ class DropsUserController extends DropsController
         if (!$this->isRequestValid()) {
             return;
         }
-
-        $parameter = $this->getParameter(self::DROPSFNC, $_GET);
-
-        switch ($parameter) {
+		
+        switch ($this->apiFunction) {
+            case NULL:
+				$response = (new DropsResponse())->setCode(400)->setMessage('API Function not set!')->setContext(__CLASS__);
+				self::logResponse($response);
+				break;
             case self::LOGOUT:
 
                 $userData = $this->getUserData();
@@ -48,8 +48,6 @@ class DropsUserController extends DropsController
                     $session = $sessionDataHandler->getSessionByDropsId($uuid);
 
                     if (!empty($session)) {
-
-
                         $userId = $session['user_id'];
 
                         $sessionDataHandler->clearSessionsByUserId($userId);
@@ -94,8 +92,6 @@ class DropsUserController extends DropsController
                 $dataHandler = new DropsUserDataHandler();
                 $userReceiver = new DropsUserUpdater($userData);
                 $userReceiver->setDataHandler($dataHandler);
-				$sessionDataHandler = new DropsSessionDataHandler();
-                $userReceiver->setSessionDataHandler($sessionDataHandler);
                 $response = $userReceiver->run();
 
                 self::logResponse($response);
@@ -105,25 +101,11 @@ class DropsUserController extends DropsController
 
                 break;
             default:
+				$response = (new DropsResponse())->setCode(400)->setMessage('API Function not implemented!')->setContext(__CLASS__);
+				self::logResponse($response);
                 break;
         }
 
-    }
-
-    /**
-     * Gets a parameter out of an array
-     *
-     * @param string $id Index of the searched params
-     * @param array $params Array of params
-     * @return mixed
-     */
-    private function getParameter($id, $params)
-    {
-        if (!isset($params[$id])) {
-            return null;
-        }
-
-        return $params[$id];
     }
 
     /**

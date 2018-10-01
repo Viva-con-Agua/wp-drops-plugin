@@ -6,6 +6,8 @@
  */
 abstract class DropsController
 {
+		
+	public $apiFunction;
 
     /**
      * @return mixed
@@ -19,6 +21,15 @@ abstract class DropsController
     protected function getParsedUrl() {
         $actualLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         return parse_url($actualLink);
+    }
+	
+    /**
+     * Returns the current url parsed into its parts
+     * @return array
+     */
+    public function setFunction($apiFunction) {
+        $this->apiFunction = $apiFunction;
+		return $this;
     }
 	
     /**
@@ -65,5 +76,22 @@ abstract class DropsController
         (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log($logLevel, $logLine);
 
     }
+
+    /**
+     * Gets a parameter out of an array
+     *
+     * @param string $id Index of the searched params
+     * @param array $params Array of params
+     * @return mixed
+     */
+    public function getParameter($id, $params)
+    {
+        if (!isset($params[$id])) {
+            return null;
+        }
+
+        return $params[$id];
+    }
+
 
 }

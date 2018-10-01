@@ -1,19 +1,19 @@
 <?php
 
 $_CONFIG['LOGIN_ENABLED'] = true;
+$_CONFIG['DB_PREFIX'] = 'wp';
 
 // Exitsting wordpress tables
-$_CONFIG['DB_USER_TABLE'] = 'wp_users';
-$_CONFIG['DB_USERMETA_TABLE'] = 'wp_usermeta';
+$_CONFIG['DB_USER_TABLE'] = $_CONFIG['DB_PREFIX'] . '_users';
+$_CONFIG['DB_USERMETA_TABLE'] = $_CONFIG['DB_PREFIX'] . '_usermeta';
 
 // Tables will be created on plugin activation
-$_CONFIG['DB_SESSION_TABLE'] = 'wp_drops_sessions';
-$_CONFIG['DB_META_TABLE'] = 'wp_drops_meta';
+$_CONFIG['DB_SESSION_TABLE'] = $_CONFIG['DB_PREFIX'] . '_drops_sessions';
+$_CONFIG['DB_META_TABLE'] = $_CONFIG['DB_PREFIX'] . '_drops_meta';
 
-$_CONFIG['DB_DROPS_LOG'] = 'wp_drops_logs';
+$_CONFIG['DB_DROPS_LOG'] = $_CONFIG['DB_PREFIX'] . '_drops_logs';
+$_CONFIG['DB_GEOGRAPHY'] = $_CONFIG['DB_PREFIX'] . '_vca_asm_geography';
 
 $_CONFIG['DROPS_LOGFILE'] = 'dropslog.txt';
-
-$_CONFIG['NATS_SERVER'] = '';
 
 ?>
