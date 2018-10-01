@@ -1,6 +1,8 @@
 <?php
 
 require_once 'DropsController.class.php';
+require_once 'user/DropsUserCreator.class.php';
+require_once 'user/DropsUserUpdater.class.php';
 
 /**
  * Class DropsUserController
@@ -8,11 +10,16 @@ require_once 'DropsController.class.php';
 class DropsUserController extends DropsController
 {
 
+    const DROPSFNC = 'apiFnc';
+	
+    /** Path to post userdata to, to update a user in the good ol' pool */
+    const UPDATE = 'userupdate';
+	
     /** Path to post userdata to, to create a user in the good ol' pool */
     const CREATE = 'usercreate';
 
     /** Path to post userdata to, to logout a user from the good ol' pool */
-    const LOGOUT = 'logout';
+    const LOGOUT = 'userlogout';
 
     /**
      * Checks if the parameters are valid and calls the user creation action
@@ -24,7 +31,7 @@ class DropsUserController extends DropsController
             return;
         }
 
-        $parameter = $this->getParameter(DropsSessionController::DROPSFNC, $_GET);
+        $parameter = $this->getParameter(self::DROPSFNC, $_GET);
 
         switch ($parameter) {
             case self::LOGOUT:
@@ -73,6 +80,22 @@ class DropsUserController extends DropsController
                 $dataHandler = new DropsUserDataHandler();
                 $userReceiver = new DropsUserCreator($userData);
                 $userReceiver->setDataHandler($dataHandler);
+                $response = $userReceiver->run();
+
+                self::logResponse($response);
+
+                echo $response->getFormat(DropsResponse::JSON);
+                exit;
+
+                break;
+            case self::UPDATE:
+
+                $userData = $this->getUserData();
+                $dataHandler = new DropsUserDataHandler();
+                $userReceiver = new DropsUserUpdater($userData);
+                $userReceiver->setDataHandler($dataHandler);
+				$sessionDataHandler = new DropsSessionDataHandler();
+                $userReceiver->setSessionDataHandler($sessionDataHandler);
                 $response = $userReceiver->run();
 
                 self::logResponse($response);

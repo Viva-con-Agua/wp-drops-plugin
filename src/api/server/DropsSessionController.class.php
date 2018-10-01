@@ -25,16 +25,21 @@ class DropsSessionController extends DropsController
     public function run()
     {
 
+		$logger = new DropsLogger();
+		$logger->log(DropsLogger::DEBUG, 'Arrived at drops');
+	
         $drops = (new DropsLoginHandler())
             ->setSessionDataHandler(new DropsSessionDataHandler())
             ->setMetaDataHandler(new DropsMetaDataHandler());
 
+		$logger->log(DropsLogger::DEBUG, 'Sessiondatahandler created');
         $parameter = $drops->getParameter(self::DROPSFNC, $_GET);
 
         if (empty($parameter)) {
             $parameter = self::INITIAL;
         }
 
+		$logger->log(DropsLogger::DEBUG, 'Parameter set');
         $url = $this->getParsedUrl();
         if (isset($url['path']) && stristr('wp-admin', $url['path'])) {
             return;
@@ -52,6 +57,7 @@ class DropsSessionController extends DropsController
 			
             case self::INITIAL:
             default:
+				$logger->log(DropsLogger::DEBUG, 'Initial call triggered');
                 $drops->handleFrontendLoginRedirect();
                 break;
         }

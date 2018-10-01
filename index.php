@@ -26,9 +26,8 @@ require_once 'src/api/server/DropsSessionController.class.php';
 require_once 'src/api/server/DropsUserController.class.php';
 
 require_once 'src/api/DropsResponse.class.php';
-require_once 'src/api/DropsUserCreator.class.php';
 require_once 'src/api/actions/DropsUserReader.class.php';
-require_once 'src/api/actions/DropsUserUpdater.class.php';
+require_once 'src/api/actions/DropsUserActionUpdater.class.php';
 require_once 'src/api/actions/DropsUserImageUpdater.class.php';
 require_once 'src/api/actions/DropsUserProfileReader.class.php';
 require_once 'src/api/actions/DropsUserDeleter.class.php';
@@ -85,14 +84,14 @@ function handleDropsLogin() {
 }*/
 
 // Handling creation of a new user
-function handleDropsUserCreation() {
+function handleDropsUserApi() {
     (new DropsUserController())->run();
 }
 
 // Handling update of an existing user
 function handleUserUpdate($userId) {
     $dataHandler = new DropsUserDataHandler();
-    $userUpdater = new DropsUserUpdater();
+    $userUpdater = new DropsUserActionUpdater();
     $userImageUpdater = new DropsUserImageUpdater();
 
     // Update the user itself
@@ -141,6 +140,21 @@ function handleUserLogout() {
 	die();
 }
 
+function handleAPIRequest() {
+
+	if (!isset($_SERVER['REQUEST_URI']) || empty($_SERVER['REQUEST_URI'])) {
+		return;
+	}
+	
+	$apiCall = explode('/api/', $_SERVER['REQUEST_URI']);
+	
+	if (count($apiCall) == 2) {
+		require_once 'src/api/server/DropsAPIController.class.php';
+		(new DropsAPIController)->run();
+	}
+	
+}
+
 function createAdminMenu() {
     if (is_admin()) {
         new AdminMenu();
@@ -148,12 +162,13 @@ function createAdminMenu() {
 }
 
 //add_action('parse_request', 'handleNatsLogout');
-add_action('parse_request', 'handleDropsUserCreation');
+add_action('parse_request', 'handleDropsUserApi');
 
 if (Config::get('LOGIN_ENABLED')) {
     add_action('parse_request', 'handleDropsLogin');
 }
 
+add_action('parse_request', 'handleAPIRequest');
 add_action('admin_menu', 'createAdminMenu' );
 add_action('profile_update', 'handleUserUpdate', 10, 1);
 add_action('delete_user', 'handleUserDelete', 10, 1);

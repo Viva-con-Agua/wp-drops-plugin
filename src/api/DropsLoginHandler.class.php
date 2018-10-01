@@ -42,18 +42,24 @@ class DropsLoginHandler
     public function handleFrontendLoginRedirect()
     {
 		
+		$logger = new DropsLogger();
+		$logger->log(DropsLogger::DEBUG, 'handleFrontendLoginResponse');
 		$currentUrl = $this->getCurrentUrl();
 
+		$logger->log(DropsLogger::DEBUG, 'Current URL: ' . $currentUrl);
         // We have to create a temporary session
         $session = $this->createTemporarySession($currentUrl);
 
+		$logger->log(DropsLogger::DEBUG, 'Session created');
         // Store the current URL to it and redirect it to the login page
         $this->sessionDataHandler->persistTemporarySession($session);
 
+		$logger->log(DropsLogger::DEBUG, 'Session persisted');
         // Redirect to drops
         $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsFrontendLoginUrl'));
         $url = str_replace('<clientId>', get_option('dropsClientId'), $url);
 		
+		$logger->log(DropsLogger::DEBUG, 'will redirect to URL: ' . $url);
         $this->redirect($url);
 
     }

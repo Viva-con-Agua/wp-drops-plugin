@@ -20,6 +20,23 @@ abstract class DropsController
         $actualLink = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         return parse_url($actualLink);
     }
+	
+    /**
+     * Returns the current url parsed into its parts
+     * @return array
+     */
+    protected function getUrlPath() {
+		
+		if (!isset($_SERVER['REQUEST_URI'])) {
+			return [];
+		}
+		
+		if (empty($_SERVER['REQUEST_URI'])) {
+			return [];
+		}
+		
+		return explode('/', $_SERVER['REQUEST_URI']);
+    }
 
     /**
      * Logs the response data to the drops logger

@@ -81,8 +81,41 @@ class DropsUserDataHandler implements UserDataHandlerInterface
         return $this->dbConnection->get_row(
             'SELECT * ' .
             'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
-            "WHERE ID = '" . $userId . "'"
+			'WHERE ID = "' . $userId . '"'
         );
+    }
+
+    public function updateUser($userId, array $userData, array $userMetaData)
+    {
+		
+		if (!empty($userData)) {
+			
+			$userDataSql = implode(', ', array_map(
+				function ($v, $k) { return sprintf('%s="%s"', $k, $v); },
+				$userData,
+				array_keys($userData)
+			));
+			
+			$this->dbConnection->query(
+				'UPDATE ' . Config::get('DB_USER_TABLE') . ' SET ' .
+				$userDataSql . ' ' .
+				'WHERE ID = "' . $userId . '"'
+			);
+			
+		}
+		
+		if (!empty($userMetaData)) {
+			
+			foreach ($userMetaData AS $metaKey => $metaValue) {
+				$this->dbConnection->query(
+					'UPDATE ' . Config::get('DB_USERMETA_TABLE') . ' SET ' .
+					'meta_value = "' . $metaValue . '"' . 
+					'WHERE user_id = "' . $userId . '" and meta_key = "' . $metaKey . '"'
+				);
+			}
+			
+		}
+		
     }
 
 }
