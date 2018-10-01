@@ -25,7 +25,7 @@ class DropsSessionController extends DropsController
     public function run()
     {
 
-		$logger = new DropsLogger();
+		$logger = new DropsLogger("");
 		$logger->log(DropsLogger::DEBUG, 'Arrived at drops');
 	
         $drops = (new DropsLoginHandler())

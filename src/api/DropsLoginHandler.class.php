@@ -42,7 +42,7 @@ class DropsLoginHandler
     public function handleFrontendLoginRedirect()
     {
 		
-		$logger = new DropsLogger();
+		$logger = new DropsLogger("");
 		$logger->log(DropsLogger::DEBUG, 'handleFrontendLoginResponse');
 		$currentUrl = $this->getCurrentUrl();
 
