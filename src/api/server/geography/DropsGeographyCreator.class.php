@@ -58,7 +58,7 @@ class DropsGeographyCreator
 			return (new DropsResponse())
 				->setCode(400)
 				->setContext(__CLASS__)
-				->setMessage('Geography already exists! [ID: ' .  $entry->id . ']');
+				->setMessage('Geography already exists! [ID: ' .  $entry->ID . ']');
 
         }
 
@@ -128,7 +128,7 @@ class DropsGeographyCreator
 			$groupEntry = $this->dataHandler->getEntryByName($group);
 			
 			if (!empty($groupEntry)) {
-				$entryGroups[] = [$groupEntry->id, $groupEntry->type, $id]; 
+				$entryGroups[] = [$groupEntry->ID, $groupEntry->type, $id]; 
 			}
 			
 		}

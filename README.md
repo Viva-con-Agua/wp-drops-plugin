@@ -13,7 +13,7 @@ redirected to the drops service for login/registration.
 - If the user executes the login action, the service ensures the login into the Pool system.
  
 - When there is a registration of a new user in the drops microservice, it pushes the the necessary user data to the pool
-to provide synchronicity of the user data.
+to provide synchronicity of the user data. Same on updating users or geography informations
 
 - After the user updates it's profile in the pool, the plugin pushed the user data to the drops microservice to ensure 
 the synchronicity in reverse. Same on deleting an existing user from the pool.
@@ -31,11 +31,21 @@ After clonig the repository to the plugins folder, the second step is to go to t
 config.inc.php.scel file and fill out the configuration for the database and the connection to drops
 
 ```
-$_CONFIG['DB_USER_TABLE'] = ''; // predefined table from wordpress
-$_CONFIG['DB_USERMETA_TABLE'] = ''; // predefined table from wordpress
-$_CONFIG['DB_SESSION_TABLE'] = ''; // table will be created
-$_CONFIG['DB_META_TABLE'] = ''; // table will be created
-$_CONFIG['DB_DROPS_LOG'] = ''; // table will be created
+$_CONFIG['LOGIN_ENABLED'] = false;
+
+$_CONFIG['DB_PREFIX'] = 'vca1312';
+
+// Exitsting wordpress tables
+$_CONFIG['DB_USER_TABLE'] = $_CONFIG['DB_PREFIX'] . '_users';
+$_CONFIG['DB_USERMETA_TABLE'] = $_CONFIG['DB_PREFIX'] . '_usermeta';
+
+// Tables will be created on plugin activation
+$_CONFIG['DB_SESSION_TABLE'] = $_CONFIG['DB_PREFIX'] . '_sessions';
+$_CONFIG['DB_META_TABLE'] = $_CONFIG['DB_PREFIX'] . '_drops_meta';
+
+$_CONFIG['DB_DROPS_LOG'] = $_CONFIG['DB_PREFIX'] . '_drops_logs';
+$_CONFIG['DB_GEOGRAPHY'] = $_CONFIG['DB_PREFIX'] . '_vca_asm_geography';
+$_CONFIG['DROPS_LOGFILE'] = 'dropslog.txt';
 ```
 
 After editing the config file, the necessary tables will be added to the database on plugin actionvation.
@@ -61,18 +71,15 @@ The expected data model must be:
     'user_email' => 'example@user.de', // string
     'display_name' => 'Example U.', // string
     'user_name' => 'Example User', // string
-    'usermeta' => {
-        'nickname' => 'Example User', // string
-        'first_name' => 'Example', // string
-        'last_name' => 'User', // string
-        'mobile' => '123456789', // string
-        'residence' => 'ExampleCity', // string
-        'birthday' => 585352800, // long
-        'gender' => 'male', // string
-        'nation' => 40, // int
-        'city' => 1, // int
-        'region' => 1 // int
-    }
+	'nickname' => 'Example User', // string
+	'first_name' => 'Example', // string
+	'last_name' => 'User', // string
+	'mobile' => '123456789', // string
+	'residence' => 'ExampleCity', // string
+	'birthday' => 585352800, // long
+	'gender' => 'male', // string
+	'nation' => "Germany", // string
+	'city' => "Hamburg", // string
 }
 ```
 

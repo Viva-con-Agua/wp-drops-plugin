@@ -152,16 +152,21 @@ class DropsLoginHandler
         if (empty($user)) {
             $this->handleFrontendLoginRedirect();
         }
-
         $this->loginUser($user->ID);
+		(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'UserId is logged in now (' . $user->ID . ')');
         $this->sessionDataHandler->persistDropsSessionId($sessionId, $userData->id);
+		(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'UserdataID (dropsId): ' . $userData->id);
         $this->sessionDataHandler->persistUserId($sessionId, $user->ID);
 
+		(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'Persisted session: ' . $sessionId);
         if (isset($this->metaDataHandler)) {
+			(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'Add metadata');
             $this->metaDataHandler->addMetaData();
+			(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'metadata added');
         }
 
         $url = $temporarySession['user_session']['url'];
+		(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'Will redirect to url: ' . $url);
         $this->redirect($url);
 
     }

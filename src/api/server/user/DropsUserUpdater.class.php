@@ -131,7 +131,6 @@ class DropsUserUpdater
             Config::get('DB_PREFIX') . '_user-settings-time' => time(),
 		];
 		
-		$dataMapper = new DropsDataMapper();
 		foreach ($this->optionalUserMetaFields AS $key) {
 			
 			if (isset($this->userData[$key])) {

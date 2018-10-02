@@ -11,19 +11,14 @@ class DropsDataMapper
      * Maps data from drops to pool1
      * @param DropsResponse $response
      */
-    public static function map($key, $value)
-    {
+    public static function map($key, $value) {
 
         switch ($key) {
             case 'pool_lang':
 				return self::mapLanguage($value);
                 break;
             case 'secondary_nl':
-				return self::mapGeography($value);
-                break;
             case 'nation':
-				return self::mapGeography($value);
-                break;
             case 'city':
 				return self::mapGeography($value);
                 break;
@@ -36,20 +31,7 @@ class DropsDataMapper
     }
 	
 	private static function mapGeography($value) {
-		global $wpdb;
-	
-		$geographyId = $wpdb->get_var(
-            'SELECT id ' .
-            'FROM ' . Config::get('DB_GEOGRAPHY') . ' ' .
-            'WHERE name = "' . $value . '"'
-		);
-		
-		if (empty($geographyId)) {
-			return false;
-		}
-		
-		return $geographyId;
-		
+		return (new DropsGeographyDataHandler)->getEntryByName($value);		
 	}
 	
 	private static function mapLanguage($language) {

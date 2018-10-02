@@ -141,7 +141,7 @@ class DropsUserCreator
             'vca_asm_last_pass_reset' => time(),
             'vca_asm_last_activity' => time(),
             'mail_switch' => 'none',
-            'pool_lang' => 'de',
+            'pool_lang' => (isset($this->userData['pool_lang']) ? DropsDataMapper::map('nation', $this->userData['pool_lang']) : 'de'),
             'default_password_nag' => '',
             Config::get('DB_PREFIX') . '_user-settings' => 'tml1=2&tml0=0&mfold=o&posts_list_mode=list&unfold=0',
             Config::get('DB_PREFIX') . '_user-settings-time' => time(),
@@ -150,9 +150,9 @@ class DropsUserCreator
             'birthday' => $this->userData['birthday'],
             'gender' => $this->userData['gender'],
             'simple-local-avatar' => '',
-            'nation' => $this->userData['nation'],
-            'city' => $this->userData['city'],
-            'region' => $this->userData['region']
+            'nation' => DropsDataMapper::map('nation', $this->userData['nation']);
+            'city' => DropsDataMapper::map('city', $this->userData['city']);
+            'region' => DropsDataMapper::map('city', $this->userData['city']);
         );
 
         return $this->dataHandler->createUserMeta($userId, $userMetaData);
