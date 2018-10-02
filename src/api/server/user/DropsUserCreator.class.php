@@ -150,9 +150,9 @@ class DropsUserCreator
             'birthday' => $this->userData['birthday'],
             'gender' => $this->userData['gender'],
             'simple-local-avatar' => '',
-            'nation' => DropsDataMapper::map('nation', $this->userData['nation']);
-            'city' => DropsDataMapper::map('city', $this->userData['city']);
-            'region' => DropsDataMapper::map('city', $this->userData['city']);
+            'nation' => DropsDataMapper::map('nation', $this->userData['nation']),
+            'city' => DropsDataMapper::map('city', $this->userData['city']),
+            'region' => DropsDataMapper::map('city', $this->userData['city'])
         );
 
         return $this->dataHandler->createUserMeta($userId, $userMetaData);
