@@ -40,7 +40,7 @@ class DropsSessionController extends DropsController
 
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Parameter set to ' . $parameter);
         $url = $this->getParsedUrl();
-        if (isset($url['path']) && stristr('wp-admin', $url['path'])) {
+        if (isset($url['path']) && (stristr('wp-admin', $url['path']) || stristr('rausloggen', $url['path']))) {
             return;
         }
 

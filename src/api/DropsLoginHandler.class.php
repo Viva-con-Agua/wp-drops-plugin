@@ -89,10 +89,6 @@ class DropsLoginHandler
         $sessionId = $this->getParameter('sessionId', $params);
 		
 		if (empty($sessionId)) {
-			$sessionId = $this->getPool1Session();
-		}
-		
-		if (empty($sessionId)) {
 			$sessionId = $this->getPool1Cookie();
 		}
 		
@@ -149,7 +145,7 @@ class DropsLoginHandler
             (new DropsLogger(''))->log(DropsLogger::INFO, 'Empty session, will restart routine (Line ' . __LINE__ . ')');
             $this->handleFrontendLoginRedirect();
         } 
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Found session with dropsId: ' . $temporarySession['drops_session_id'] . ' (Line ' . __LINE__ . ')');
+		
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will persist token request userdata with access_token: ' . $response['access_token'] . ' (Line ' . __LINE__ . ')');
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
         $userDataResponse = (new DropsUserProfileReader())->setAccessToken($response['access_token'])->run(1);
@@ -190,6 +186,9 @@ class DropsLoginHandler
         }
 
         $url = $temporarySession['user_session']['url'];
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will clear cookie: ' . $url . ' (Line ' . __LINE__ . ')');
+		$this->clearPool1Cookie();
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will redirect to url: ' . $url . ' (Line ' . __LINE__ . ')');
         $this->redirect($url);
 
@@ -263,6 +262,27 @@ class DropsLoginHandler
      * @param string $url
      * @return array
      */
+    private function clearPool1Cookie()
+    {
+
+		$cookieData = print_r($_COOKIE, true);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current cookie data to check: ' . $cookieData . ' (Line ' . __LINE__ . ')');
+		
+		if (isset($_COOKIE['pool1'])) {
+			unset($_COOKIE['pool1']);
+			setcookie('pool1', '', time() - 3600, '/'); // empty value and old timestamp
+		}
+
+        return false;
+
+    }
+
+    /**
+     * Creates a temporary session and stores the current url in it
+     *
+     * @param string $url
+     * @return array
+     */
     private function getPool1Cookie()
     {
 
@@ -271,26 +291,6 @@ class DropsLoginHandler
 		
 		if (isset($_COOKIE['pool1'])) {
 			return $_COOKIE['pool1'];
-		}
-
-        return false;
-
-    }
-
-
-    /**
-     * Creates a temporary session and stores the current url in it
-     *
-     * @param string $url
-     * @return array
-     */
-    private function getPool1Session()
-    {
-		
-		$sessionData = print_r($_SESSION, true);
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current session data to check: ' . $sessionData . ' (Line ' . __LINE__ . '). Good bye!');
-		if ('pool1' == session_name()) {
-			return session_id();
 		}
 
         return false;
