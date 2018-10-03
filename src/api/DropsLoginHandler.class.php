@@ -275,7 +275,7 @@ class DropsLoginHandler
 		$uD = print_r($_COOKIE, true);
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current cookie data to check: ' . $ud . ' (Line ' . __LINE__ . ')');
 		
-		if (isset($_COOKIE['pool1']) {
+		if (isset($_COOKIE['pool1'])) {
 			return $_COOKIE['pool1'];
 		}
 
