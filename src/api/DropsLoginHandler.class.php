@@ -311,11 +311,12 @@ class DropsLoginHandler
             session_unset();
         }
 
-        session_start();
-        session_regenerate_id(true);
+        session_start([
+			'name' => 'pool1',
+			'path' => '/pool',
+			'url' => $url
+		]);
 
-        $_SESSION['name'] = 'pool1';
-        $_SESSION['url'] = $url;
         $temporarySession = [
             'id' => session_id(),
             'session' => json_encode($_SESSION)
