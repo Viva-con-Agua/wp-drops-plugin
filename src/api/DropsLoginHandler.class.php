@@ -42,24 +42,30 @@ class DropsLoginHandler
     public function handleFrontendLoginRedirect()
     {
 		
-		$logger = new DropsLogger("");
-		$logger->log(DropsLogger::DEBUG, 'handleFrontendLoginRedirect');
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Entered handleFrontendLoginRedirect (Line ' . __LINE__ . ')');
 		$currentUrl = $this->getCurrentUrl();
 
-		$logger->log(DropsLogger::DEBUG, 'Current URL: ' . $currentUrl);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current called URL is ' . $currentUrl . ' (Line ' . __LINE__ . ')');
+
         // We have to create a temporary session
         $session = $this->createTemporarySession($currentUrl);
 
-		$logger->log(DropsLogger::DEBUG, 'Session created');
-        // Store the current URL to it and redirect it to the login page
-        $this->sessionDataHandler->persistTemporarySession($session);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Session created and destroyed with id: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
 
-		$logger->log(DropsLogger::DEBUG, 'Session persisted');
+        // Store the current URL to it and redirect it to the login page
+        $isPersisted = $this->sessionDataHandler->persistTemporarySession($session);
+		
+		if ($isPersisted === false) {
+			(new DropsLogger(''))->log(DropsLogger::WARNING, 'Session could not be persisted, error: ' . $this->sessionDataHandler->getError(). ' (Line ' . __LINE__ . ')');
+		} else {
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Session persisted before frontend login redirect: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
+		}
+
         // Redirect to drops
         $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsFrontendLoginUrl'));
         $url = str_replace('<clientId>', get_option('dropsClientId'), $url);
 		
-		$logger->log(DropsLogger::DEBUG, 'will redirect to URL: ' . $url);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will frontend login redirect to URL: ' . $url. ' (Line ' . __LINE__ . ')');
         $this->redirect($url);
 
     }
@@ -76,19 +82,27 @@ class DropsLoginHandler
      */
     public function handleLoginResponse($params)
     {
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Started handleLoginResponse (Line ' . __LINE__ . ')');
 
         // If there is no temporary session with the id, redirect to the login process
         $sessionId = $this->getParameter('sessionId', $params);
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'SessionId from Parameters: ' . $sessionId . ' (Line ' . __LINE__ . ')');
+		
         $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'No temporary session found will create und with url: ' . get_site_url() . ' (Line ' . __LINE__ . ')');
             $session = $this->createTemporarySession(get_site_url());
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Temporary session created with id: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
             $this->sessionDataHandler->persistTemporarySession($session);
             $sessionId = $session['id'];
         }
 
         // Read the parameters from the URL and persists them
         $dropsSessionId = $this->getParameter('dropsSessionId', $params);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will persist drops session id: ' . $dropsSessionId . ' (Line ' . __LINE__ . ')');
 
         $this->sessionDataHandler->persistDropsSessionId($sessionId, $dropsSessionId);
 
@@ -109,6 +123,8 @@ class DropsLoginHandler
         // Create parameters needed to request the access token
         $authorizationCode = $this->getParameter('authorizationCode', $params);
 
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will request access_token with authorizationCode: ' . $authorizationCode . ' (Line ' . __LINE__ . ')');
+		
         $parameters = [
             'grant_type'    => 'authorization_code',
             'client_id'     => get_option('dropsClientId'),
@@ -120,53 +136,60 @@ class DropsLoginHandler
         $response = $this->requestAccessToken($parameters);
 
         if (empty($response)) {
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty response, will restart routine from line ' . __LINE__);
+            (new DropsLogger(''))->log(DropsLogger::INFO, 'Empty response, will restart routine (Line ' . __LINE__ . ')');
             $this->handleFrontendLoginRedirect();
         }
 
         $sessionId = $this->getParameter('sessionId', $params);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will look for temporary session with id: ' . $sessionId . ' (Line ' . __LINE__ . ')');
         $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart routine from line ' . __LINE__);
+            (new DropsLogger(''))->log(DropsLogger::INFO, 'Empty session, will restart routine (Line ' . __LINE__ . ')');
             $this->handleFrontendLoginRedirect();
-        }
-
+        } 
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Found session with dropsId: ' . $temporarySession['drops_session_id'] . ' (Line ' . __LINE__ . ')');
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will persist token request userdata with access_token: ' . $response['access_token'] . ' (Line ' . __LINE__ . ')');
         $this->sessionDataHandler->persistAccessToken($sessionId, $response);
         $userDataResponse = (new DropsUserProfileReader())->setAccessToken($response['access_token'])->run(1);
 
         DropsController::logResponse($userDataResponse);
 
         if ($userDataResponse->getCode() != 200) {
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Empty session, will restart routine from line ' . __LINE__);
+            (new DropsLogger(''))->log(DropsLogger::INFO, 'Empty session, will restart routine (Line ' . __LINE__ . ')');
             $this->handleFrontendLoginRedirect();
         }
 
         $userData = $userDataResponse->getResponse();
         $userEmail = $userData->profiles[0]->email;
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Got user from drops profile request with email: ' . $userEmail . ' (Line ' . __LINE__ . ')');
 
         // Check if user really exists
         $userDataHandler = new DropsUserDataHandler();
         $user = $userDataHandler->getUserByEMail($userEmail);
 
         if (empty($user)) {
+			(new DropsLogger(''))->log(DropsLogger::INFO, 'No user found with email: ' . $userEmail . ' (Line ' . __LINE__ . ')');
             $this->handleFrontendLoginRedirect();
         }
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will login user id ' . $user->ID . ' (Line ' . __LINE__ . ')');
         $this->loginUser($user->ID);
-		(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'UserId is logged in now (' . $user->ID . ')');
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User is logged in now with id ' . $user->ID . ' (Line ' . __LINE__ . ')');
         $this->sessionDataHandler->persistDropsSessionId($sessionId, $userData->id);
-		(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'UserdataID (dropsId): ' . $userData->id);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User got drops id ' . $userData->id . ' (Line ' . __LINE__ . ')');
         $this->sessionDataHandler->persistUserId($sessionId, $user->ID);
 
-		(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'Persisted session: ' . $sessionId);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Persisted session: ' . $sessionId . ' (Line ' . __LINE__ . ')');
         if (isset($this->metaDataHandler)) {
-			(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'Add metadata');
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will add metadata (Line ' . __LINE__ . ')');
             $this->metaDataHandler->addMetaData();
-			(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'metadata added');
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Metadata added (Line ' . __LINE__ . ')');
         }
 
         $url = $temporarySession['user_session']['url'];
-		(new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::DEBUG, 'Will redirect to url: ' . $url);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will redirect to url: ' . $url . ' (Line ' . __LINE__ . ')');
         $this->redirect($url);
 
     }
@@ -211,7 +234,7 @@ class DropsLoginHandler
         if ($response->info->http_code == 200) {
             return json_decode($response->response, true);
         } else {
-            (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::ERROR, '(' . $response->info->http_code . ' ' . $response->error . ') URL: ' . get_option('dropsAccessUrl'));
+            (new DropsLogger(''))->log(DropsLogger::ERROR, '(' . $response->info->http_code . ' ' . $response->error . ') URL: ' . get_option('dropsAccessUrl'). ' (Line ' . __LINE__ . ')'. ' (Line ' . __LINE__ . ')');
             return null;
         }
 
@@ -270,6 +293,7 @@ class DropsLoginHandler
     private function redirect($url)
     {
         header('Location: ' . $url, true, 302);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will die now after redirection to ' . $url . ' (Line ' . __LINE__ . '). Good bye!');
         exit;
     }
 
@@ -299,7 +323,7 @@ class DropsLoginHandler
 
         update_user_meta( $userId, 'vca_asm_last_activity', time() );
 
-        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log(DropsLogger::INFO, 'Did login user ' . $user->user_login . ' with id ' . $userId);
+        (new DropsLogger(''))->log(DropsLogger::INFO, 'Did login user ' . $user->user_login . ' with id ' . $userId);
 
         do_action('wp_login', $user->user_login, $user);
 

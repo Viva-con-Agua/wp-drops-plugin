@@ -241,5 +241,9 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
             'WHERE user_id = ' . $userId
         );
     }
+		
+	public function getError() {
+		return $this->dbConnection->last_error;
+	}
 
 }
