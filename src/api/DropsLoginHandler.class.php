@@ -107,12 +107,6 @@ class DropsLoginHandler
             $sessionId = $session['id'];
         }
 
-        // Read the parameters from the URL and persists them
-        $dropsSessionId = $this->getParameter('dropsSessionId', $params);
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will persist drops session id: ' . $dropsSessionId . ' (Line ' . __LINE__ . ')');
-
-        $this->sessionDataHandler->persistDropsSessionId($sessionId, $dropsSessionId);
-
         return $sessionId;
 
     }
@@ -272,8 +266,8 @@ class DropsLoginHandler
     private function getPool1Cookie()
     {
 
-		$uD = print_r($_COOKIE, true);
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current cookie data to check: ' . $ud . ' (Line ' . __LINE__ . ')');
+		$cookieData = print_r($_COOKIE, true);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current cookie data to check: ' . $cookieData . ' (Line ' . __LINE__ . ')');
 		
 		if (isset($_COOKIE['pool1'])) {
 			return $_COOKIE['pool1'];
@@ -293,8 +287,8 @@ class DropsLoginHandler
     private function getPool1Session()
     {
 		
-		$uD = print_r($_SESSION, true);
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current session data to check: ' . $ud . ' (Line ' . __LINE__ . '). Good bye!');
+		$sessionData = print_r($_SESSION, true);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current session data to check: ' . $sessionData . ' (Line ' . __LINE__ . '). Good bye!');
 		if ('pool1' == session_name()) {
 			return session_id();
 		}
