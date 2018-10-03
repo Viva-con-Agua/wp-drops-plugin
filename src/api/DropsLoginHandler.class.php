@@ -88,13 +88,16 @@ class DropsLoginHandler
         // If there is no temporary session with the id, redirect to the login process
         $sessionId = $this->getParameter('sessionId', $params);
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'SessionId from Parameters: ' . $sessionId . ' (Line ' . __LINE__ . ')');
+		if (empty($sessionId)) {
+			$sessionId = $this->getPool1Session();
+		}
 		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'SessionId from Parameters: ' . $sessionId . ' (Line ' . __LINE__ . ')');
         $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
-			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'No temporary session found will create und with url: ' . get_site_url() . ' (Line ' . __LINE__ . ')');
-            $session = $this->createTemporarySession(get_site_url());
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'No temporary session found will create und with url: ' . $this->getCurrentUrl() . ' (Line ' . __LINE__ . ')');
+            $session = $this->createTemporarySession($this->getCurrentUrl());
 			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Temporary session created with id: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
             $this->sessionDataHandler->persistTemporarySession($session);
             $sessionId = $session['id'];
@@ -262,6 +265,27 @@ class DropsLoginHandler
      * @param string $url
      * @return array
      */
+    private function getPool1Session()
+    {
+
+        if (session_status() != PHP_SESSION_ACTIVE) {
+			return false;
+        }
+
+		if ('pool1' == session_name()) {
+			return session_id();
+		}
+
+        return false;
+
+    }
+
+    /**
+     * Creates a temporary session and stores the current url in it
+     *
+     * @param string $url
+     * @return array
+     */
     private function createTemporarySession($url)
     {
 
@@ -271,6 +295,7 @@ class DropsLoginHandler
         }
 
         session_start();
+		session_name('pool1');
         session_regenerate_id(true);
 
         $_SESSION['url'] = $url;
@@ -278,9 +303,6 @@ class DropsLoginHandler
             'id' => session_id(),
             'session' => json_encode($_SESSION)
         ];
-
-        session_destroy();
-        session_unset();
 
         return $temporarySession;
 
