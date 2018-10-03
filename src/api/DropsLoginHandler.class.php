@@ -92,12 +92,16 @@ class DropsLoginHandler
 			$sessionId = $this->getPool1Session();
 		}
 		
+		if (empty($sessionId)) {
+			$sessionId = $this->getPool1Cookie();
+		}
+		
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'SessionId from Parameters: ' . $sessionId . ' (Line ' . __LINE__ . ')');
         $temporarySession = $this->sessionDataHandler->getTemporarySession($sessionId);
 
         if (empty($temporarySession)) {
-			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'No temporary session found will create und with url: ' . $this->getCurrentUrl() . ' (Line ' . __LINE__ . ')');
-            $session = $this->createTemporarySession($this->getCurrentUrl());
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'No temporary session found will create und with url: ' . get_site_url() . '/' . ' (Line ' . __LINE__ . ')');
+            $session = $this->createTemporarySession(get_site_url() . '/');
 			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Temporary session created with id: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
             $this->sessionDataHandler->persistTemporarySession($session);
             $sessionId = $session['id'];
@@ -265,13 +269,32 @@ class DropsLoginHandler
      * @param string $url
      * @return array
      */
-    private function getPool1Session()
+    private function getPool1Cookie()
     {
 
-        if (session_status() != PHP_SESSION_ACTIVE) {
-			return false;
-        }
+		$uD = print_r($_COOKIE, true);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current cookie data to check: ' . $ud . ' (Line ' . __LINE__ . ')');
+		
+		if (isset($_COOKIE['pool1']) {
+			return $_COOKIE['pool1'];
+		}
 
+        return false;
+
+    }
+
+
+    /**
+     * Creates a temporary session and stores the current url in it
+     *
+     * @param string $url
+     * @return array
+     */
+    private function getPool1Session()
+    {
+		
+		$uD = print_r($_SESSION, true);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current session data to check: ' . $ud . ' (Line ' . __LINE__ . '). Good bye!');
 		if ('pool1' == session_name()) {
 			return session_id();
 		}
@@ -295,9 +318,9 @@ class DropsLoginHandler
         }
 
         session_start();
-		session_name('pool1');
         session_regenerate_id(true);
 
+        $_SESSION['name'] = 'pool1';
         $_SESSION['url'] = $url;
         $temporarySession = [
             'id' => session_id(),
