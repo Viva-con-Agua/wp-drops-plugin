@@ -283,7 +283,7 @@ class DropsLoginHandler
      * @param string $url
      * @return array
      */
-    private function getPool1Cookie()
+    public function getPool1Cookie()
     {
 
 		$cookieData = print_r($_COOKIE, true);
