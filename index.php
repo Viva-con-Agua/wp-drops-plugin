@@ -84,6 +84,12 @@ function handleDropsLogin() {
 
 }*/
 
+
+	
+function function allowProgrammaticLogin( $user, $username, $password ) {
+	return get_user_by( 'login', $username );
+}
+
 // Handling update of an existing user
 function handleUserUpdate($userId) {
     $dataHandler = new DropsUserDataHandler();
