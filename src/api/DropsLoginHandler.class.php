@@ -42,27 +42,40 @@ class DropsLoginHandler
     public function handleFrontendLoginRedirect()
     {
 				
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Entered handleFrontendLoginRedirect (Line ' . __LINE__ . ')');
-		$currentUrl = $this->getCurrentUrl();
-
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current called URL is ' . $currentUrl . ' (Line ' . __LINE__ . ')');
-
-        // We have to create a temporary session
-        $session = $this->createTemporarySession($currentUrl);
-
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Session created and destroyed with id: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
-
-        // Store the current URL to it and redirect it to the login page
-        $isPersisted = $this->sessionDataHandler->persistTemporarySession($session);
+		// If there is no temporary session with the id, redirect to the login process
+        $sessionId = $this->getParameter('sessionId', $_GET);
 		
-		if ($isPersisted === false) {
-			(new DropsLogger(''))->log(DropsLogger::WARNING, 'Session could not be persisted, error: ' . $this->sessionDataHandler->getError(). ' (Line ' . __LINE__ . ')');
-		} else {
-			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Session persisted before frontend login redirect: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
+		if (empty($sessionId)) {
+			$sessionId = $drops->getPool1Cookie();
+		}
+		
+		if (empty($sessionId)) {
+			
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Entered handleFrontendLoginRedirect (Line ' . __LINE__ . ')');
+			$currentUrl = $this->getCurrentUrl();
+
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current called URL is ' . $currentUrl . ' (Line ' . __LINE__ . ')');
+
+			// We have to create a temporary session
+			$session = $this->createTemporarySession($currentUrl);
+			
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Session created and destroyed with id: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
+
+			// Store the current URL to it and redirect it to the login page
+			$isPersisted = $this->sessionDataHandler->persistTemporarySession($session);
+			
+			if ($isPersisted === false) {
+				(new DropsLogger(''))->log(DropsLogger::WARNING, 'Session could not be persisted, error: ' . $this->sessionDataHandler->getError(). ' (Line ' . __LINE__ . ')');
+			} else {
+				(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Session persisted before frontend login redirect: ' . $session['id'] . ' (Line ' . __LINE__ . ')');
+			}
+			
+			$sessionId = $session['id'];
+			
 		}
 
         // Redirect to drops
-        $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsFrontendLoginUrl'));
+        $url = str_replace('<temporarySessionId>', $sessionId, get_option('dropsFrontendLoginUrl'));
         $url = str_replace('<clientId>', get_option('dropsClientId'), $url);
 		
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will frontend login redirect to URL: ' . $url. ' (Line ' . __LINE__ . ')');
