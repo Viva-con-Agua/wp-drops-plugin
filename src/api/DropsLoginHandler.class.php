@@ -171,9 +171,15 @@ class DropsLoginHandler
         }
 		
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will login user id ' . $user->ID . ' (Line ' . __LINE__ . ')');
-        $this->loginUser($user->ID);
+        //$this->loginUser($user->ID);
+        $isSignedOn = $this->signonUser($user->user_login);
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User is logged in now with id ' . $user->ID . ' (Line ' . __LINE__ . ')');
+		if (!$isSignedOn) {
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User is NOT signed on! ' . $user->user_login . ' (Line ' . __LINE__ . ')');
+		} else {
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User is logged in now with id ' . $user->ID . ' (Line ' . __LINE__ . ')');
+		}
+		
         $this->sessionDataHandler->persistDropsSessionId($sessionId, $userData->id);
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User got drops id ' . $userData->id . ' (Line ' . __LINE__ . ')');
         $this->sessionDataHandler->persistUserId($sessionId, $user->ID);
@@ -366,6 +372,27 @@ class DropsLoginHandler
         (new DropsLogger(''))->log(DropsLogger::INFO, 'Did login user ' . $user->user_login . ' with id ' . $userId);
 
         do_action('wp_login', $user->user_login, $user);
+
+    }
+	
+    /**
+     * Triggers the login_action for automatically user login
+     * @param int $userId
+     */
+    private function signonUser($username)
+    {
+
+		$user = wp_signon( array( 'user_login' => $username ) );
+		
+		if ( is_a( $user, 'WP_User' ) ) {
+			wp_set_current_user( $user->ID, $user->user_login );
+			
+			if ( is_user_logged_in() ) {
+				return true;
+			}
+		}
+
+		return false;
 
     }
 
