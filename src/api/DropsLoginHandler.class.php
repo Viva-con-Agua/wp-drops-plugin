@@ -349,7 +349,7 @@ class DropsLoginHandler
      * Redirects to the given url
      * @param string $url the URL to redirect to
      */
-    private function redirect($url)
+    public function redirect($url)
     {
         header('Location: ' . $url, true, 302);
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will die now after redirection to ' . $url . ' (Line ' . __LINE__ . '). Good bye!');
