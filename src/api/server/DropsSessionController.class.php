@@ -27,8 +27,10 @@ class DropsSessionController extends DropsController
 
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Arrived at drops');
 	
+		$sessionDataHandler = new DropsSessionDataHandler();
+	
         $drops = (new DropsLoginHandler())
-            ->setSessionDataHandler(new DropsSessionDataHandler())
+            ->setSessionDataHandler($sessionDataHandler)
             ->setMetaDataHandler(new DropsMetaDataHandler());
 
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Sessiondatahandler created');
@@ -43,6 +45,20 @@ class DropsSessionController extends DropsController
         if (isset($url['path']) && (stristr('wp-admin', $url['path']) || stristr('rausloggen', $url['path']))) {
             return;
         }
+				
+		// If there is no temporary session with the id, redirect to the login process
+        $sessionId = $this->getParameter('sessionId', $_GET);
+		
+		if (empty($sessionId)) {
+			$sessionId = $drops->getPool1Cookie();
+		}
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'SessionId in SessionController: ' . $sessionId . ' (Line ' . __LINE__ . ')');
+        $temporarySession = $sessionDataHandler->getTemporarySession($sessionId);
+
+        if ($parameter == self::INITIAL && !empty($temporarySession)) {
+            $parameter = self::REDIRECT;
+		}
 
         switch ($parameter) {
             case self::ACCESS:
@@ -51,7 +67,7 @@ class DropsSessionController extends DropsController
                 break;
 				
             case self::REDIRECT:
-                $drops->handleFrontendLoginResponse();
+                $drops->handleFrontendLoginResponse($sessionId);
 				break;
 			
             case self::INITIAL:

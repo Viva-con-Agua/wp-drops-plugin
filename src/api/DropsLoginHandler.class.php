@@ -23,11 +23,11 @@ class DropsLoginHandler
      * We store the current called URL in a session and persist it, afterwards the user is redirected to the drops login page
      * We can call this the first step on the login process
      */
-    public function handleFrontendLoginResponse()
+    public function handleFrontendLoginResponse($sessionId)
     {
 		
 		// Redirect to drops
-        $url = str_replace('<temporarySessionId>', $session['id'], get_option('dropsLoginUrl'));
+        $url = str_replace('<temporarySessionId>', $sessionId, get_option('dropsLoginUrl'));
         $url = str_replace('<clientId>', get_option('dropsClientId'), $url);
 		
         $this->redirect($url);
@@ -41,7 +41,7 @@ class DropsLoginHandler
      */
     public function handleFrontendLoginRedirect()
     {
-		
+				
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Entered handleFrontendLoginRedirect (Line ' . __LINE__ . ')');
 		$currentUrl = $this->getCurrentUrl();
 
