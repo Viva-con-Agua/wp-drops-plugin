@@ -84,9 +84,8 @@ function handleDropsLogin() {
 
 }*/
 
-
 	
-function function allowProgrammaticLogin( $user, $username, $password ) {
+function allowProgrammaticLogin( $user, $username, $password ) {
 	return get_user_by( 'login', $username );
 }
 
