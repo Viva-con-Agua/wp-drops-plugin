@@ -46,7 +46,7 @@ class DropsLoginHandler
         $sessionId = $this->getParameter('sessionId', $_GET);
 		
 		if (empty($sessionId)) {
-			$sessionId = $drops->getPool1Cookie();
+			$sessionId = $this->getPool1Cookie();
 		}
 		
 		if (empty($sessionId)) {
