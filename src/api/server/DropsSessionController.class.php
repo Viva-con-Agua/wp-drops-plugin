@@ -57,7 +57,14 @@ class DropsSessionController extends DropsController
         $temporarySession = $sessionDataHandler->getTemporarySession($sessionId);
 
         if ($parameter == self::INITIAL && !empty($temporarySession)) {
+			
+			if (!empty($temporarySession['drops_session_id']) {
+				(new DropsLogger(''))->log(DropsLogger::DEBUG, 'DropsID already there: ' . $temporarySession['drops_session_id'] . ' (Line ' . __LINE__ . ')');
+				$drops->redirect($temporarySession['user_session']['url']);
+			}
+			
             $parameter = self::REDIRECT;
+			
 		}
 
         switch ($parameter) {
