@@ -382,7 +382,9 @@ class DropsLoginHandler
     private function signonUser($username)
     {
 
+		add_filter( 'authenticate', 'allow_programmatic_login', 10, 3 ); // hook in earlier than other callbacks to short-circuit them
 		$user = wp_signon( array( 'user_login' => $username ) );
+		remove_filter( 'authenticate', 'allow_programmatic_login', 10, 3 );	
 		
 		if ( is_a( $user, 'WP_User' ) ) {
 			wp_set_current_user( $user->ID, $user->user_login );
