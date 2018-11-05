@@ -49,12 +49,12 @@ if (is_admin()) {
 // Handling login of an existing user
 function handleDropsLogin() {
 
-    if (!is_user_logged_in() && false) {
+    if (!is_user_logged_in()) {
         (new DropsSessionController)->run();
     } else {
         $dataHandler = new DropsSessionDataHandler();
 
-        if ($dataHandler->isSessionExpired(get_current_user_id()) || true) {
+        if ($dataHandler->isSessionExpired(get_current_user_id())) {
 
             $dataHandler->clearSessionsByUserId(get_current_user_id());
 
