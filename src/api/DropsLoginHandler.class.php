@@ -353,7 +353,7 @@ class DropsLoginHandler
     {
         header('Location: ' . $url, true, 302);
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will die now after redirection to ' . $url . ' (Line ' . __LINE__ . '). Good bye!');
-        exit;
+        exit 'Redirected';
     }
 
     /**

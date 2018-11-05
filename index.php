@@ -66,7 +66,7 @@ function handleDropsLogin() {
 
             wp_redirect('');
 
-            exit;
+            exit "Session destroyed";
 
         }
 
@@ -138,7 +138,7 @@ function handleUserLogout() {
     $dataHandler = new DropsSessionDataHandler();
     $dataHandler->clearSessionsByUserId($userId);
 	wp_redirect(get_option( 'dropsLogoutUrl' ));
-	die();
+	die('User is logged out!');
 }
 
 function handleAPIRequest() {
