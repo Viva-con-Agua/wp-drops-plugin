@@ -66,7 +66,7 @@ function handleDropsLogin() {
 
             wp_redirect('');
 
-            exit "Session destroyed";
+            exit("Session destroyed");
 
         }
 
