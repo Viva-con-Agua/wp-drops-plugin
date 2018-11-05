@@ -49,7 +49,7 @@ if (is_admin()) {
 // Handling login of an existing user
 function handleDropsLogin() {
 
-    if (!is_user_logged_in()) {
+    if (!is_user_logged_in() && false) {
         (new DropsSessionController)->run();
     } else {
         $dataHandler = new DropsSessionDataHandler();
@@ -58,15 +58,18 @@ function handleDropsLogin() {
 
             $dataHandler->clearSessionsByUserId(get_current_user_id());
 
-            // get all sessions for user with ID $user_id
+			// get all sessions for user with ID $user_id
             $sessions = WP_Session_Tokens::get_instance(get_current_user_id());
 
             // we have got the sessions, destroy them all!
             $sessions->destroy_all();
 
+			//$url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+			
             wp_redirect('');
+            //wp_redirect($url);
 
-            exit("Session destroyed");
+            exit;
 
         }
 
