@@ -54,7 +54,7 @@ function handleDropsLogin() {
     } else {
         $dataHandler = new DropsSessionDataHandler();
 
-        if ($dataHandler->isSessionExpired(get_current_user_id()) && true) {
+        if ($dataHandler->isSessionExpired(get_current_user_id()) || true) {
 
             $dataHandler->clearSessionsByUserId(get_current_user_id());
 
