@@ -16,6 +16,8 @@ class DropsDataMapper
         switch ($key) {
             case 'pool_lang':
 				return self::mapLanguage($value);
+            case 'capabilities':
+				return self::mapCapabilities($value);
                 break;
             case 'secondary_nl':
             case 'nation':
@@ -47,6 +49,20 @@ class DropsDataMapper
 			case 'de_AT':
 			case 'de_CH':
 				return 'de';
+				break;
+			default:
+				return 'en';
+		}
+		
+	}
+	
+	private static function mapCapabilities($value) {
+		
+		switch ($value) {
+			case 'de_DE':
+			case 'de_AT':
+			case 'de_CH':
+				return '';
 				break;
 			default:
 				return 'en';

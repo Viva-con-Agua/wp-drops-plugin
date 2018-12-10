@@ -1,6 +1,7 @@
 <?php
 
 require_once DROPSHOME . '/src/api/client/restclient.php';
+require_once DROPSHOME . '/src/api/server/actions/DropsUserUpdater.php';
 
 /**
  * Class DropsConnector
@@ -193,6 +194,10 @@ class DropsLoginHandler
 		} else {
 			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User is logged in now with id ' . $user->ID . ' (Line ' . __LINE__ . ')');
 		}
+
+		$this->updateUserCapabilities($userData);
+		
+		// TODO: UPDATE USERS ROLE!
 		
         $this->sessionDataHandler->persistDropsSessionId($sessionId, $userData->id);
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User got drops id ' . $userData->id . ' (Line ' . __LINE__ . ')');
@@ -411,5 +416,22 @@ class DropsLoginHandler
 		return false;
 
     }
+	
+	private function updateUserCapabilities(array $userData) {
+		
+		var_dump($userData);
+		
+		die();
+		
+		$dataHandler = new DropsUserDataHandler();
+		$userUpdater = new DropsUserUpdater($userData);
+		$userUpdater->setDataHandler($dataHandler);
+		$response = $userUpdater->run();
+
+		self::logResponse($response);
+		
+		die();		
+		
+	}
 
 }

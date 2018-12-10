@@ -82,9 +82,9 @@ class DropsUserController extends DropsController
 
                 $userData = $this->getUserData();
                 $dataHandler = new DropsUserDataHandler();
-                $userReceiver = new DropsUserCreator($userData);
-                $userReceiver->setDataHandler($dataHandler);
-                $response = $userReceiver->run();
+                $userCreator = new DropsUserCreator($userData);
+                $userCreator->setDataHandler($dataHandler);
+                $response = $userCreator->run();
 
                 self::logResponse($response);
 
@@ -96,9 +96,9 @@ class DropsUserController extends DropsController
 
                 $userData = $this->getUserData();
                 $dataHandler = new DropsUserDataHandler();
-                $userReceiver = new DropsUserUpdater($userData);
-                $userReceiver->setDataHandler($dataHandler);
-                $response = $userReceiver->run();
+                $userUpdater = new DropsUserUpdater($userData);
+                $userUpdater->setDataHandler($dataHandler);
+                $response = $userUpdater->run();
 
                 self::logResponse($response);
 
@@ -110,9 +110,9 @@ class DropsUserController extends DropsController
 
                 $userData = $this->getUserData();
                 $dataHandler = new DropsUserDataHandler();
-                $userReceiver = new DropsUserDeleter($userData);
-                $userReceiver->setDataHandler($dataHandler);
-                $response = $userReceiver->run();
+                $userDeleter = new DropsUserDeleter($userData);
+                $userDeleter->setDataHandler($dataHandler);
+                $response = $userDeleter->run();
 
                 self::logResponse($response);
 

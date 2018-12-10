@@ -42,9 +42,9 @@ class DropsGeographyController extends DropsController
 
                 $data = $this->getData();
                 $dataHandler = new DropsGeographyDataHandler();
-                $receiver = new DropsGeographyCreator($data);
-                $receiver->setDataHandler($dataHandler);
-                $response = $receiver->run();
+                $creator = new DropsGeographyCreator($data);
+                $creator->setDataHandler($dataHandler);
+                $response = $creator->run();
 
                 self::logResponse($response);
 
@@ -56,9 +56,9 @@ class DropsGeographyController extends DropsController
 			    				
 				$data = $this->getData();
                 $dataHandler = new DropsGeographyDataHandler();
-                $receiver = new DropsGeographyUpdater($data);
-                $receiver->setDataHandler($dataHandler);
-                $response = $receiver->run();
+                $updater = new DropsGeographyUpdater($data);
+                $updater->setDataHandler($dataHandler);
+                $response = $updater->run();
 
                 self::logResponse($response);
 
@@ -70,9 +70,9 @@ class DropsGeographyController extends DropsController
 			    				
 				$data = $this->getData();
                 $dataHandler = new DropsGeographyDataHandler();
-                $receiver = new DropsGeographyDeleter($data);
-                $receiver->setDataHandler($dataHandler);
-                $response = $receiver->run();
+                $deleter = new DropsGeographyDeleter($data);
+                $deleter->setDataHandler($dataHandler);
+                $response = $deleter->run();
 
                 self::logResponse($response);
 
