@@ -430,7 +430,7 @@ class DropsLoginHandler
 			//'capabilities'	=> $userData->profiles[0]->roles
 		];
 
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Setting userdata after login to ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')';
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Setting userdata after login to ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');
 		
 		$dataHandler = new DropsUserDataHandler();
 		$userUpdater = new DropsUserUpdater($preparedUserData);
