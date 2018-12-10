@@ -435,6 +435,8 @@ class DropsLoginHandler
 		$userUpdater->setDataHandler($dataHandler);
 		$response = $userUpdater->run();
 				
+		DropsController::logResponse($response);
+				
 	}
 
 }
