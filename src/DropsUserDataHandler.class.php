@@ -126,10 +126,20 @@ class DropsUserDataHandler implements UserDataHandlerInterface
 			
 		}
 		
-		var_dump($returnValue);
-		
 		return !(isset($returnValue[false]));
 		
     }
+	
+	public function deleteUser($userId) {
+		$deleteSql = 'DELETE FROM ' . Config::get('DB_USER_TABLE') . ' ' .
+			'WHERE ID = "' . $userId . '"';
+		return $this->dbConnection->query($deleteSql);
+	}
+	
+	public function deleteUserMeta($userId) {
+		$deleteSql = 'DELETE FROM ' . Config::get('DB_USERMETA_TABLE') . ' ' .
+			'WHERE user_id = "' . $userId . '"';
+		return $this->dbConnection->query($deleteSql);		
+	}
 
 }

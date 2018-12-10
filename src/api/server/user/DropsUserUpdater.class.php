@@ -49,15 +49,7 @@ class DropsUserUpdater
         $isValid = empty($invalidFields);
 
         if (!$isValid) {
-
-            ob_start();
-            var_dump($this->userData);
-            $userData = ob_get_clean();
-
-            return (new DropsResponse())
-                ->setCode(400)
-                ->setContext(__CLASS__)
-                ->setMessage('Missing parameters: ' . implode(", ", $invalidFields) . ' | userdata: [' . $userData . ']');
+			return validationError($invalidFields);
         }
 
         // Check if user already exists
@@ -124,7 +116,7 @@ class DropsUserUpdater
 			if (isset($this->userData[$key])) {
 				$userData[$key] = $this->userData[$key];
 			}
-		}		
+		}
 		
         $userMetaData = [
             'vca_asm_last_activity' => time(),
@@ -174,5 +166,17 @@ class DropsUserUpdater
         return $invalidFields;
 
     }
+	
+	private function validationError($invalidFields) {
+		
+		ob_start();
+		var_dump($this->userData);
+        $userData = ob_get_clean();
+
+		return (new DropsResponse())
+			->setCode(400)
+			->setContext(__CLASS__)
+			->setMessage('Missing parameters: ' . implode(", ", $invalidFields) . ' | userdata: [' . $userData . ']');
+	}
 
 }

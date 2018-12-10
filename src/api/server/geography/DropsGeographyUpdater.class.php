@@ -1,173 +1,144 @@
 <?php
-/** TODO:
-
-Mapping for fields:
-usermeta:
-'mail_switch', 'pool_lang', 'secondary_nl', 'nation', 'city'
-
-*/
-
 
 /**
  * Class DropsGeographyUpdater
- * The class updates a wordpress user out of the given data.
- * First it checks if there is already an existing user and if we update the user and its metadata
+ * The class updates a wordpress geography entry out of the given data.
+ * First it checks if there is already an existing and if not, we can update one considering its meta data
  */
 class DropsGeographyUpdater
 {
 
-    private $requiredUserData = array('uuid');
-    private $optionalUserFields = array('user_login', 'user_nicename', 'user_email', 'display_name');
-    private $optionalUserMetaFields = array('nickname', 'first_name', 'mail_switch', 'pool_lang', 'secondary_nl', 'last_name', 'mobile', 'residence', 'birthday', 'gender', 'nation', 'city');
+    private $requiredData = array('name');
+	private $optionalData = array('new_name', 'new_type', 'new_groups');
 
     /**
-     * @var UserDataHandlerInterface $dataHandler
+     * @var GeographyDataHandlerInterface $dataHandler
      */
     private $dataHandler;
 
     /**
-     * @var array $userData
+     * @var array $data
      */
-    private $userData;
+    private $data;
 
-    public function __construct(array $userData)
+    public function __construct(array $data)
     {
-        $this->userData = $userData;
+        $this->data = $data;
     }
 
     /**
-     * Initializing function on calling the entry of an user
-     * Checks if there is an existing user with the given id
-     * If there is no user, a user with its usermeta data will be created
+     * Initializing function on calling the entry of an element
+     * Checks if there is an existing element with the given data
+     * If there is one, the element and its metadata will be updated
      * @return DropsResponse
      */
     public function run()
     {
 
-        // Check if userdata is complete
-        $invalidFields = $this->validateUserData();
+        // Check if data is complete
+        $invalidFields = $this->validateData();
         $isValid = empty($invalidFields);
 
         if (!$isValid) {
-
-            ob_start();
-            var_dump($this->userData);
-            $userData = ob_get_clean();
-
-            return (new DropsResponse())
-                ->setCode(400)
-                ->setContext(__CLASS__)
-                ->setMessage('Missing parameters: ' . implode(", ", $invalidFields) . ' | userdata: [' . $userData . ']');
+			return $this->validationError($invalidFields);
         }
 
-        // Check if user already exists
-		
-		$uuid = $this->userData['uuid'];
-		
-		$sessionDataHandler = new DropsSessionDataHandler();
-		$session = $sessionDataHandler->getSessionByDropsId($uuid);
-				
-		if	(empty($session) || !isset($session['user_id'])) {
-			
-			return (new DropsResponse())
-				->setCode(400)
-				->setContext(__CLASS__)
-				->setMessage('No session found with given uuid! Parameters: ' . implode(', ', $this->userData));
-			
-		}
-		
-		$userId = $session['user_id'];
-        $user = $this->dataHandler->getUserById($userId);
+        // Check if location already exists
+        $entry = $this->dataHandler->getEntryByName($this->data['name']);
 
-        if (empty($user)) {
+        if (empty($entry)) {
 			
 			return (new DropsResponse())
 				->setCode(400)
 				->setContext(__CLASS__)
-				->setMessage('No user with given email address! Parameters: ' . implode(', ', $this->userData));
+				->setMessage('No entry found with given data! Parameters: ' . implode(', ', $this->data['name']));
 
         }
-            
-		if (!$this->doUserUpdate($userId)) {
-						
+
+		$this->updateEntry($entry->id);
+
+		if (empty($entry) || !isset($entry->id)) {
 			return (new DropsResponse())
 				->setCode(400)
 				->setContext(__CLASS__)
-				->setMessage('Database error during user update! Parameters: ' . implode(', ', $this->userData));
-				
+				->setMessage('Database error during update! Parameters: ' . implode(', ', $this->data));
 		}
+
+		if (!empty($this->data['new_groups'])) {
+							
+			$isHierarchyupdated = $this->updateEntryHierarchy($entry->id);
+
+			if (!$isHierarchyupdated) {
+				return (new DropsResponse())
+					->setCode(400)
+					->setContext(__CLASS__)
+					->setMessage('Database error during hierarchy update! [ID: ' .  $entry->id . '] Parameters: ' . implode(', ', $this->data));
+			}
 		
+		}
+
 		return (new DropsResponse())
 			->setCode(200)
 			->setContext(__CLASS__)
-			->setMessage('User has been updated! [ID: ' .  $userId . ']');
-			
+			->setMessage('Geography has been updated! [ID: ' . $entry->id . ']');
     }
 
     /**
-     * @param UserDataHandlerInterface $dataHandler
+     * @param GeographyDataHandlerInterface $dataHandler
      */
-    public function setDataHandler(UserDataHandlerInterface $dataHandler)
+    public function setDataHandler(GeographyDataHandlerInterface $dataHandler)
     {
         $this->dataHandler = $dataHandler;
     }
 
     /**
-     * Prepares the data and creates the user entry
+     * Prepares the data and updates the entry
      * @return false|int
      */
-    private function doUserUpdate($userId)
+    private function updateEntry($id)
     {
-		
-		$userData = [];
-		foreach ($this->optionalUserFields AS $key) {
-			if (isset($this->userData[$key])) {
-				$userData[$key] = $this->userData[$key];
-			}
-		}		
-		
-        $userMetaData = [
-            'vca_asm_last_activity' => time(),
-            Config::get('DB_PREFIX') . '_user-settings-time' => time(),
-		];
-		
-		$dataMapper = new DropsDataMapper();
-		foreach ($this->optionalUserMetaFields AS $key) {
-			
-			if (isset($this->userData[$key])) {
-				
-				if (in_array($key, ['pool_lang', 'secondary_nl', 'nation', 'city'])) {
-					
-					$mappedValue = DropsDataMapper::map($key, $this->userData[$key]);
-					$userMetaData[$key] = $mappedValue;
-					
-					if ($key == 'city') {
-						$userMetaData['region'] = $mappedValue;
-					}
-					
-				} else {
-					$userMetaData[$key] = $this->userData[$key];
-				}
-				
-			}
-			
-		}
-		
-		return $this->dataHandler->updateUser($userId, $userData, $userMetaData);
+
+        $data = array(
+            'name' => $this->data['new_name'],
+            'type' => $this->data['new_type'],
+        );
+
+        return $this->dataHandler->updateEntry($id, $data);
 
     }
 
     /**
-     * Validate the received userdata for completeness
+     * Prepares the data and updates the meta data entry
+     */
+    private function updateEntryHierarchy($id)
+    {
+		
+		$entryGroups = [];
+		foreach ($this->data['new_groups'] AS $group) {
+			
+			$groupEntry = $this->dataHandler->getEntryByName($group);
+						
+			if (!empty($groupEntry)) {
+				$entryGroups[] = [$groupEntry->id, $groupEntry->type, $id]; 
+			}
+			
+		}
+
+        return $this->dataHandler->updateEntryHierarchy($id, $entryGroups);
+
+    }
+
+    /**
+     * Validate the received data for completeness
      * @return array
      */
-    private function validateUserData()
+    private function validateData()
     {
 
         $invalidFields = array();
 
-        foreach ($this->requiredUserData as $entry) {
-            if (!isset($this->userData[$entry])) {
+        foreach ($this->requiredData as $entry) {
+            if (!isset($this->data[$entry])) {
                 $invalidFields[] = $entry;
             }
         }
@@ -175,5 +146,17 @@ class DropsGeographyUpdater
         return $invalidFields;
 
     }
+
+	private function validationError($invalidFields) {
+		
+		ob_start();
+		var_dump($this->data);
+        $geoData = ob_get_clean();
+
+		return (new DropsResponse())
+			->setCode(400)
+			->setContext(__CLASS__)
+			->setMessage('Missing parameters: ' . implode(", ", $invalidFields) . ' | geographydata: [' . $geoData . ']');
+	}
 
 }

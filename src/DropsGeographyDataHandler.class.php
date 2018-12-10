@@ -87,7 +87,7 @@ class DropsGeographyDataHandler implements GeographyDataHandlerInterface
         );
     }
 
-    public function updateEntry($id, array $data, array $hierarchyData)
+    public function updateEntry($id, array $data)
     {
 		
 		$returnValue['true'] = 1;
@@ -112,26 +112,49 @@ class DropsGeographyDataHandler implements GeographyDataHandlerInterface
 			
 		}
 		
-		if (!empty($hierarchyData)) {
+		return !(isset($returnValue[false]));
+		
+    }
+	
+	public function updateEntryHierarchy($id, array $data)
+    {
+		
+		$returnValue['true'] = 1;
+		
+		if (!empty($data)) {
 			
-			foreach ($hierarchyData AS $metaKey => $metaValue) {
+			foreach ($data AS $entryData) {
+			
 				$updateSql = 'UPDATE ' . Config::get('DB_GEOGRAPHY') . '_hierarchy SET ' .
-					'meta_value = "' . $metaValue . '" ' . 
-					'WHERE user_id = "' . $userId . '" and meta_key = "' . $metaKey . '"';
+					'ancestor = "' . $entryData[0] . '" ' .
+					'WHERE ancestor_type = "' . $entryData[1] . '" ' .
+					'AND descendant = "' . $entryData[2] . '"';
+			
 				$returnValueKey = $this->dbConnection->query($updateSql);
 				
 				if($returnValueKey === false) {
 					$returnValue[false] = 1;
 				}
-				
-			}
+			
+			}			
 			
 		}
-		
-		var_dump($returnValue);
 		
 		return !(isset($returnValue[false]));
 		
     }
+	
+	public function deleteEntry($id) {
+		$deleteSql = 'DELETE FROM ' . Config::get('DB_GEOGRAPHY') . ' ' .
+			'WHERE id = "' . $id . '"';
+		return $this->dbConnection->query($deleteSql);
+	}
+	
+	public function deleteEntryHierarchy($id) {
+		$deleteSql = 
+			'DELETE FROM ' . Config::get('DB_GEOGRAPHY') . '_hierarchy' . ' ' .
+			'WHERE ancestor = "' . $id . '" OR descendant = "' . $id . '"';
+		return $this->dbConnection->query($deleteSql);	
+	}
 
 }

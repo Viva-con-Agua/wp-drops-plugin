@@ -32,6 +32,7 @@ class DropsAPIController extends DropsController
 			return;
 		}
 		
+		
 		switch ($apiCall) {
             case self::USER:
 				$response = (new DropsUserController())->setFunction($actionCall)->run();
@@ -39,12 +40,14 @@ class DropsAPIController extends DropsController
             case self::GEOGRAPHY:
 				$response = (new DropsGeographyController())->setFunction($actionCall)->run();
 				break;
+            case 'user-certificate':
+				return;
             default:
                 break;
         }
-		var_dump($this->apiFunction);
+
 		echo $response;
-		die('API FINISHED JOB');
+		die('{"context":"DropsAPIController","code":400,"message":"API has done nothing! Badum!"}');
 
     }
 	

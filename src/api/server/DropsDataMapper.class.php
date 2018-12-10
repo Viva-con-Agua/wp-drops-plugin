@@ -31,7 +31,13 @@ class DropsDataMapper
     }
 	
 	private static function mapGeography($value) {
-		return (new DropsGeographyDataHandler)->getEntryByName($value);		
+		$geography = (new DropsGeographyDataHandler)->getEntryByName($value);
+		
+		if (empty($geography)) {
+			return 0;
+		}
+		
+		return $geography->id;	
 	}
 	
 	private static function mapLanguage($language) {

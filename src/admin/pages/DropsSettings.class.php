@@ -31,6 +31,12 @@ class DropsSettings extends DropsMain
             'description' => __('The client id is sent to the drops microservice to authenticate the plugin to receive the access token for further communication', 'drops')
         );
 
+        $this->page['settings']['dropsClientSecret'] = array(
+            'title' => __('Client Secret', 'drops'),
+            'value' => isset($_POST['dropsClientSecret']) ? $_POST['dropsClientSecret'] : get_option( 'dropsClientSecret' ),
+            'description' => __('The client secret is sent to the drops microservice to authenticate the plugin to receive the access token for further communication', 'drops')
+        );
+
         $this->page['settings']['dropsUserAccessHash'] = array(
             'title' => __('Authentication key', 'drops'),
             'value' => isset($_POST['dropsUserAccessHash']) ? $_POST['dropsUserAccessHash'] : get_option( 'dropsUserAccessHash' ),
@@ -108,6 +114,7 @@ class DropsSettings extends DropsMain
     private function persistSettings()
     {
         update_option('dropsClientId', $_POST['dropsClientId']);
+        update_option('dropsClientSecret', $_POST['dropsClientSecret']);
         update_option('dropsUserAccessHash', $_POST['dropsUserAccessHash']);
         update_option('dropsLoginUrl', $_POST['dropsLoginUrl']);
         update_option('dropsFrontendLoginUrl', $_POST['dropsFrontendLoginUrl']);

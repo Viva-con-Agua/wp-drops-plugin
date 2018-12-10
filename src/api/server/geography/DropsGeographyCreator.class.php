@@ -39,26 +39,18 @@ class DropsGeographyCreator
         $isValid = empty($invalidFields);
 
         if (!$isValid) {
-
-            ob_start();
-            var_dump($this->data);
-            $data = ob_get_clean();
-
-            return (new DropsResponse())
-                ->setCode(400)
-                ->setContext(__CLASS__)
-                ->setMessage('Missing parameters: ' . implode(", ", $invalidFields) . ' | data: [' . $data . ']');
+			return $this->validationError($invalidFields);
         }
 
         // Check if location already exists
         $entry = $this->dataHandler->getEntryByName($this->data['name']);
 
         if (!empty($entry)) {
-
+			
 			return (new DropsResponse())
 				->setCode(400)
 				->setContext(__CLASS__)
-				->setMessage('Geography already exists! [ID: ' .  $entry->ID . ']');
+				->setMessage('Geography already exists! [ID: ' .  $entry->id . ']');
 
         }
 
@@ -126,9 +118,9 @@ class DropsGeographyCreator
 		foreach ($this->data['groups'] AS $group) {
 			
 			$groupEntry = $this->dataHandler->getEntryByName($group);
-			
+						
 			if (!empty($groupEntry)) {
-				$entryGroups[] = [$groupEntry->ID, $groupEntry->type, $id]; 
+				$entryGroups[] = [$groupEntry->id, $groupEntry->type, $id]; 
 			}
 			
 		}
@@ -155,5 +147,17 @@ class DropsGeographyCreator
         return $invalidFields;
 
     }
+
+	private function validationError($invalidFields) {
+		
+		ob_start();
+		var_dump($this->data);
+        $geoData = ob_get_clean();
+
+		return (new DropsResponse())
+			->setCode(400)
+			->setContext(__CLASS__)
+			->setMessage('Missing parameters: ' . implode(", ", $invalidFields) . ' | geographydata: [' . $geoData . ']');
+	}
 
 }

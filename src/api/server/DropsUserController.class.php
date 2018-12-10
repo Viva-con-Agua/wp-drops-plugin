@@ -3,6 +3,7 @@
 require_once 'DropsController.class.php';
 require_once 'user/DropsUserCreator.class.php';
 require_once 'user/DropsUserUpdater.class.php';
+require_once 'user/DropsUserDeleter.class.php';
 
 /**
  * Class DropsUserController
@@ -19,6 +20,9 @@ class DropsUserController extends DropsController
     /** Path to post userdata to, to logout a user from the good ol' pool */
     const LOGOUT = 'logout';
 
+    /** Path to post userdata to, to logout a user from the good ol' pool */
+    const REMOVE = 'delete';
+
     /**
      * Checks if the parameters are valid and calls the user creation action
      */
@@ -26,7 +30,9 @@ class DropsUserController extends DropsController
     {
 
         if (!$this->isRequestValid()) {
-            return;
+            $response = (new DropsResponse())->setCode(400)->setMessage('Invalid request! Please check your data and format!')->setContext(__CLASS__);
+			self::logResponse($response);
+            return $response->getFormat(DropsResponse::JSON);
         }
 		
         switch ($this->apiFunction) {
@@ -60,7 +66,7 @@ class DropsUserController extends DropsController
                         $response = (new DropsResponse())->setCode(200)->setMessage('Logout successful for ' . $uuid . '(' . $userId . ')')->setContext(__CLASS__);
 
                     } else {
-                        $response = (new DropsResponse())->setCode(200)->setMessage('No session found for ' . $uuid)->setContext(__CLASS__);
+                        $response = (new DropsResponse())->setCode(400)->setMessage('No session found for ' . $uuid)->setContext(__CLASS__);
                     }
 
                 } else {
@@ -91,6 +97,20 @@ class DropsUserController extends DropsController
                 $userData = $this->getUserData();
                 $dataHandler = new DropsUserDataHandler();
                 $userReceiver = new DropsUserUpdater($userData);
+                $userReceiver->setDataHandler($dataHandler);
+                $response = $userReceiver->run();
+
+                self::logResponse($response);
+
+                echo $response->getFormat(DropsResponse::JSON);
+                exit;
+
+                break;
+            case self::REMOVE:
+
+                $userData = $this->getUserData();
+                $dataHandler = new DropsUserDataHandler();
+                $userReceiver = new DropsUserDeleter($userData);
                 $userReceiver->setDataHandler($dataHandler);
                 $response = $userReceiver->run();
 

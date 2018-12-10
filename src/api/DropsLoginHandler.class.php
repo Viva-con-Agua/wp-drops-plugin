@@ -138,6 +138,7 @@ class DropsLoginHandler
         $parameters = [
             'grant_type'    => 'authorization_code',
             'client_id'     => get_option('dropsClientId'),
+            'client_secret' => get_option('dropsClientSecret'),
             'code'          => $authorizationCode,
             'redirect_uri'  => 'https://vca.informatik.hu-berlin.de/pool/?loginFnc=useraccess&authorizationCode='
         ];

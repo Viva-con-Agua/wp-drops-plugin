@@ -30,7 +30,7 @@ require_once 'src/api/actions/DropsUserReader.class.php';
 require_once 'src/api/actions/DropsUserActionUpdater.class.php';
 require_once 'src/api/actions/DropsUserImageUpdater.class.php';
 require_once 'src/api/actions/DropsUserProfileReader.class.php';
-require_once 'src/api/actions/DropsUserDeleter.class.php';
+require_once 'src/api/actions/DropsUserActionDeleter.class.php';
 require_once 'src/api/DropsLoginHandler.class.php';
 
 require_once 'src/DropsSessionDataHandler.class.php';
@@ -121,7 +121,7 @@ function handleUserUpdate($userId) {
 // Handling the deletion of an user
 function handleUserDelete($userId) {
     $dataHandler = new DropsUserDataHandler();
-    $userDeleter = new DropsUserDeleter();
+    $userDeleter = new DropsUserActionDeleter();
 
     $response = $userDeleter->setAccessToken(
         (new DropsSessionDataHandler())
@@ -163,7 +163,7 @@ if (Config::get('LOGIN_ENABLED')) {
 add_action('parse_request', 'handleAPIRequest');
 add_action('admin_menu', 'createAdminMenu' );
 add_action('profile_update', 'handleUserUpdate', 10, 1);
-add_action('delete_user', 'handleUserDelete', 10, 1);
+//add_action('delete_user', 'handleUserDelete', 10, 1);
 add_action('wp_logout', 'handleUserLogout');
 
 ?>

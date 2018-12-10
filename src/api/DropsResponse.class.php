@@ -11,7 +11,7 @@ class DropsResponse
     /**
      * @var array $response
      */
-    private $response;
+//    private $response;
     /**
      * @var string $context
      */
