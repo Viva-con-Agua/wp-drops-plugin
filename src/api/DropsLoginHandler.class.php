@@ -194,11 +194,7 @@ class DropsLoginHandler
 		} else {
 			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User is logged in now with id ' . $user->ID . ' (Line ' . __LINE__ . ')');
 		}
-
-		$this->updateUserCapabilities($userData);
-		
-		// TODO: UPDATE USERS ROLE!
-		
+				
         $this->sessionDataHandler->persistDropsSessionId($sessionId, $userData->id);
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User got drops id ' . $userData->id . ' (Line ' . __LINE__ . ')');
         $this->sessionDataHandler->persistUserId($sessionId, $user->ID);
@@ -210,6 +206,8 @@ class DropsLoginHandler
 			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Metadata added (Line ' . __LINE__ . ')');
         }
 
+		$this->updateUserCapabilities($userData);
+		
         $url = $temporarySession['user_session']['url'];
 		
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Will clear cookie: ' . $url . ' (Line ' . __LINE__ . ')');
