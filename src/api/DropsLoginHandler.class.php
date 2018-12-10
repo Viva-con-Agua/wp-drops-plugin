@@ -417,7 +417,7 @@ class DropsLoginHandler
 
     }
 	
-	private function updateUserCapabilities(array $userData) {
+	private function updateUserCapabilities($userData) {
 		
 		var_dump($userData);
 		
