@@ -18,7 +18,7 @@ class DropsUserUpdater
 
     private $requiredUserData = array('uuid');
     private $optionalUserFields = array('user_login', 'user_nicename', 'user_email', 'display_name');
-    private $optionalUserMetaFields = array('nickname', 'first_name', 'mail_switch', 'pool_lang', 'secondary_nl', 'last_name', 'capabilites', 'mobile', 'residence', 'birthday', 'gender', 'nation', 'city');
+    private $optionalUserMetaFields = array('nickname', 'first_name', 'mail_switch', 'pool_lang', 'secondary_nl', 'last_name', 'wp_capabilites', 'mobile', 'residence', 'birthday', 'gender', 'nation', 'city');
 
     /**
      * @var UserDataHandlerInterface $dataHandler
