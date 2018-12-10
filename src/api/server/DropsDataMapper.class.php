@@ -56,17 +56,31 @@ class DropsDataMapper
 		
 	}
 	
-	private static function mapCapabilities($value) {
+	private static function mapCapabilities(array $capabilities) {
 		
-		switch ($value) {
-			case 'de_DE':
-			case 'de_AT':
-			case 'de_CH':
-				return '';
-				break;
-			default:
-				return 'en';
+		$processedValues = [];
+		
+		foreach ($capabilities AS $role) {
+			
+			switch ($role) {
+				case 'admin':
+					$processedValues[] = 'administrator';
+					break;
+				case 'employee':
+					$processedValues[] = 'management_national';
+					break;
+				case 'volunteerManager':
+					$processedValues[] = 'city';
+					break;
+				case 'supporter':
+				default:
+					$processedValues[] = 'supporter';
+					break;
+			}			
+			
 		}
+		
+		return serialize($processedValues);		
 		
 	}
 

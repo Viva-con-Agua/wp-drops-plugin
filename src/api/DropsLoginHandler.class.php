@@ -419,19 +419,24 @@ class DropsLoginHandler
 	
 	private function updateUserCapabilities($userData) {
 		
-		var_dump($userData);
+		if (!isset($userData->profiles[0])) 
+		{
+			return;
+		}
 		
-		die();
+		$preparedUserData = [
+			'uuid'			=> $userData->id,
+			'capabilities'	=> ['role' => 'admin']
+			//'capabilities'	=> $userData->profiles[0]->roles
+		];
 		
 		$dataHandler = new DropsUserDataHandler();
-		$userUpdater = new DropsUserUpdater($userData);
+		$userUpdater = new DropsUserUpdater($preparedUserData);
 		$userUpdater->setDataHandler($dataHandler);
 		$response = $userUpdater->run();
 
 		self::logResponse($response);
-		
-		die();		
-		
+				
 	}
 
 }
