@@ -1,7 +1,7 @@
 <?php
 
 require_once DROPSHOME . '/src/api/client/restclient.php';
-require_once DROPSHOME . '/src/api/server/actions/DropsUserUpdater.php';
+require_once DROPSHOME . '/src/api/server/user/DropsUserUpdater.php';
 
 /**
  * Class DropsConnector
