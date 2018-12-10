@@ -426,8 +426,8 @@ class DropsLoginHandler
 		
 		$preparedUserData = [
 			'uuid'			=> $userData->id,
-			'capabilities'	=> ['role' => 'admin']
-			//'capabilities'	=> $userData->profiles[0]->roles
+			'capabilities'	=> 'supporter'
+			//'capabilities'	=> implode(', ', $userData->profiles[0]->roles)
 		];
 
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Setting userdata after login to ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');

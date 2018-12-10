@@ -56,11 +56,13 @@ class DropsDataMapper
 		
 	}
 	
-	private static function mapCapabilities(array $capabilities) {
+	private static function mapCapabilities($capabilities) {
 		
 		$processedValues = [];
 		
-		foreach ($capabilities AS $role) {
+		$capabilitiesArray = explode(',', $capabilities);
+		
+		foreach ($capabilitiesArray AS $role) {
 			
 			switch ($role) {
 				case 'admin':
