@@ -127,11 +127,11 @@ class DropsUserUpdater
 			
 			if (isset($this->userData[$key])) {
 				
-				if (in_array($key, ['pool_lang', 'secondary_nl', 'nation', 'city', 'capabilites'])) {
+				if (in_array($key, ['pool_lang', 'secondary_nl', 'nation', 'city', 'wp_capabilities'])) {
 					
 					$mappedValue = DropsDataMapper::map($key, $this->userData[$key]);
 					$userMetaData[$key] = $mappedValue;
-					
+										
 					if ($key == 'city') {
 						$userMetaData['region'] = $mappedValue;
 					}
