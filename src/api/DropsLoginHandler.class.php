@@ -429,13 +429,13 @@ class DropsLoginHandler
 			'capabilities'	=> ['role' => 'admin']
 			//'capabilities'	=> $userData->profiles[0]->roles
 		];
+
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Setting userdata after login to ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')';
 		
 		$dataHandler = new DropsUserDataHandler();
 		$userUpdater = new DropsUserUpdater($preparedUserData);
 		$userUpdater->setDataHandler($dataHandler);
 		$response = $userUpdater->run();
-
-		self::logResponse($response);
 				
 	}
 

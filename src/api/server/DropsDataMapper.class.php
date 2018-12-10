@@ -80,6 +80,8 @@ class DropsDataMapper
 			
 		}
 		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapped capabilities ' . serialize($processedValues) . ' (Line ' . __LINE__ . ')';
+		
 		return serialize($processedValues);		
 		
 	}
