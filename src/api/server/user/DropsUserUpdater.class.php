@@ -49,7 +49,8 @@ class DropsUserUpdater
         $isValid = empty($invalidFields);
 
         if (!$isValid) {
-			return validationError($invalidFields);
+			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Update validation error (Line ' . __LINE__ . ')');
+			return $this->validationError($invalidFields);
         }
 
         // Check if user already exists

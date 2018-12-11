@@ -434,6 +434,8 @@ class DropsLoginHandler
 		$userUpdater = new DropsUserUpdater($preparedUserData);
 		$userUpdater->setDataHandler($dataHandler);
 		$response = $userUpdater->run();
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User updated data: ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');
 				
 		DropsController::logResponse($response);
 				
