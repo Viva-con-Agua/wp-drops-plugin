@@ -93,7 +93,7 @@ class DropsUserDataHandler implements UserDataHandlerInterface
 		if (!empty($userData)) {
 			
 			$userDataSql = implode(', ', array_map(
-				function ($v, $k) { return sprintf('%s="%s"', $k, $v); },
+				function ($v, $k) { return sprintf('%s=\'%s\'', $k, $v); },
 				$userData,
 				array_keys($userData)
 			));
