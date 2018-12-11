@@ -424,8 +424,8 @@ class DropsLoginHandler
 		
 		$preparedUserData = [
 			'uuid'			=> $userData->id,
-			'wp_capabilities'	=> 'admin'
-			//'capabilities'	=> implode(', ', $userData->profiles[0]->roles)
+			//'wp_capabilities'	=> 'admin'
+			'wp_capabilities'	=> implode(', ', $userData->profiles[0]->roles)
 		];
 
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Setting userdata after login to ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');

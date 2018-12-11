@@ -62,10 +62,14 @@ class DropsDataMapper
 	
 	private static function mapCapabilities($capabilities) {
 		
+		if (empty($capabilities)) {
+			return $capabilities;
+		}
+		
 		$processedValues = [];
 		
 		$capabilitiesArray = explode(',', $capabilities);
-		
+				
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping capabilities ' . serialize($capabilitiesArray) . ' (Line ' . __LINE__ . ')');
 		
 		foreach ($capabilitiesArray AS $role) {
