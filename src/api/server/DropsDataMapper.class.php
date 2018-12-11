@@ -72,17 +72,17 @@ class DropsDataMapper
 			
 			switch ($role) {
 				case 'admin':
-					$processedValues[] = 'administrator';
+					$processedValues['administrator'] = 1;
 					break;
 				case 'employee':
-					$processedValues[] = 'management_national';
+					$processedValues['management_national'] = 1;
 					break;
 				case 'volunteerManager':
-					$processedValues[] = 'city';
+					$processedValues['city'] = 1;
 					break;
 				case 'supporter':
 				default:
-					$processedValues[] = 'supporter';
+					$processedValues['supporter'] = 1;
 					break;
 			}			
 			
