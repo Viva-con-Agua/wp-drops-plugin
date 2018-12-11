@@ -422,7 +422,7 @@ class DropsLoginHandler
 			return;
 		}
 		
-		var_dump($userData->profiles[0]);die();
+		var_dump($userData);die();
 		
 		$preparedUserData = [
 			'uuid'			=> $userData->id,
