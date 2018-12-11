@@ -6,12 +6,16 @@
  */
 class DropsDataMapper
 {
+	
+	public static $mappedFields = ['pool_lang', 'secondary_nl', 'nation', 'city', 'wp_capabilities'];
 
     /**
      * Maps data from drops to pool1
      * @param DropsResponse $response
      */
     public static function map($key, $value) {
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping field ' . $key . ' (Line ' . __LINE__ . ')');
 
         switch ($key) {
             case 'pool_lang':
@@ -61,6 +65,8 @@ class DropsDataMapper
 		$processedValues = [];
 		
 		$capabilitiesArray = explode(',', $capabilities);
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping capabilities ' . serialize($capabilitiesArray) . ' (Line ' . __LINE__ . ')');
 		
 		foreach ($capabilitiesArray AS $role) {
 			
