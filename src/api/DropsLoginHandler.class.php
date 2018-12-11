@@ -422,6 +422,8 @@ class DropsLoginHandler
 			return;
 		}
 		
+		var_dump($userData->profiles[0]);die();
+		
 		$preparedUserData = [
 			'uuid'			=> $userData->id,
 			//'wp_capabilities'	=> 'admin'
