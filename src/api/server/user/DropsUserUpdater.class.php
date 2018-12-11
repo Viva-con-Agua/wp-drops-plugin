@@ -128,7 +128,7 @@ class DropsUserUpdater
 			
 			if (isset($this->userData[$key])) {
 				
-				if (in_array($key, DropsDataMapper::mappedFields)) {
+				if (in_array($key, DropsDataMapper::$mappedFields)) {
 					
 					$mappedValue = DropsDataMapper::map($key, $this->userData[$key]);
 					$userMetaData[$key] = $mappedValue;
