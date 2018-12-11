@@ -16,7 +16,7 @@ class DropsDataMapper
         switch ($key) {
             case 'pool_lang':
 				return self::mapLanguage($value);
-            case 'capabilities':
+            case 'wp_capabilities':
 				return self::mapCapabilities($value);
                 break;
             case 'secondary_nl':
