@@ -114,7 +114,7 @@ class DropsUserDataHandler implements UserDataHandlerInterface
 			
 			foreach ($userMetaData AS $metaKey => $metaValue) {
 				$updateSql = 'UPDATE ' . Config::get('DB_USERMETA_TABLE') . ' SET ' .
-					'meta_value = "' . $metaValue . '" ' . 
+					'meta_value = \'' . $metaValue . '\' ' . 
 					'WHERE user_id = "' . $userId . '" and meta_key = "' . $metaKey . '"';
 				$returnValueKey = $this->dbConnection->query($updateSql);
 				
