@@ -79,14 +79,28 @@ class DropsDataMapper
 					$processedValues['administrator'] = true;
 					break;
 				case 'employee':
-					$processedValues['management_national'] = true;
+				
+					if (!in_array('admin', $capabilitiesArray)) 
+					{
+						$processedValues['management_national'] = true;
+					}
 					break;
 				case 'volunteerManager':
-					$processedValues['city'] = true;
+					if (!in_array('admin', $capabilitiesArray)
+						&& !in_array('employee', $capabilitiesArray)) 
+					{
+						$processedValues['city'] = true;
+					}
 					break;
 				case 'supporter':
 				default:
-					$processedValues['supporter'] = true;
+					if (!in_array('admin', $capabilitiesArray)
+						&& !in_array('employee', $capabilitiesArray)
+						&& !in_array('volunteerManager', $capabilitiesArray)) 
+					{
+						$processedValues['supporter'] = true;
+					}
+				
 					break;
 			}			
 			

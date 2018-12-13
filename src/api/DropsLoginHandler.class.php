@@ -463,16 +463,20 @@ class DropsLoginHandler
 		
 		if (empty($response)) {
 			(new DropsLogger(''))->log(DropsLogger::ERROR, 'No userdata found with id ' . $userId . ' (Line ' . __LINE__ . ')');
-			var_dump($response);die();
 			return;
 		}
 		
 		var_dump($response);die();
 		
+		$rolesArr = [];
+		foreach($response->profiles[0]->roles AS $role) {
+			$rolesArr[] = $role->role;
+		}
+		
+		
 		$preparedUserData = [
-			'uuid'			=> $userData->id,
-			//'wp_capabilities'	=> 'admin'
-			'wp_capabilities'	=> implode(', ', $userData->profiles[0]->roles)
+			'uuid'			=> $userId,
+			'wp_capabilities'	=> implode(', ', $rolesArr)
 		];
 
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Setting userdata after login to ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');
