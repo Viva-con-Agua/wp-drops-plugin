@@ -466,13 +466,10 @@ class DropsLoginHandler
 			return;
 		}
 		
-		var_dump($response);die();
-		
 		$rolesArr = [];
 		foreach($response->profiles[0]->roles AS $role) {
 			$rolesArr[] = $role->role;
 		}
-		
 		
 		$preparedUserData = [
 			'uuid'			=> $userId,
