@@ -8,8 +8,10 @@ require_once 'DropsUserAction.class.php';
  */
 class DropsUserReader extends DropsUserAction
 {
-
+	
     const ACTION_TYPE = 'READ';
+	
+	private $uuid = '';
 
     /**
      * Creates an array with the userdata
@@ -34,15 +36,17 @@ class DropsUserReader extends DropsUserAction
      */
     protected function getActionUrl()
     {
-
-        $user = wp_get_current_user();
-
+		
         $actionUrl = get_option('dropsUserReadUrl');
-        $actionUrl = str_replace('<id>', $user->ID, $actionUrl);
+        $actionUrl = str_replace('<id>', $this->uuid, $actionUrl);
 
         return $actionUrl;
 
     }
+	
+	public function setDropsUuid($uuid) {
+		$this->uuid = $uuid;
+	}
 
     /**
      * Returns the action to add it to the parameters

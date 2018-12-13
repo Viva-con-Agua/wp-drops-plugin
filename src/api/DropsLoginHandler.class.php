@@ -2,6 +2,7 @@
 
 require_once DROPSHOME . '/src/api/client/restclient.php';
 require_once DROPSHOME . '/src/api/server/user/DropsUserUpdater.class.php';
+require_once DROPSHOME . '/src/api/actions/DropsUserReader.class.php';
 
 /**
  * Class DropsConnector
@@ -270,7 +271,7 @@ class DropsLoginHandler
      */
     private function requestUserProfile($userId)
     {
-			
+				
         $options = array(
             'parameters' => [
 				'client_id'     => get_option('dropsClientId'),
@@ -279,7 +280,7 @@ class DropsLoginHandler
         );
 		
         // Redirect to drops
-        $url = str_replace('<uuid>', $userId, get_option('dropsOauthUserProfileUrl'));
+        $url = str_replace('<id>', $userId, get_option('dropsUserReadUrl'));
 		
 		var_dump($options);
 		var_dump($url);
@@ -451,15 +452,22 @@ class DropsLoginHandler
 	
 	private function updateUserCapabilities($userId) {
 		
-		$userData = $this->requestUserProfile($userId);
+		$response = (new DropsUserReader())->setDropsUuid($userId)->setAccessToken(
+			(new DropsSessionDataHandler())
+				->getAccessToken(
+					get_current_user_id()
+				)
+		)->setDataHandler($dataHandler)->run($userId);
 		
-		if (empty($userData)) {
+		DropsController::logResponse($response);
+		
+		if (empty($response)) {
 			(new DropsLogger(''))->log(DropsLogger::ERROR, 'No userdata found with id ' . $userId . ' (Line ' . __LINE__ . ')');
-			var_dump($userData);die();
+			var_dump($response);die();
 			return;
 		}
 		
-		var_dump($userData);die();
+		var_dump($response);die();
 		
 		$preparedUserData = [
 			'uuid'			=> $userData->id,
