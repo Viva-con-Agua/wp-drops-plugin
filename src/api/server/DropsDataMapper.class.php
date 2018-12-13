@@ -74,7 +74,7 @@ class DropsDataMapper
 		
 		foreach ($capabilitiesArray AS $role) {
 			
-			switch ($role) {
+			switch (trim($role)) {
 				case 'admin':
 					$processedValues['administrator'] = true;
 					break;
