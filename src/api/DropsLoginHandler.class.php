@@ -457,7 +457,7 @@ class DropsLoginHandler
 				->getAccessToken(
 					get_current_user_id()
 				)
-		)->setDataHandler($dataHandler)->run($userId);
+		)->setDataHandler(new DropsUserDataHandler())->run($userId);
 		
 		DropsController::logResponse($response);
 		
