@@ -81,12 +81,6 @@ class DropsSettings extends DropsMain
             'description' => __('The drops wordpress plugin will call this URL to get the login user informations', 'drops')
         );
 
-        $this->page['settings']['dropsOauthUserProfileUrl'] = array(
-            'title' => __('OAuth2 Profile URL of drops', 'drops'),
-            'value' => isset($_POST['dropsOauthUserProfileUrl']) ? $_POST['dropsOauthUserProfileUrl'] : get_option( 'dropsOauthUserProfileUrl' ),
-            'description' => __('The drops wordpress plugin will call this URL to get the login user roles informations', 'drops')
-        );
-
         $this->page['settings']['dropsUserDeleteUrl'] = array(
             'title' => __('Delete User URL of drops', 'drops'),
             'value' => isset($_POST['dropsUserDeleteUrl']) ? $_POST['dropsUserDeleteUrl'] : get_option( 'dropsUserDeleteUrl' ),
@@ -132,7 +126,6 @@ class DropsSettings extends DropsMain
         update_option('dropsUserReadUrl', $_POST['dropsUserReadUrl']);
         update_option('dropsUserDeleteUrl', $_POST['dropsUserDeleteUrl']);
         update_option('dropsUserProfileUrl', $_POST['dropsUserProfileUrl']);
-        update_option('dropsOauthUserProfileUrl', $_POST['dropsOauthUserProfileUrl']);
     }
 
 }
