@@ -39,6 +39,8 @@ class DropsUserReader extends DropsUserAction
 		
         $actionUrl = get_option('dropsUserReadUrl');
         $actionUrl = str_replace('<id>', $this->uuid, $actionUrl);
+        $actionUrl = str_replace('<client_id>', get_option('dropsClientId'), $actionUrl);
+        $actionUrl = str_replace('<client_secret>', get_option('dropsClientSecret'), $actionUrl);
 
 		var_dump($actionUrl);
 		
