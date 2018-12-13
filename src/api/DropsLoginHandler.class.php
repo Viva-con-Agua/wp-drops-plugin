@@ -474,7 +474,7 @@ class DropsLoginHandler
 		
 		$preparedUserData = [
 			'uuid'			=> $userId,
-			'wp_capabilities'	=> implode(', ', $rolesArr)
+			'wp_capabilities'	=> implode(';', $rolesArr)
 		];
 		
 		

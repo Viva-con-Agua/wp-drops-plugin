@@ -68,13 +68,13 @@ class DropsDataMapper
 		
 		$processedValues = [];
 		
-		$capabilitiesArray = explode(',', $capabilities);
+		$capabilitiesArray = explode(';', $capabilities);
 				
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping capabilities ' . serialize($capabilitiesArray) . ' (Line ' . __LINE__ . ')');
 		
 		foreach ($capabilitiesArray AS $role) {
 			
-			switch (trim($role)) {
+			switch ($role) {
 				case 'admin':
 					$processedValues['administrator'] = true;
 					break;
