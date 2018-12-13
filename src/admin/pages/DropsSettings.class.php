@@ -34,14 +34,14 @@ class DropsSettings extends DropsMain
         $this->page['settings']['dropsClientSecret'] = array(
             'title' => __('Client Secret', 'drops'),
             'type' => 'password',
-            'value' => isset($_POST['dropsClientSecret']) ? $_POST['dropsClientSecret'] : get_option( 'dropsClientSecret' ),
+            'value' => isset($_POST['dropsClientSecret']) ? $_POST['dropsClientSecret'] : '',
             'description' => __('The client secret is sent to the drops microservice to authenticate the plugin to receive the access token for further communication', 'drops')
         );
 
         $this->page['settings']['dropsUserAccessHash'] = array(
             'title' => __('Authentication key', 'drops'),
 			'type' => 'password',
-            'value' => isset($_POST['dropsUserAccessHash']) ? $_POST['dropsUserAccessHash'] : get_option( 'dropsUserAccessHash' ),
+            'value' => isset($_POST['dropsUserAccessHash']) ? $_POST['dropsUserAccessHash'] : '',
             'description' => __('The key from the drops microservice to authenticate the service. When a profile is created in the drops microservice, it pushes the user\'s data to this plugin, which adds the user to wordpress', 'drops')
         );
 
@@ -123,8 +123,15 @@ class DropsSettings extends DropsMain
     private function persistSettings()
     {
         update_option('dropsClientId', $_POST['dropsClientId']);
-        update_option('dropsClientSecret', $_POST['dropsClientSecret']);
-        update_option('dropsUserAccessHash', $_POST['dropsUserAccessHash']);
+        
+		if (!empty($_POST['dropsClientSecret'])) {
+			update_option('dropsClientSecret',  $_POST['dropsClientSecret']);
+		}
+		
+		if (!empty($_POST['dropsUserAccessHash'])) {
+			update_option('dropsUserAccessHash', $_POST['dropsUserAccessHash']);
+		}
+		
         update_option('dropsAuthorizationCodeResponseUri', $_POST['dropsAuthorizationCodeResponseUri']);
         update_option('dropsLoginUrl', $_POST['dropsLoginUrl']);
         update_option('dropsFrontendLoginUrl', $_POST['dropsFrontendLoginUrl']);
