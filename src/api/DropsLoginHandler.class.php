@@ -466,16 +466,9 @@ class DropsLoginHandler
 			return;
 		}
 		
-		echo '<pre>';
-		
-		var_dump($response);
-
-		echo '</pre>';
-		
-		die();
 		
 		$rolesArr = [];
-		foreach($response->getResponse()->profiles[0]->roles AS $role) {
+		foreach($response->getResponse()->roles AS $role) {
 			$rolesArr[] = $role->role;
 		}
 		
@@ -494,7 +487,16 @@ class DropsLoginHandler
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User updated data: ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');
 				
 		DropsController::logResponse($response);
-				
+		
+
+		echo '<pre>';
+		
+		var_dump($response);
+
+		echo '</pre>';
+		
+		die();
+		
 	}
 
 }
