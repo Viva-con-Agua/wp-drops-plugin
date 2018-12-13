@@ -206,7 +206,7 @@ class DropsLoginHandler
 			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Metadata added (Line ' . __LINE__ . ')');
         }
 
-		$this->updateUserCapabilities($userData);
+		$this->updateUserCapabilities($userData->id);
 		
         $url = $temporarySession['user_session']['url'];
 		
@@ -253,6 +253,32 @@ class DropsLoginHandler
 
         $restClient = new RestClient($options);
         $response = $restClient->get(get_option('dropsAccessUrl'));
+
+        if ($response->info->http_code == 200) {
+            return json_decode($response->response, true);
+        } else {
+            (new DropsLogger(''))->log(DropsLogger::ERROR, '(' . $response->info->http_code . ' ' . $response->error . ') URL: ' . get_option('dropsAccessUrl'). ' (Line ' . __LINE__ . ')'. ' (Line ' . __LINE__ . ')');
+            return null;
+        }
+
+    }
+	
+    /**
+     * Creates HTTP request and receives the access token
+     * @param $parameters
+     * @return array|null
+     */
+    private function requestUserProfile($userId)
+    {
+
+        $options = array(
+            'parameters' => []
+        );
+
+        $restClient = new RestClient($options);
+		
+		$dropsOauthUserProfileUrl = '/drops/rest/user/' . $userId . '?client_id=' . get_option('dropsClientId') . '&client_secret=' . get_option('dropsClientSecret');
+        $response = $restClient->get($dropsOauthUserProfileUrl);
 
         if ($response->info->http_code == 200) {
             return json_decode($response->response, true);
@@ -415,10 +441,12 @@ class DropsLoginHandler
 
     }
 	
-	private function updateUserCapabilities($userData) {
+	private function updateUserCapabilities($userId) {
 		
-		if (!isset($userData->profiles[0])) 
-		{
+		$userData = $this->requestUserProfile($userId);
+		
+		if (empty($userData)) {
+			(new DropsLogger(''))->log(DropsLogger::ERROR, 'No userdata found with id ' . $userId . ' (Line ' . __LINE__ . ')');
 			return;
 		}
 		
