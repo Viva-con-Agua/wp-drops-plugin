@@ -270,15 +270,12 @@ class DropsLoginHandler
      */
     private function requestUserProfile($userId)
     {
-		
-		
-        $parameters = [
-            'client_id'     => get_option('dropsClientId'),
-            'client_secret' => get_option('dropsClientSecret')
-		];
-
+			
         $options = array(
-            'parameters' => []
+            'parameters' => [
+				'client_id'     => get_option('dropsClientId'),
+				'client_secret' => get_option('dropsClientSecret')
+			]
         );
 		
         // Redirect to drops
