@@ -46,7 +46,7 @@ class DropsSettings extends DropsMain
 
 		// https://vca.informatik.hu-berlin.de/pool/?loginFnc=useraccess&authorizationCode=
         $this->page['settings']['dropsAuthorizationCodeResponseUri'] = array(
-            'title' => __('Authentication key', 'drops'),
+            'title' => __('AuthenticationCode Resonse URL', 'drops'),
             'value' => isset($_POST['dropsAuthorizationCodeResponseUri']) ? $_POST['dropsAuthorizationCodeResponseUri'] : get_option( 'dropsAuthorizationCodeResponseUri' ),
             'description' => __('The URL to with the authorizationCode is sent to', 'drops')
         );
