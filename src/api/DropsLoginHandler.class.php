@@ -277,7 +277,7 @@ class DropsLoginHandler
 
         $restClient = new RestClient($options);
 		
-		$dropsOauthUserProfileUrl = '/drops/rest/user/' . $userId . '?client_id=' . get_option('dropsClientId') . '&client_secret=' . get_option('dropsClientSecret');
+		$dropsOauthUserProfileUrl = 'https://vca.informatik.hu-berlin.de/drops/rest/user/' . $userId . '?client_id=' . get_option('dropsClientId') . '&client_secret=' . get_option('dropsClientSecret');
         $response = $restClient->get($dropsOauthUserProfileUrl);
 
         if ($response->info->http_code == 200) {
@@ -447,6 +447,7 @@ class DropsLoginHandler
 		
 		if (empty($userData)) {
 			(new DropsLogger(''))->log(DropsLogger::ERROR, 'No userdata found with id ' . $userId . ' (Line ' . __LINE__ . ')');
+			var_dump($userData);die();
 			return;
 		}
 		
