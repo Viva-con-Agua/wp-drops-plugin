@@ -40,6 +40,7 @@ class DropsSettings extends DropsMain
 
         $this->page['settings']['dropsUserAccessHash'] = array(
             'title' => __('Authentication key', 'drops'),
+			'type' => 'password',
             'value' => isset($_POST['dropsUserAccessHash']) ? $_POST['dropsUserAccessHash'] : get_option( 'dropsUserAccessHash' ),
             'description' => __('The key from the drops microservice to authenticate the service. When a profile is created in the drops microservice, it pushes the user\'s data to this plugin, which adds the user to wordpress', 'drops')
         );
