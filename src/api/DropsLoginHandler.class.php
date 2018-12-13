@@ -466,8 +466,16 @@ class DropsLoginHandler
 			return;
 		}
 		
+		echo '<pre>';
+		
+		var_dump($response);
+
+		echo '</pre>';
+		
+		die();
+		
 		$rolesArr = [];
-		foreach($response->response->profiles[0]->roles AS $role) {
+		foreach($response->getResponse()->profiles[0]->roles AS $role) {
 			$rolesArr[] = $role->role;
 		}
 		
