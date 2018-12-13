@@ -56,7 +56,7 @@ class DropsUserReader extends DropsUserAction
      */
     protected function getActionType()
     {
-        return parent::ACTIONTYPE_GET;
+        return parent::ACTIONTYPE_POST;
     }
 
     protected function getFormat()
