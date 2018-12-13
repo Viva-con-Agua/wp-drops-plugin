@@ -467,7 +467,7 @@ class DropsLoginHandler
 		}
 		
 		$rolesArr = [];
-		foreach($response->profiles[0]->roles AS $role) {
+		foreach($response->response->profiles[0]->roles AS $role) {
 			$rolesArr[] = $role->role;
 		}
 		
