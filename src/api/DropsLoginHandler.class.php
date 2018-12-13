@@ -142,7 +142,7 @@ class DropsLoginHandler
             'client_id'     => get_option('dropsClientId'),
             'client_secret' => get_option('dropsClientSecret'),
             'code'          => $authorizationCode,
-            'redirect_uri'  => 'https://vca.informatik.hu-berlin.de/pool/?loginFnc=useraccess&authorizationCode='
+            'redirect_uri'  => '/pool/?loginFnc=useraccess&authorizationCode='
         ];
 
         // Trigger request
