@@ -46,6 +46,7 @@ class DropsUserReader extends DropsUserAction
 	
 	public function setDropsUuid($uuid) {
 		$this->uuid = $uuid;
+		return $this;
 	}
 
     /**
