@@ -33,6 +33,7 @@ class DropsSettings extends DropsMain
 
         $this->page['settings']['dropsClientSecret'] = array(
             'title' => __('Client Secret', 'drops'),
+            'type' => 'password',
             'value' => isset($_POST['dropsClientSecret']) ? $_POST['dropsClientSecret'] : get_option( 'dropsClientSecret' ),
             'description' => __('The client secret is sent to the drops microservice to authenticate the plugin to receive the access token for further communication', 'drops')
         );

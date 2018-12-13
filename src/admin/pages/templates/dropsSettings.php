@@ -12,7 +12,7 @@
     <tr>
         <td><strong><?= $setting['title']; ?></strong></td>
         <td>
-            <input type="text" id="<?= $key; ?>" name="<?= $key; ?>" size="100" class="input" value="<?= $setting['value']; ?>"/>
+            <input type="<?= isset($setting['type']) ? $setting['type'] : 'text'; ?>" id="<?= $key; ?>" name="<?= $key; ?>" size="100" class="input" value="<?= $setting['value']; ?>"/>
             <?php if (!empty($setting['description'])) { ?>
                 <p class="description"><?= $setting['description']; ?></p>
             <?php } ?>
