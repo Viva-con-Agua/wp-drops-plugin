@@ -43,6 +43,13 @@ class DropsSettings extends DropsMain
             'description' => __('The key from the drops microservice to authenticate the service. When a profile is created in the drops microservice, it pushes the user\'s data to this plugin, which adds the user to wordpress', 'drops')
         );
 
+		// https://vca.informatik.hu-berlin.de/pool/?loginFnc=useraccess&authorizationCode=
+        $this->page['settings']['dropsAuthorizationCodeResponseUri'] = array(
+            'title' => __('Authentication key', 'drops'),
+            'value' => isset($_POST['dropsAuthorizationCodeResponseUri']) ? $_POST['dropsAuthorizationCodeResponseUri'] : get_option( 'dropsAuthorizationCodeResponseUri' ),
+            'description' => __('The URL to with the authorizationCode is sent to', 'drops')
+        );
+
         // URLS for the connection to drops
 
         $this->page['settings']['dropsFrontendLoginUrl'] = array(
@@ -116,6 +123,7 @@ class DropsSettings extends DropsMain
         update_option('dropsClientId', $_POST['dropsClientId']);
         update_option('dropsClientSecret', $_POST['dropsClientSecret']);
         update_option('dropsUserAccessHash', $_POST['dropsUserAccessHash']);
+        update_option('dropsAuthorizationCodeResponseUri', $_POST['dropsAuthorizationCodeResponseUri']);
         update_option('dropsLoginUrl', $_POST['dropsLoginUrl']);
         update_option('dropsFrontendLoginUrl', $_POST['dropsFrontendLoginUrl']);
         update_option('dropsLogoutUrl', $_POST['dropsLogoutUrl']);
