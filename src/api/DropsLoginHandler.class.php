@@ -270,15 +270,26 @@ class DropsLoginHandler
      */
     private function requestUserProfile($userId)
     {
+		
+		
+        $parameters = [
+            'client_id'     => get_option('dropsClientId'),
+            'client_secret' => get_option('dropsClientSecret')
+		];
 
         $options = array(
             'parameters' => []
         );
+		
+        // Redirect to drops
+        $url = str_replace('<uuid>', $userId, get_option('dropsOauthUserProfileUrl'));
+		
+		var_dump($options);
+		var_dump($url);
 
         $restClient = new RestClient($options);
 		
-		$dropsOauthUserProfileUrl = 'https://vca.informatik.hu-berlin.de/drops/rest/user/' . $userId . '?client_id=' . get_option('dropsClientId') . '&client_secret=' . get_option('dropsClientSecret');
-        $response = $restClient->get($dropsOauthUserProfileUrl);
+        $response = $restClient->get($url);
 
         if ($response->info->http_code == 200) {
             return json_decode($response->response, true);
