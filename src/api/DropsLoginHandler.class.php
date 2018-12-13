@@ -477,14 +477,6 @@ class DropsLoginHandler
 			'wp_capabilities'	=> implode(';', $rolesArr)
 		];
 		
-		
-		echo '<pre>';
-		
-		var_dump($preparedUserData);
-
-		echo '</pre>';
-		
-
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Setting userdata after login to ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');
 		
 		$dataHandler = new DropsUserDataHandler();
@@ -495,16 +487,7 @@ class DropsLoginHandler
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User updated data: ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');
 				
 		DropsController::logResponse($response);
-		
-
-		echo '<pre>';
-		
-		var_dump($response);
-
-		echo '</pre>';
-		
-		die();
-		
+				
 	}
 
 }
