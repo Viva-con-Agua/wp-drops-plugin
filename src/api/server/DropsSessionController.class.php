@@ -62,10 +62,10 @@ class DropsSessionController extends DropsController
 				case self::INITIAL:
 					$parameter = self::REDIRECT;
 				case self::ACCESS:
-					if (!empty($temporarySession['drops_session_id'])) {
+					/*if (!empty($temporarySession['drops_session_id'])) {
 						(new DropsLogger(''))->log(DropsLogger::DEBUG, 'DropsID already there: ' . $temporarySession['drops_session_id'] . ' (Line ' . __LINE__ . ')');
 						$drops->redirect($temporarySession['user_session']['url']);
-					}
+					}*/
 					break;
 				
 			}
