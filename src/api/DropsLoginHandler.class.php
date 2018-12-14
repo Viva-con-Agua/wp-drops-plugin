@@ -57,6 +57,11 @@ class DropsLoginHandler
 			$currentUrl = $this->getCurrentUrl();
 
 			(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Current called URL is ' . $currentUrl . ' (Line ' . __LINE__ . ')');
+			
+			if (isset($_GET['redirect_to'])) {
+				$currentUrl = urldecode($_GET['redirect_to']);
+				(new DropsLogger(''))->log(DropsLogger::DEBUG, 'CHANGED Current called URL to ' . $currentUrl . ' (Line ' . __LINE__ . ')');
+			}
 
 			// We have to create a temporary session
 			$session = $this->createTemporarySession($currentUrl);
