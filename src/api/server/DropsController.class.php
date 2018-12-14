@@ -73,7 +73,7 @@ abstract class DropsController
             $logLine .= ' [' . $response->getResponse() . ']';
         }
 
-        (new DropsLogger(date('Y_m_d') . '_' . Config::get('DROPS_LOGFILE')))->log($logLevel, $logLine);
+        (new DropsLogger(date('Y_m_d')))->log($logLevel, $logLine);
 
     }
 

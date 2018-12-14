@@ -45,7 +45,6 @@ $_CONFIG['DB_META_TABLE'] = $_CONFIG['DB_PREFIX'] . '_drops_meta';
 
 $_CONFIG['DB_DROPS_LOG'] = $_CONFIG['DB_PREFIX'] . '_drops_logs';
 $_CONFIG['DB_GEOGRAPHY'] = $_CONFIG['DB_PREFIX'] . '_vca_asm_geography';
-$_CONFIG['DROPS_LOGFILE'] = 'dropslog.txt';
 ```
 
 After editing the config file, the necessary tables will be added to the database on plugin actionvation.
