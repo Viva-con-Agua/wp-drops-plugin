@@ -45,7 +45,7 @@ class DropsUserController extends DropsController
                 $userData = $this->getUserData();
 
                 $uD = print_r($userData, true);
-                (new DropsLogger(date('Y_m_d'))))->log(DropsLogger::INFO, $uD);
+                (new DropsLogger(date('Y_m_d')))->log(DropsLogger::INFO, $uD);
 
                 if (isset($userData['uuid'])) {
                     $uuid = $userData['uuid'];
