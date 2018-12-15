@@ -53,6 +53,7 @@ function handleDropsLogin() {
 		
 		if (strpos($_SERVER['REQUEST_URI'], 'datenschutz') !== false
 			|| strpos($_SERVER['REQUEST_URI'], 'nutzungs') !== false
+			|| strpos($_SERVER['REQUEST_URI'], 'rausloggen') !== false
 			|| strpos($_SERVER['REQUEST_URI'], 'faq') !== false) {
 				return;
 			}
