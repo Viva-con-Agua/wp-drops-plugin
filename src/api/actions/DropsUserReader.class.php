@@ -6,7 +6,7 @@ require_once 'DropsUserAction.class.php';
  * Class DropsUserReader
  * The class reads the user from drops
  */
-class DropsUserReader extends DropsUserAction
+class DropsApiUserReader extends DropsUserAction
 {
 	
     const ACTION_TYPE = 'READ';

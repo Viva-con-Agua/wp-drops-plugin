@@ -85,6 +85,15 @@ class DropsUserDataHandler implements UserDataHandlerInterface
         );
     }
 
+    public function getUserMetaById($userId)
+    {
+        return $this->dbConnection->get_var(
+            'SELECT meta_value ' .
+            'FROM ' . Config::get('DB_USERMETA_TABLE') . ' ' .
+			'WHERE meta_key = "mail_switch" AND user_id = "' . $userId . '"'
+        );
+    }
+
     public function updateUser($userId, array $userData, array $userMetaData)
     {
 		

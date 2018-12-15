@@ -457,7 +457,7 @@ class DropsLoginHandler
 	
 	private function updateUserCapabilities($userId) {
 		
-		$response = (new DropsUserReader())->setDropsUuid($userId)->setAccessToken(
+		$response = (new DropsApiUserReader())->setDropsUuid($userId)->setAccessToken(
 			(new DropsSessionDataHandler())
 				->getAccessToken(
 					get_current_user_id()

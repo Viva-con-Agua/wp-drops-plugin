@@ -2,6 +2,7 @@
 
 require_once 'DropsController.class.php';
 require_once 'user/DropsUserCreator.class.php';
+require_once 'user/DropsUserReader.class.php';
 require_once 'user/DropsUserUpdater.class.php';
 require_once 'user/DropsUserDeleter.class.php';
 
@@ -22,6 +23,9 @@ class DropsUserController extends DropsController
 
     /** Path to post userdata to, to logout a user from the good ol' pool */
     const REMOVE = 'delete';
+	
+    /** Path to post userdata to, to logout a user from the good ol' pool */
+    const READ = 'read';
 
     /**
      * Checks if the parameters are valid and calls the user creation action
@@ -113,6 +117,20 @@ class DropsUserController extends DropsController
                 $userDeleter = new DropsUserDeleter($userData);
                 $userDeleter->setDataHandler($dataHandler);
                 $response = $userDeleter->run();
+
+                self::logResponse($response);
+
+                echo $response->getFormat(DropsResponse::JSON);
+                exit;
+
+                break;            
+			case self::READ:
+
+                $userData = $this->getUserData();
+                $dataHandler = new DropsUserDataHandler();
+                $userReader = new DropsUserReader($userData);
+                $userReader->setDataHandler($dataHandler);
+                $response = $userReader->run();
 
                 self::logResponse($response);
 
