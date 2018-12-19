@@ -59,7 +59,7 @@ class DropsAPIController extends DropsController
 		$this->data = $data;
 	}
 	
-    private function createReceivedDataFromJson($data) {
+    private function createReceivedDataFromJson() {
 		$this->data = json_decode(file_get_contents('php://input'), true);
 	}
 	
