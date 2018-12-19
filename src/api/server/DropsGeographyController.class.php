@@ -100,14 +100,10 @@ class DropsGeographyController extends DropsController
             return 'Wrong request method given!';
         }
 
-        if (!isset($_POST['geography'])) {
-            return 'No crew given ' . print_r($_POST, true);
-        }
-		
 		// DATAJSON
-        /*if (!isset($this->data['geography'])) {
+        if (!isset($this->data['geography'])) {
             return 'No user given ' . print_r($this->data, true);
-        }*/
+        }
 
         return '';
 
@@ -116,10 +112,7 @@ class DropsGeographyController extends DropsController
     private function getData()
     {
 		// DATAJSON
-		// return $this->data['geography'];
-        $data = $_POST['geography'];
-        $data = str_replace('\\', '', $data);
-        return json_decode($data, true);
+		return $this->data['geography'];
     }
 
 }

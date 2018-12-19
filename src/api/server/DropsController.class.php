@@ -92,6 +92,13 @@ abstract class DropsController
 
         return $params[$id];
     }
+    
+	public function setData($data)
+    {
+		// DATAJSON
+		$this->data = $data;
+		return $this;
+    }
 
 
 }

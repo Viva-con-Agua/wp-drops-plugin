@@ -23,12 +23,13 @@ class DropsAPIController extends DropsController
     {
 		
 		$apiCall = $this->getParameter('api', $_GET);
-		
 		if (empty($apiCall)) {
 			return;
 		}
-		
-		//$this->createReceivedData($_POST);		
+	
+		// DATAJSON
+		$this->createReceivedDataFromJson($_POST[0]);		
+		//$this->createReceivedDataFromArray($_POST);		
 	
 		if (!$this->isValid()) {
 			return;
@@ -38,10 +39,10 @@ class DropsAPIController extends DropsController
 		
 		switch ($apiCall) {
             case self::USER:
-				$response = (new DropsUserController())->setFunction($actionCall)->run();
+				$response = (new DropsUserController())->setFunction($actionCall)->setData($this->data)->run();
 				break;
             case self::GEOGRAPHY:
-				$response = (new DropsGeographyController())->setFunction($actionCall)->run();
+				$response = (new DropsGeographyController())->setFunction($actionCall)->setData($this->data)->run();
 				break;
             case 'user-certificate':
 				return;
@@ -54,14 +55,16 @@ class DropsAPIController extends DropsController
 
     }
 
+	private function createReceivedDataFromArray($data) {
+		$this->data = $data;
+	}
 	
-    private function createReceivedData($data) {
-		$this->data = json_decode($data, true);
+    private function createReceivedDataFromJson($data) {
+		$this->data = json_decode(stripslashes($data), true);
 	}
 	
 	private function isValid() {
-		//$hash = $this->getParameter('hash', $this->data);
-		$hash = $this->getParameter('hash', $_POST);
+		$hash = $this->getParameter('hash', $this->data);
 		return ($hash === get_option('dropsUserAccessHash'));
 	}
 

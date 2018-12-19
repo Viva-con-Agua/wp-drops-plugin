@@ -157,15 +157,15 @@ class DropsUserController extends DropsController
             return 'Wrong request method given!';
         }
 
-        if (!isset($_POST['user'])) {
+        /*if (!isset($_POST['user'])) {
             return 'No user given ' . print_r($_POST, true);
-        }
+        }*/
 		
 		// DATAJSON
-        /*if (!isset($this->data['user'])) {
+        if (!isset($this->data['user'])) {
             return 'No user given ' . print_r($this->data, true);
-        }*/
-
+        }
+		
         return '';
 
     }
@@ -173,10 +173,7 @@ class DropsUserController extends DropsController
     private function getUserData()
     {
 		// DATAJSON
-		// return $this->data['user'];
-        $userData = $_POST['user'];
-        $userData = str_replace('\\', '', $userData);
-        return json_decode($userData, true);
+		return $this->data['user'];
     }
 
 }
