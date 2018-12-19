@@ -114,7 +114,7 @@ class DropsResponse
                 break;
             case self::JSON:
             default:
-                return json_encode(get_object_vars($this));
+				return json_encode(array_filter(get_object_vars($this)));
                 break;
         }
 
