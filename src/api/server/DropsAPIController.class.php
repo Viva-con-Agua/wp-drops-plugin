@@ -14,6 +14,8 @@ class DropsAPIController extends DropsController
     const USER = 'user';
     const GEOGRAPHY = 'geography';
 	
+	private $data;
+	
     /**
      * The routine checks which path is called and calls the corresponding function
      */
@@ -26,12 +28,13 @@ class DropsAPIController extends DropsController
 			return;
 		}
 		
-		$actionCall = $this->getParameter('action', $_GET);
-		
+		//$this->createReceivedData($_POST);		
+	
 		if (!$this->isValid()) {
 			return;
 		}
 		
+		$actionCall = $this->getParameter('action', $_GET);
 		
 		switch ($apiCall) {
             case self::USER:
@@ -50,10 +53,16 @@ class DropsAPIController extends DropsController
 		die('{"context":"DropsAPIController","code":400,"message":"API has done nothing! Badum!"}');
 
     }
+
+	
+    private function createReceivedData($data) {
+		$this->data = json_decode($data, true);
+	}
 	
 	private function isValid() {
+		//$hash = $this->getParameter('hash', $this->data);
 		$hash = $this->getParameter('hash', $_POST);
-		return ($hash == get_option('dropsUserAccessHash'));
+		return ($hash === get_option('dropsUserAccessHash'));
 	}
 
 }
