@@ -115,7 +115,7 @@ class DropsUserUpdater
 		$userData = [];
 		foreach ($this->optionalUserFields AS $key) {
 			if (isset($this->userData[$key])) {
-				$userData[$key] =  utf8_encode($this->userData[$key]);
+				$userData[$key] =  $this->userData[$key];
 			}
 		}
 		

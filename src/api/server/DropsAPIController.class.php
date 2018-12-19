@@ -35,7 +35,8 @@ class DropsAPIController extends DropsController
 			return;
 		}
 	
-		(new DropsLogger(date('Y_m_d')))->log(DropsLogger::INFO, print_r($this->data, true));
+		$dataString = print_r($this->data, true);
+		(new DropsLogger(date('Y_m_d')))->log(DropsLogger::INFO, mb_detect_encoding($dataString) . ' ' . $dataString);
 	
 		$actionCall = $this->getParameter('action', $_GET);
 		
