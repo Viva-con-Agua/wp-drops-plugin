@@ -26,6 +26,10 @@ class DropsAPIController extends DropsController
 		if (empty($apiCall)) {
 			return;
 		}
+		$data = json_decode(file_get_contents('php://input'), true);
+		var_dump($_POST);
+		var_dump($data);
+		die();
 	
 		// DATAJSON
 		$this->createReceivedDataFromJson($_POST[0]);		
