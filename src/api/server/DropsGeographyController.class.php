@@ -28,7 +28,7 @@ class DropsGeographyController extends DropsController
 
 		$requestValidation = $this->isRequestValid();
 
-        if (!empty(requestValidation)) {
+        if (!empty($requestValidation)) {
             $response = (new DropsResponse())->setCode(400)->setMessage('Invalid request! Please check your data and format! Message: ' . $requestValidation)->setContext(__CLASS__);
 			self::logResponse($response);
             return $response->getFormat(DropsResponse::JSON);
