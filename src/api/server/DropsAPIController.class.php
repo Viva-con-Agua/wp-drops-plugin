@@ -26,13 +26,9 @@ class DropsAPIController extends DropsController
 		if (empty($apiCall)) {
 			return;
 		}
-		$data = json_decode(file_get_contents('php://input'), true);
-		var_dump($_POST);
-		var_dump($data);
-		die();
 	
 		// DATAJSON
-		$this->createReceivedDataFromJson($_POST[0]);		
+		$this->createReceivedDataFromJson();		
 		//$this->createReceivedDataFromArray($_POST);		
 	
 		if (!$this->isValid()) {
@@ -64,7 +60,7 @@ class DropsAPIController extends DropsController
 	}
 	
     private function createReceivedDataFromJson($data) {
-		$this->data = json_decode(stripslashes($data), true);
+		$this->data = json_decode(file_get_contents('php://input'), true);
 	}
 	
 	private function isValid() {
