@@ -32,9 +32,11 @@ class DropsUserController extends DropsController
      */
     public function run()
     {
+		
+		$requestValidation = $this->isRequestValid();
 
-        if (!$this->isRequestValid()) {
-            $response = (new DropsResponse())->setCode(400)->setMessage('Invalid request! Please check your data and format!')->setContext(__CLASS__);
+        if (!empty(requestValidation)) {
+            $response = (new DropsResponse())->setCode(400)->setMessage('Invalid request! Please check your data and format! Message: ' . $requestValidation)->setContext(__CLASS__);
 			self::logResponse($response);
             return $response->getFormat(DropsResponse::JSON);
         }
@@ -153,18 +155,18 @@ class DropsUserController extends DropsController
     {
 
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            return false;
+            return 'Wrong request method given!';
         }
 
         if (!isset($_POST['hash']) || $_POST['hash'] !== get_option('dropsUserAccessHash')) {
-            return false;
+            return 'No hash given ' . print_r($_POST, true);
         }
 
         if (!isset($_POST['user'])) {
-            return false;
+            return 'No user given ' . print_r($_POST, true);
         }
 
-        return true;
+        return '';
 
     }
 
