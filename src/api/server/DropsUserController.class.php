@@ -159,7 +159,7 @@ class DropsUserController extends DropsController
         }
 
         if (!isset($_POST['hash']) || $_POST['hash'] !== get_option('dropsUserAccessHash')) {
-            return 'No hash given ' . print_r($_POST, true);
+            return 'No hash given ' . print_r($_REQUEST, true);
         }
 
         if (!isset($_POST['user'])) {
