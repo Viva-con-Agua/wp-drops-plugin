@@ -34,7 +34,9 @@ class DropsAPIController extends DropsController
 		if (!$this->isValid()) {
 			return;
 		}
-		
+	
+		(new DropsLogger(date('Y_m_d')))->log(DropsLogger::INFO, print_r($this->data, true));
+	
 		$actionCall = $this->getParameter('action', $_GET);
 		
 		switch ($apiCall) {
