@@ -72,7 +72,7 @@ class DropsUserController extends DropsController
                         $response = (new DropsResponse())->setCode(200)->setMessage('Logout successful for ' . $uuid . '(' . $userId . ')')->setContext(__CLASS__);
 
                     } else {
-                        $response = (new DropsResponse())->setCode(400)->setMessage('No session found for ' . $uuid)->setContext(__CLASS__);
+                        $response = (new DropsResponse())->setCode(200)->setMessage('No session found for ' . $uuid)->setContext(__CLASS__);
                     }
 
                 } else {
