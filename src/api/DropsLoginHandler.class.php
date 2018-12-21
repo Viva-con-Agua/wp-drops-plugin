@@ -471,8 +471,15 @@ class DropsLoginHandler
 			return;
 		}
 		
-		
 		$rolesArr = [];
+		if (isset($response->getResponse()->profiles)) {
+			foreach($response->getResponse()->profiles AS $profile) {
+				if (isset($profile->supporter) && !empty($profile->supporter->roles)) {
+					$rolesArr[] = 'volunteerManager';
+				}
+			}
+		}
+		
 		foreach($response->getResponse()->roles AS $role) {
 			$rolesArr[] = $role->role;
 		}
