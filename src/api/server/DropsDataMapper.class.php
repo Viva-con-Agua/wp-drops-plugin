@@ -23,6 +23,9 @@ class DropsDataMapper
             case 'wp_capabilities':
 				return self::mapCapabilities($value);
                 break;
+            case 'region':
+				return self::mapRegions($value);
+                break;
             case 'secondary_nl':
             case 'nation':
             case 'city':
@@ -35,6 +38,20 @@ class DropsDataMapper
 		return false;
 
     }
+	
+	private static function mapRegions($value) 
+	{
+		
+		$ancestorGeography = (new DropsGeographyDataHandler)->getHierarchyEntryById($value)
+		
+		if (empty($ancestorGeography)) {
+			return $value;
+		}
+		
+		$ancestorGeography->id;	
+		
+	}
+	
 	
 	private static function mapGeography($value) {
 		$geography = (new DropsGeographyDataHandler)->getEntryByName($value);

@@ -124,6 +124,8 @@ class DropsUserCreator
      */
     private function createUserMeta($userId)
     {
+		
+		$cityId = DropsDataMapper::map('city', $this->userData['city']);
 
         $userMetaData = array(
             'nickname' => $this->userData['nickname'],
@@ -151,8 +153,8 @@ class DropsUserCreator
             'gender' => $this->userData['gender'],
             'simple-local-avatar' => '',
             'nation' => DropsDataMapper::map('nation', $this->userData['nation']),
-            'city' => DropsDataMapper::map('city', $this->userData['city']),
-            'region' => DropsDataMapper::map('city', $this->userData['city'])
+            'city' => $cityId,
+            'region' => DropsDataMapper::map('region', $cityId)
         );
 
         return $this->dataHandler->createUserMeta($userId, $userMetaData);

@@ -78,6 +78,16 @@ class DropsGeographyDataHandler implements GeographyDataHandlerInterface
         );
     }
 
+    public function getHierarchyEntryById($id)
+    {
+        return $this->dbConnection->get_var(
+            'SELECT ancestor ' .
+            'FROM ' . Config::get('DB_GEOGRAPHY') . '_hierarchy ' .
+            "WHERE ancestor_type = 'cg' " .
+			"AND descendant = '" . $idi . "'"
+        );
+    }
+
     public function getEntryById($id)
     {
         return $this->dbConnection->get_row(
