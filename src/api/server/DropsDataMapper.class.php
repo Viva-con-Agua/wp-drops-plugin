@@ -42,7 +42,7 @@ class DropsDataMapper
 	private static function mapRegions($value) 
 	{
 		
-		$ancestorGeography = (new DropsGeographyDataHandler)->getHierarchyEntryById($value)
+		$ancestorGeography = (new DropsGeographyDataHandler)->getHierarchyEntryById($value);
 		
 		if (empty($ancestorGeography)) {
 			return $value;
