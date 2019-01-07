@@ -28,8 +28,10 @@ class DropsDataMapper
                 break;
             case 'secondary_nl':
             case 'nation':
-            case 'city':
 				return self::mapGeography($value);
+                break;
+            case 'city_id':
+				return self::mapDropsGeography($value);
                 break;
             default:
 				break;
@@ -52,6 +54,18 @@ class DropsDataMapper
 		
 	}
 	
+	private static function mapDropsGeography($value) {
+		
+		$geography = (new DropsGeographyMappingDataHandler)->getEntryByDropsId($value);
+		
+		if (empty($geography)) {
+			(new DropsLogger(''))->log(DropsLogger::ERROR, 'Mapping for drops geography not found: ' . $value . ' (Line ' . __LINE__ . ')');
+			return 0;
+		}
+		
+		return $geography;
+		
+	}
 	
 	private static function mapGeography($value) {
 		$geography = (new DropsGeographyDataHandler)->getEntryByName($value);
