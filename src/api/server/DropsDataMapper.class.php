@@ -26,6 +26,9 @@ class DropsDataMapper
             case 'region':
 				return self::mapRegions($value);
                 break;
+            case 'birthday':
+				return self::mapBirthday($value);
+                break;
             case 'secondary_nl':
             case 'nation':
 				return self::mapGeography($value);
@@ -89,6 +92,10 @@ class DropsDataMapper
 				return 'en';
 		}
 		
+	}
+	
+	private static function mapBirthday($value) {
+		return $value / 1000;
 	}
 	
 	private static function mapCapabilities($capabilities) {
