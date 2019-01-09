@@ -125,7 +125,7 @@ class DropsUserCreator
     private function createUserMeta($userId)
     {
 		
-		$cityId = DropsDataMapper::map('city', $this->userData['city']);
+		$cityId = DropsDataMapper::map('crew_id', $this->userData['crew_id']);
 
         $userMetaData = array(
             'nickname' => $this->userData['nickname'],
@@ -149,7 +149,7 @@ class DropsUserCreator
             Config::get('DB_PREFIX') . '_user-settings-time' => time(),
             'mobile' => $this->userData['mobile'],
             'residence' => $this->userData['residence'],
-            'birthday' => $this->userData['birthday'],
+            'birthday' => DropsDataMapper::map('birthday', $this->userData['birthday']),
             'gender' => $this->userData['gender'],
             'simple-local-avatar' => '',
             'nation' => DropsDataMapper::map('nation', $this->userData['nation']),
