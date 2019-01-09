@@ -30,7 +30,7 @@ class DropsDataMapper
             case 'nation':
 				return self::mapGeography($value);
                 break;
-            case 'city_id':
+            case 'crew_id':
 				return self::mapDropsGeography($value);
                 break;
             default:
