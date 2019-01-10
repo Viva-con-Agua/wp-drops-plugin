@@ -37,6 +37,7 @@ require_once 'src/DropsSessionDataHandler.class.php';
 require_once 'src/DropsUserDataHandler.class.php';
 require_once 'src/DropsMetaDataHandler.class.php';
 require_once 'src/DropsGeographyDataHandler.class.php';
+require_once 'src/DropsGeographyMapperDataHandler.class.php';
 
 require_once 'src/DropsLogger.class.php';
 
