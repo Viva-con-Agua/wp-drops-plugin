@@ -84,7 +84,7 @@ class DropsGeographyDataHandler implements GeographyDataHandlerInterface
             'SELECT ancestor ' .
             'FROM ' . Config::get('DB_GEOGRAPHY') . '_hierarchy ' .
             "WHERE ancestor_type = 'cg' " .
-			"AND descendant = '" . $idi . "'"
+			"AND descendant = '" . $id . "'"
         );
     }
 

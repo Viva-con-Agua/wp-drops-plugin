@@ -29,11 +29,20 @@ class DropsGeographyMapperDataHandler
 	
     public function getEntryByDropsId($id)
     {
-        return $this->dbConnection->get_var(
-            'SELECT geography_id ' .
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Entered geo mapping id ' . $id . ' (Line ' . __LINE__ . ')');
+		
+		$sql = 'SELECT geography_id ' .
             'FROM ' . Config::get('DB_GEOGRAPHY') . '_mapping ' .
-            "WHERE drops_id = '" . $id . "'"
-        );
+            "WHERE drops_id = '" . $id . "'";
+			
+			
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'SQL for geo mapping id ' . $sql . ' (Line ' . __LINE__ . ')');
+			
+		$result = $this->dbConnection->get_var($sql);
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'SQL result: ' . $result . ' (Line ' . __LINE__ . ')');
+        return $result;
     }
 
 }
