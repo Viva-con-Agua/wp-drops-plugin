@@ -122,6 +122,11 @@ class DropsUserDataHandler implements UserDataHandlerInterface
 		if (!empty($userMetaData)) {
 			
 			foreach ($userMetaData AS $metaKey => $metaValue) {
+				
+				if ($metaKey == 'region') {
+					(new DropsLogger(''))->log(DropsLogger::ERROR, 'Mapping ' . print_r($metaKey, true) . ' (Line ' . __LINE__ . ')');
+				}
+				
 				$updateSql = 'UPDATE ' . Config::get('DB_USERMETA_TABLE') . ' SET ' .
 					'meta_value = \'' . $metaValue . '\' ' . 
 					'WHERE user_id = "' . $userId . '" and meta_key = "' . $metaKey . '"';

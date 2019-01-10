@@ -49,12 +49,13 @@ class DropsDataMapper
 		
 		$ancestorGeography = (new DropsGeographyDataHandler)->getHierarchyEntryById($value);
 		
-		(new DropsLogger(''))->log(DropsLogger::ERROR, 'Mapping ' . print_r($ancestorGeography, true) . ' (Line ' . __LINE__ . ')');
 		
 		if (empty($ancestorGeography)) {
+		(new DropsLogger(''))->log(DropsLogger::ERROR, 'Mapping ' . print_r($ancestorGeography, true) . ' (Line ' . __LINE__ . ')');
 			return 0;
 		}
 		
+		(new DropsLogger(''))->log(DropsLogger::ERROR, 'Mapping ' . print_r($ancestorGeography, true) . ' (Line ' . __LINE__ . ')');
 		$ancestorGeography;	
 		
 	}
