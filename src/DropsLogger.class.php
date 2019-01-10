@@ -56,7 +56,7 @@ class DropsLogger
 		$sql = 'INSERT INTO ' . Config::get('DB_DROPS_LOG') . ' (`time`, `level`, `message`) ' .
 				'(NOW(), "' . strtoupper($level) . '", "' . $logline . '")';
 			
-		$returnValueKey = $this->dbConnection->query($sql);
+		$wpdb->query($sql);
 		
     }
 
