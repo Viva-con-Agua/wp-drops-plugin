@@ -53,7 +53,7 @@ class DropsLogger
         $logline = '[' . date('Y-m-d H:i:s') . '] ' . strtoupper($level) . ': ' . $this->interpolate($message, $context);
         //file_put_contents($this->logFile, $logline, FILE_APPEND | LOCK_EX);
 
-		$sql = 'INSERT INTO ' . Config::get('DB_DROPS_LOG') . ' (`time`, `level`, `message`) ' .
+		$sql = 'INSERT INTO ' . Config::get('DB_DROPS_LOG') . ' (`time`, `level`, `message`) VALUES ' .
 				'(NOW(), "' . strtoupper($level) . '", "' . $logline . '")';
 			
 		$wpdb->query($sql);
