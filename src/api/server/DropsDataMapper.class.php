@@ -15,7 +15,7 @@ class DropsDataMapper
      */
     public static function map($key, $value) {
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping field ' . $key . ' (Line ' . __LINE__ . ')');
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping field ' . $key . ' = ' . $value . ' (Line ' . __LINE__ . ')');
 
         switch ($key) {
             case 'pool_lang':
@@ -57,10 +57,14 @@ class DropsDataMapper
 		
 	}
 	
-	private static function mapDropsGeography($value) {
+	private static function mapDropsGeography($value) 
+	{
 		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $value . ' (Line ' . __LINE__ . ')');
 		$value = str_replace('-', '', $value);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $value . ' (Line ' . __LINE__ . ')');
 		$value = strtoupper($value);
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $value . ' (Line ' . __LINE__ . ')');
 		
 		$geography = (new DropsGeographyMappingDataHandler)->getEntryByDropsId($value);
 		
