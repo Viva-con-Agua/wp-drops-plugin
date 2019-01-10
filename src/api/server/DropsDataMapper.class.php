@@ -72,7 +72,7 @@ class DropsDataMapper
             "WHERE drops_id = '" . $value . "'";
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping sql ' . $sql . ' (Line ' . __LINE__ . ')');
 		
-		$geography = (new DropsGeographyMappingDataHandler)->getEntryByDropsId($value);
+		$geography = (new DropsGeographyMapperDataHandler)->getEntryByDropsId($value);
 		
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $geography . ' (' . $value . ') (Line ' . __LINE__ . ')');
 		if (empty($geography)) {
