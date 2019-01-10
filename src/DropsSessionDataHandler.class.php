@@ -197,6 +197,23 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
     }
 
     /**
+     * Updates the expiry date
+     * @param int $userId
+     * @return bool
+     */
+    public function updateExpiryDate($id)
+    {
+        $time = $this->createExpiryTime();
+        return $this->dbConnection->update(
+            Config::get('DB_SESSION_TABLE'),
+            array(
+                'expiry_timestamp' => $time,
+            ),
+            array('user_id' => $id)
+        );
+    }
+
+    /**
      * Checks if the session of the user is already expired
      * @param int $userId
      * @return bool
