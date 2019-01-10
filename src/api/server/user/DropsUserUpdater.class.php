@@ -134,6 +134,7 @@ class DropsUserUpdater
 					$userMetaData[$key] = $mappedValue;
 										
 					if ($key == 'crew_id') {
+						$userMetaData['city'] = $mappedValue;
 						$userMetaData['region'] = DropsDataMapper::map('region', $mappedValue);
 					}
 					
