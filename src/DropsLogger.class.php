@@ -43,7 +43,7 @@ class DropsLogger
      * @param string $message
      * @param array $context
      */
-public function log($level, $message, array $context = array())
+	public function log($level, $message, array $context = array())
     {
         /*
         * @var wpdb $dbConnection
@@ -53,15 +53,11 @@ public function log($level, $message, array $context = array())
         $logline = '[' . date('Y-m-d H:i:s') . '] ' . strtoupper($level) . ': ' . $this->interpolate($message, $context);
         //file_put_contents($this->logFile, $logline, FILE_APPEND | LOCK_EX);
 
-        $wpdb->insert(
-            Config::get('DB_DROPS_LOG'),
-            array(
-                'time' => 'now()',
-                'level' => strtoupper($level),
-                'message' => $logline
-            )
-        );
-
+		$sql = 'INSERT INTO ' . Config::get('DB_DROPS_LOG') . ' (`time`, `level`, `message`) ' .
+				'(NOW(), "' . strtoupper($level) . '", ' . $logline . ', "''");';
+			
+		$returnValueKey = $this->dbConnection->query($sql);
+		
     }
 
     /**
