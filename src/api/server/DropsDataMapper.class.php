@@ -53,7 +53,7 @@ class DropsDataMapper
 			return 0;
 		}
 		
-		$ancestorGeography->id;	
+		$ancestorGeography;	
 		
 	}
 	
