@@ -63,7 +63,6 @@ function handleDropsLogin() {
 
             // we have got the sessions, destroy them all!
             $sessions->destroy_all();
-			die();
 			
         } else {
 			$dataHandler->updateExpiryDate(get_current_user_id());
