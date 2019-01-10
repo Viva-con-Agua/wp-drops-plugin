@@ -179,7 +179,7 @@ class DropsSessionDataHandler implements SessionDataHandlerInterface
      */
     private function createExpiryTime()
     {
-        return return $this->dbConnection->get_var('SELECT SELECT now() + INTERVAL 30 minute;');
+        return $this->dbConnection->get_var('SELECT SELECT now() + INTERVAL 30 minute;');
     }
 
     /**
