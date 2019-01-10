@@ -29,7 +29,7 @@ class DropsGeographyMapperDataHandler
 	
     public function getEntryByDropsId($id)
     {
-        return $this->dbConnection->get_row(
+        return $this->dbConnection->get_var(
             'SELECT geography_id ' .
             'FROM ' . Config::get('DB_GEOGRAPHY') . '_mapping ' .
             "WHERE drops_id = '" . $id . "'"

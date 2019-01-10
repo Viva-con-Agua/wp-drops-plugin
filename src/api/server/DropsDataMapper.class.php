@@ -66,6 +66,12 @@ class DropsDataMapper
 		$value = strtoupper($value);
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $value . ' (Line ' . __LINE__ . ')');
 		
+		
+        $sql = 'SELECT geography_id ' .
+            'FROM ' . Config::get('DB_GEOGRAPHY') . '_mapping ' .
+            "WHERE drops_id = '" . $value . "'"
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping sql ' . $sql . ' (Line ' . __LINE__ . ')');
+		
 		$geography = (new DropsGeographyMappingDataHandler)->getEntryByDropsId($value);
 		
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $geography . ' (' . $value . ') (Line ' . __LINE__ . ')');
