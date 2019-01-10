@@ -18,7 +18,7 @@ class DropsUserUpdater
 
     private $requiredUserData = array('uuid');
     private $optionalUserFields = array('user_login', 'user_nicename', 'user_email', 'display_name');
-    private $optionalUserMetaFields = array('nickname', 'first_name', 'mail_switch', 'pool_lang', 'secondary_nl', 'last_name', 'wp_capabilities', 'mobile', 'residence', 'birthday', 'gender', 'nation', 'city', 'crew_id');
+    private $optionalUserMetaFields = array('nickname', 'first_name', 'mail_switch', 'pool_lang', 'secondary_nl', 'last_name', 'wp_capabilities', 'mobile', 'residence', 'birthday', 'gender', 'nation', 'crew_id');
 
     /**
      * @var UserDataHandlerInterface $dataHandler
@@ -139,11 +139,6 @@ class DropsUserUpdater
 					}
 					
 				} else {
-					
-					if ($key == 'city') {
-						continue;
-					}
-					
 					$userMetaData[$key] = $this->userData[$key];
 				}
 				

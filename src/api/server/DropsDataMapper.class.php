@@ -15,6 +15,8 @@ class DropsDataMapper
      */
     public static function map($key, $value) {
 		
+		(new DropsLogger(''))->log(DropsLogger::ERROR, 'Mapping for ' . $key . '  value ' . $value . ' (Line ' . __LINE__ . ')');
+		
         switch ($key) {
             case 'pool_lang':
 				return self::mapLanguage($value);
@@ -48,7 +50,7 @@ class DropsDataMapper
 		$ancestorGeography = (new DropsGeographyDataHandler)->getHierarchyEntryById($value);
 		
 		if (empty($ancestorGeography)) {
-			return $value;
+			return 0;
 		}
 		
 		$ancestorGeography->id;	
