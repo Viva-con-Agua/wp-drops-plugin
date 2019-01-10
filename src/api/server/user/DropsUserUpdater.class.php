@@ -146,8 +146,6 @@ class DropsUserUpdater
 			
 		}
 		
-		(new DropsLogger(''))->log(DropsLogger::ERROR, 'METADATA: ' . print_r($userMetaData, true) . ' (Line ' . __LINE__ . ')');
-		
 		return $this->dataHandler->updateUser($userId, $userData, $userMetaData);
 
     }
