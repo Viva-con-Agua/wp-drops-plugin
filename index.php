@@ -49,7 +49,9 @@ if (is_admin()) {
 
 // Handling login of an existing user
 function handleDropsLogin() {
-		
+	
+	$just_logged_out = false;
+	
 	if (is_user_logged_in()) {
 		
 		$dataHandler = new DropsSessionDataHandler();
@@ -63,6 +65,8 @@ function handleDropsLogin() {
 
             // we have got the sessions, destroy them all!
             $sessions->destroy_all();
+
+			$just_logged_out = true;
 			
         } else {
 			$dataHandler->updateExpiryDate(get_current_user_id());
@@ -70,7 +74,7 @@ function handleDropsLogin() {
 		
 	}
 
-    if (!is_user_logged_in()) {
+    if (!is_user_logged_in() || $just_logged_out) {
 		
 		if (strpos($_SERVER['REQUEST_URI'], 'datenschutz') !== false
 			|| strpos($_SERVER['REQUEST_URI'], 'nutzungs') !== false
