@@ -7,7 +7,7 @@
 class DropsDataMapper
 {
 	
-	public static $mappedFields = ['pool_lang', 'secondary_nl', 'nation', 'city', 'wp_capabilities', 'birthday', 'crew_id'];
+	public static $mappedFields = ['pool_lang', 'secondary_nl', 'nation', 'wp_capabilities', 'birthday', 'crew_id'];
 
     /**
      * Maps data from drops to pool1
