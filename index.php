@@ -72,7 +72,6 @@ function handleDropsLogin() {
 
     if (!is_user_logged_in()) {
 		
-		die();
 		if (strpos($_SERVER['REQUEST_URI'], 'datenschutz') !== false
 			|| strpos($_SERVER['REQUEST_URI'], 'nutzungs') !== false
 			|| strpos($_SERVER['REQUEST_URI'], 'rausloggen') !== false
