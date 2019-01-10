@@ -59,6 +59,9 @@ class DropsDataMapper
 	
 	private static function mapDropsGeography($value) {
 		
+		$value = str_replace('-', '', $value);
+		$value = strtoupper($value);
+		
 		$geography = (new DropsGeographyMappingDataHandler)->getEntryByDropsId($value);
 		
 		if (empty($geography)) {
