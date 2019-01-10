@@ -69,7 +69,7 @@ class DropsDataMapper
 		
         $sql = 'SELECT geography_id ' .
             'FROM ' . Config::get('DB_GEOGRAPHY') . '_mapping ' .
-            "WHERE drops_id = '" . $value . "'"
+            "WHERE drops_id = '" . $value . "'";
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping sql ' . $sql . ' (Line ' . __LINE__ . ')');
 		
 		$geography = (new DropsGeographyMappingDataHandler)->getEntryByDropsId($value);
