@@ -33,14 +33,12 @@ class DropsSessionController extends DropsController
             ->setSessionDataHandler($sessionDataHandler)
             ->setMetaDataHandler(new DropsMetaDataHandler());
 
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Sessiondatahandler created');
         $parameter = $drops->getParameter(self::DROPSFNC, $_GET);
 
         if (empty($parameter)) {
             $parameter = self::INITIAL;
         }
 
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Parameter set to ' . $parameter);
         $url = $this->getParsedUrl();
         if (isset($url['path']) && (stristr('wp-admin', $url['path']) || stristr('rausloggen', $url['path']))) {
             return;
@@ -53,7 +51,6 @@ class DropsSessionController extends DropsController
 			$sessionId = $drops->getPool1Cookie();
 		}
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'SessionId in SessionController: ' . $sessionId . ' (Line ' . __LINE__ . ')');
         $temporarySession = $sessionDataHandler->getTemporarySession($sessionId);
 
         if (!empty($temporarySession)) {
@@ -84,7 +81,6 @@ class DropsSessionController extends DropsController
 			
             case self::INITIAL:
             default:
-				(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Initial call triggered');
                 $drops->handleFrontendLoginRedirect();
                 break;
         }

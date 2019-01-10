@@ -60,21 +60,15 @@ class DropsDataMapper
 	private static function mapDropsGeography($value) 
 	{
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $value . ' (Line ' . __LINE__ . ')');
 		$value = str_replace('-', '', $value);
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $value . ' (Line ' . __LINE__ . ')');
 		$value = strtoupper($value);
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $value . ' (Line ' . __LINE__ . ')');
-		
 		
         $sql = 'SELECT geography_id ' .
             'FROM ' . Config::get('DB_GEOGRAPHY') . '_mapping ' .
             "WHERE drops_id = '" . $value . "'";
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping sql ' . $sql . ' (Line ' . __LINE__ . ')');
 		
 		$geography = (new DropsGeographyMapperDataHandler)->getEntryByDropsId($value);
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping for drops geography : ' . $geography . ' (' . $value . ') (Line ' . __LINE__ . ')');
 		if (empty($geography)) {
 			(new DropsLogger(''))->log(DropsLogger::ERROR, 'Mapping for drops geography not found: ' . $value . ' (Line ' . __LINE__ . ')');
 			return 0;
