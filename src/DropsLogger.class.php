@@ -54,7 +54,7 @@ class DropsLogger
         //file_put_contents($this->logFile, $logline, FILE_APPEND | LOCK_EX);
 
 		$sql = 'INSERT INTO ' . Config::get('DB_DROPS_LOG') . ' (`time`, `level`, `message`) ' .
-				'(NOW(), "' . strtoupper($level) . '", "' . $logline . '"');
+				'(NOW(), "' . strtoupper($level) . '", "' . $logline . '")';
 			
 		$returnValueKey = $this->dbConnection->query($sql);
 		
