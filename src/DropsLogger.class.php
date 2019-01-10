@@ -56,7 +56,7 @@ public function log($level, $message, array $context = array())
         $wpdb->insert(
             Config::get('DB_DROPS_LOG'),
             array(
-                'time' => date('Y-m-d H:i:s'),
+                'time' => 'now()',
                 'level' => strtoupper($level),
                 'message' => $logline
             )
