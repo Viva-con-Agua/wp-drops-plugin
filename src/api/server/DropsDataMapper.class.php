@@ -15,8 +15,6 @@ class DropsDataMapper
      */
     public static function map($key, $value) {
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping field ' . $key . ' = ' . $value . ' (Line ' . __LINE__ . ')');
-
         switch ($key) {
             case 'pool_lang':
 				return self::mapLanguage($value);
@@ -116,8 +114,6 @@ class DropsDataMapper
 		
 		$capabilitiesArray = explode(';', $capabilities);
 				
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapping capabilities ' . serialize($capabilitiesArray) . ' (Line ' . __LINE__ . ')');
-		
 		foreach ($capabilitiesArray AS $role) {
 			
 			switch ($role) {
@@ -151,8 +147,6 @@ class DropsDataMapper
 			}			
 			
 		}
-		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Mapped capabilities ' . serialize($processedValues) . ' (Line ' . __LINE__ . ')');
 		
 		return serialize($processedValues);		
 		
