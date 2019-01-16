@@ -174,6 +174,8 @@ class DropsLoginHandler
         if (empty($user)) {
 			(new DropsLogger(''))->log(DropsLogger::ERROR, 'Data: ' . print_r($userData) . ' (Line ' . __LINE__ . ')');
 			$this->createUser($userData);
+			$user = $userDataHandler->getUserByEMail($userEmail);
+			$this->handleFrontendLoginRedirect();
             (new DropsLogger(''))->log(DropsLogger::ERROR, 'Created user with email: ' . $userEmail . ' (Line ' . __LINE__ . ')');
         }
 		
