@@ -193,7 +193,7 @@ class DropsLoginHandler
             $this->metaDataHandler->addMetaData();
         }
 
-		$this->updateUserCapabilities($userData->id);
+		$this->updateUserCapabilities($userData->id, $response['access_token']);
 		
         $url = $temporarySession['user_session']['url'];
 		
@@ -433,14 +433,13 @@ class DropsLoginHandler
 
     }
 	
-	private function updateUserCapabilities($userId) {
+	private function updateUserCapabilities($userId, $access_token) {
 		
-		$response = (new DropsApiUserReader())->setDropsUuid($userId)->setAccessToken(
-			(new DropsSessionDataHandler())
-				->getAccessToken(
-					get_current_user_id()
-				)
-		)->setDataHandler(new DropsUserDataHandler())->run($userId);
+		$response = (new DropsApiUserReader())
+			->setDropsUuid($userId)
+			->setAccessToken($access_token)
+			->setDataHandler(new DropsUserDataHandler())
+			->run($userId);
 		
 		DropsController::logResponse($response);
 		
