@@ -172,7 +172,6 @@ class DropsLoginHandler
         $user = $userDataHandler->getUserByEMail($userEmail);
 
         if (empty($user)) {
-			(new DropsLogger(''))->log(DropsLogger::ERROR, 'Data: ' . print_r($userData) . ' (Line ' . __LINE__ . ')');
 			$this->createUser($userData);
 			$user = $userDataHandler->getUserByEMail($userEmail);
 			$this->handleFrontendLoginRedirect();
