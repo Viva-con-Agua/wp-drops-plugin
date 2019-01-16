@@ -174,9 +174,7 @@ class DropsLoginHandler
         if (empty($user)) {
 			$this->createUser($userData);
             (new DropsLogger(''))->log(DropsLogger::ERROR, 'Created user with email: ' . $userEmail . ' (Line ' . __LINE__ . ')');
-			
 			$user = $userDataHandler->getUserByEMail($userEmail);
-            (new DropsLogger(''))->log(DropsLogger::ERROR, 'User read: ' . print_r($user, true) . ' (Line ' . __LINE__ . ')');
         }
 		
         //$this->loginUser($user->ID);
@@ -506,8 +504,6 @@ class DropsLoginHandler
 		$userCreator->setDataHandler($dataHandler);
 		$response = $userCreator->run();
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User created data: ' . implode(', ', $requiredUserDataCreate) . ' (Line ' . __LINE__ . ')');
-				
 		DropsController::logResponse($response);
 				
 	}
