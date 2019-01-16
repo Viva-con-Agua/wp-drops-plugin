@@ -171,8 +171,11 @@ class DropsLoginHandler
         $user = $userDataHandler->getUserByEMail($userEmail);
 
         if (empty($user)) {
-			(new DropsLogger(''))->log(DropsLogger::ERROR, 'No user found with email: ' . $userEmail . ' (Line ' . __LINE__ . ')');
-            $this->handleFrontendLoginRedirect();
+			(new DropsLogger(''))->log(DropsLogger::ERROR, 'Data: ' . print_r($userData) . ' (Line ' . __LINE__ . ')');
+			$this->createUser($userData);
+            (new DropsLogger(''))->log(DropsLogger::ERROR, 'No user found with email: ' . $userEmail . ' (Line ' . __LINE__ . ')');
+			die();
+			$this->handleFrontendLoginRedirect();
         }
 		
         //$this->loginUser($user->ID);
@@ -467,6 +470,60 @@ class DropsLoginHandler
 		
 		$dataHandler = new DropsUserDataHandler();
 		$userUpdater = new DropsUserUpdater($preparedUserData);
+		$userUpdater->setDataHandler($dataHandler);
+		$response = $userUpdater->run();
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User updated data: ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');
+				
+		DropsController::logResponse($response);
+				
+	}
+	
+	private function createUser($userData) {
+		
+		/*$response = (new DropsApiUserReader())->setDropsUuid($userId)->setAccessToken(
+			(new DropsSessionDataHandler())
+				->getAccessToken(
+					get_current_user_id()
+				)
+		)->setDataHandler(new DropsUserDataHandler())->run($userId);
+		
+		DropsController::logResponse($response);
+		
+		if (empty($response)) {
+			(new DropsLogger(''))->log(DropsLogger::ERROR, 'No userdata found with id ' . $userId . ' (Line ' . __LINE__ . ')');
+			return;
+		}
+				
+		$preparedUserData = [
+			'uuid'			=> $userId,
+			'wp_capabilities'	=> implode(';', $rolesArr)
+		];
+		*/
+		$requiredUserDataCreate = array(
+			"user_login" => 	$userData->profiles[0]->email, 
+			"user_nicename" =>	$userData->profiles[0]->email, 
+			"user_email" =>		$userData->profiles[0]->email, 
+			"display_name" =>	$userData->profiles[0]->supporter->fullName, 
+			"nickname" => 	$userData->profiles[0]->supporter->fullName, 
+			"first_name" => $userData->profiles[0]->supporter->firstName,
+			"last_name" => 	$userData->profiles[0]->supporter->lastName, 
+			"mobile" => 	$userData->profiles[0]->supporter->mobilePhone, 
+			"residence" => 	$userData->profiles[0]->supporter->placeOfResidence, 
+			"birthday" => 	$userData->profiles[0]->supporter->birthday, 
+			"gender" => 	$userData->profiles[0]->supporter->sex, 
+			"nation" => 	"40", 
+			"city" => 		$userData->profiles[0]->supporter->crew, 
+			"region" =>		$userData->profiles[0]->supporter->crew
+		);
+		
+		
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Creating user with userdata ' . implode(', ', $requiredUserDataCreate) . ' (Line ' . __LINE__ . ')');
+		
+		die();
+		
+		$dataHandler = new DropsUserDataHandler();
+		$userUpdater = new DropsUserCreator($preparedUserData);
 		$userUpdater->setDataHandler($dataHandler);
 		$response = $userUpdater->run();
 		
