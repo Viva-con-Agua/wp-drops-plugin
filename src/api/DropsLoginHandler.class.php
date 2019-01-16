@@ -501,11 +501,11 @@ class DropsLoginHandler
 		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'Creating user with userdata ' . implode(', ', $requiredUserDataCreate) . ' (Line ' . __LINE__ . ')');
 				
 		$dataHandler = new DropsUserDataHandler();
-		$userCreator = new DropsUserCreator($preparedUserData);
+		$userCreator = new DropsUserCreator($requiredUserDataCreate);
 		$userCreator->setDataHandler($dataHandler);
 		$response = $userCreator->run();
 		
-		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User updated data: ' . implode(', ', $preparedUserData) . ' (Line ' . __LINE__ . ')');
+		(new DropsLogger(''))->log(DropsLogger::DEBUG, 'User updated data: ' . implode(', ', $requiredUserDataCreate) . ' (Line ' . __LINE__ . ')');
 				
 		DropsController::logResponse($response);
 				
