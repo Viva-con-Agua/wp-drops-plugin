@@ -502,19 +502,20 @@ class DropsLoginHandler
 		*/
 		$requiredUserDataCreate = array(
 			"user_login" => 	$userData->profiles[0]->email, 
-			"user_nicename" =>	$userData->profiles[0]->email, 
+			"user_nicename" =>	$userData->profiles[0]->supporter->fullName, 
 			"user_email" =>		$userData->profiles[0]->email, 
 			"display_name" =>	$userData->profiles[0]->supporter->fullName, 
 			"nickname" => 	$userData->profiles[0]->supporter->fullName, 
 			"first_name" => $userData->profiles[0]->supporter->firstName,
 			"last_name" => 	$userData->profiles[0]->supporter->lastName, 
-			"mobile" => 	$userData->profiles[0]->supporter->mobilePhone, 
-			"residence" => 	$userData->profiles[0]->supporter->placeOfResidence, 
-			"birthday" => 	$userData->profiles[0]->supporter->birthday, 
-			"gender" => 	$userData->profiles[0]->supporter->sex, 
+			"mobile" => 	isset($userData->profiles[0]->supporter->mobilePhone) ? $userData->profiles[0]->supporter->mobilePhone : '', 
+			"residence" => 	isset($userData->profiles[0]->supporter->placeOfResidence) ? $userData->profiles[0]->supporter->placeOfResidence : '', 
+			"birthday" => 	isset($userData->profiles[0]->supporter->birthday) ? $userData->profiles[0]->supporter->birthday : '', 
+			"gender" => 	isset($userData->profiles[0]->supporter->sex) ? $userData->profiles[0]->supporter->sex : '', 
 			"nation" => 	"40", 
-			"city" => 		$userData->profiles[0]->supporter->crew, 
-			"region" =>		$userData->profiles[0]->supporter->crew
+			"crew_id" => 	isset($userData->profiles[0]->supporter->crew->id) ? $userData->profiles[0]->supporter->crew->id : '', 
+			"city" => 		'', 
+			"region" =>		''
 		);
 		
 		
