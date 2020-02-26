@@ -45,7 +45,8 @@ class DropsNewsletterReader
         // Check if user exists
 		         
 		$mail_switches = $this->dataHandler->getUsersMetaById();
-		$mail_switches = empty($mail_switches) ? 'none' : $mail_switches;
+
+		var_dump(mail_switches);
 
 		$result =  [];
 		foreach ($mail_switches as $key => $row) {
