@@ -71,6 +71,7 @@ class DropsAPIController extends DropsController
 	
 	private function isValid() {
 		$hash = $this->getParameter('hash', $this->data);
+		var_dump($hash);
 		return ($hash === get_option('dropsUserAccessHash'));
 	}
 
