@@ -46,7 +46,7 @@ class DropsNewsletterReader
 		         
 		$mail_switches = $this->dataHandler->getUsersMetaById();
 
-		var_dump(mail_switches);
+		var_dump($mail_switches);
 
 		$result =  [];
 		foreach ($mail_switches as $key => $row) {
