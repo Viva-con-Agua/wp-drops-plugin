@@ -99,13 +99,13 @@ class DropsUserDataHandler implements UserDataHandlerInterface
 
         var_dump('SELECT user_email, meta_value ' .
             'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
-            'JOIN ' . Config::get('DB_USERMETA_TABLE') . ' ON ID = user_id' .
-            'WHERE meta_key = "mail_switch" AND user_id = "' . $userId . '"');
+            'JOIN ' . Config::get('DB_USERMETA_TABLE') . ' ON ID = user_id ' .
+            'WHERE meta_key = "mail_switch"');
         return $this->dbConnection->get_results(
             'SELECT user_email, meta_value ' .
             'FROM ' . Config::get('DB_USER_TABLE') . ' ' .
-            'JOIN ' . Config::get('DB_USERMETA_TABLE') . ' ON ID = user_id' .
-            'WHERE meta_key = "mail_switch" AND user_id = "' . $userId . '"'
+            'JOIN ' . Config::get('DB_USERMETA_TABLE') . ' ON ID = user_id ' .
+            'WHERE meta_key = "mail_switch"'
         );
     }
 
