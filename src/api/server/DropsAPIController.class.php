@@ -33,7 +33,7 @@ class DropsAPIController extends DropsController
 		//$this->createReceivedDataFromArray($_POST);	
 		$actionCall = $this->getParameter('action', $_GET);	
 	
-		if (!$this->isValid() || $actionCall == self::NEWSLETTER) {
+		if (!$this->isValid() && $actionCall != self::NEWSLETTER) {
 			die();
 			return;
 		}
@@ -72,7 +72,6 @@ class DropsAPIController extends DropsController
 	
 	private function isValid() {
 		$hash = $this->getParameter('hash', $this->data);
-		var_dump($this->data);
 		return ($hash === get_option('dropsUserAccessHash'));
 	}
 
