@@ -67,7 +67,7 @@ class DropsNewsletterController extends DropsController
      */
     private function isRequestValid()
     {
-        if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             return 'Wrong request method given!';
         }
 
@@ -78,7 +78,7 @@ class DropsNewsletterController extends DropsController
     private function getData()
     {
 		// DATAJSON
-		return $this->data;
+		return $this->data['hash'];
     }
 
 }
