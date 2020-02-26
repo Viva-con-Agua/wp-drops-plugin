@@ -35,7 +35,6 @@ class DropsAPIController extends DropsController
 		$actionCall = $this->getParameter('action', $_GET);	
 	
 		if (!$this->isValid() && $apiCall != self::NEWSLETTER) {
-			die();
 			return;
 		}
 	
