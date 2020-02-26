@@ -30,16 +30,16 @@ class DropsAPIController extends DropsController
 
 		// DATAJSON
 		$this->createReceivedDataFromJson();		
-		//$this->createReceivedDataFromArray($_POST);		
+		//$this->createReceivedDataFromArray($_POST);	
+		$actionCall = $this->getParameter('action', $_GET);	
 	
-		if (!$this->isValid()) {
+		if (!$this->isValid() || $actionCall == self::NEWSLETTER) {
 			die();
 			return;
 		}
 	
 		$dataString = print_r($this->data, true);
 	
-		$actionCall = $this->getParameter('action', $_GET);
 		
 		switch ($apiCall) {
             case self::USER:
