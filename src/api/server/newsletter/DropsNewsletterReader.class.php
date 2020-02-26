@@ -48,7 +48,7 @@ class DropsNewsletterReader
 
 		$result =  [];
 		foreach ($mail_switches as $key => $row) {
-			$result[$row->user_email] = $row->mail_switch;
+			$result[$row->user_email] = $row->meta_value;
 		}
 				
 		return (new DropsResponse())
