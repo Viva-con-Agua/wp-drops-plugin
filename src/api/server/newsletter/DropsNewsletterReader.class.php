@@ -54,7 +54,7 @@ class DropsNewsletterReader
 		return (new DropsResponse())
 			->setCode(200)
 			->setContext(__CLASS__)
-			->setResponse(['mail_switch' => $mail_switch])
+			->setResponse($result)
 			->setMessage('User has been read! [ID: ' .  $userId . ']');
 			
     }
@@ -65,50 +65,6 @@ class DropsNewsletterReader
     public function setDataHandler(UserDataHandlerInterface $dataHandler)
     {
         $this->dataHandler = $dataHandler;
-    }
-
-    /**
-     * Prepares the data and creates the user entry
-     * @return false|int
-     */
-    private function doUserUpdate($userId)
-    {
-		
-		$userData = [];
-		foreach ($this->optionalUserFields AS $key) {
-			if (isset($this->userData[$key])) {
-				$userData[$key] = $this->userData[$key];
-			}
-		}
-		
-        $userMetaData = [
-            'vca_asm_last_activity' => time(),
-            Config::get('DB_PREFIX') . '_user-settings-time' => time(),
-		];
-		
-		foreach ($this->optionalUserMetaFields AS $key) {
-			
-			if (isset($this->userData[$key])) {
-				
-				if (in_array($key, DropsDataMapper::$mappedFields)) {
-					
-					$mappedValue = DropsDataMapper::map($key, $this->userData[$key]);
-					$userMetaData[$key] = $mappedValue;
-										
-					if ($key == 'city') {
-						$userMetaData['region'] = $mappedValue;
-					}
-					
-				} else {
-					$userMetaData[$key] = $this->userData[$key];
-				}
-				
-			}
-			
-		}
-		
-		return $this->dataHandler->updateUser($userId, $userData, $userMetaData);
-
     }
 
     /**
