@@ -45,7 +45,7 @@ class DropsNewsletterController extends DropsController
 
                 $data = $this->getData();
                 $dataHandler = new DropsUserDataHandler();
-                $newsletterReader = new DropsNewsletterReader($data);
+                $newsletterReader = new DropsNewsletterReader();
                 $newsletterReader->setDataHandler($dataHandler);
                 $response = $userReader->run();
 

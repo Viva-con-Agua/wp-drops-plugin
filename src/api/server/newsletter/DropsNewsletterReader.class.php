@@ -20,9 +20,8 @@ class DropsNewsletterReader
      */
     private $data;
 
-    public function __construct(array $data)
+    public function __construct()
     {
-        $this->data = $data;
     }
 
     /**
