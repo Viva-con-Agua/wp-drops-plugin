@@ -13,6 +13,7 @@ class DropsAPIController extends DropsController
     /** Definition of pathes */
     const USER = 'user';
     const GEOGRAPHY = 'geography';
+    const NEWSLETTER = 'newsletter';
 	
 	private $data;
 	
@@ -45,6 +46,9 @@ class DropsAPIController extends DropsController
 				break;
             case self::GEOGRAPHY:
 				$response = (new DropsGeographyController())->setFunction($actionCall)->setData($this->data)->run();
+				break;
+            case self::NEWSLETTER:
+				$response = (new DropsNewsletterController())->setFunction($actionCall)->setData($this->data)->run();
 				break;
             case 'user-certificate':
 				return;
