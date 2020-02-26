@@ -1,7 +1,6 @@
 <?php
 
 require_once 'DropsController.class.php';
-require_once 'user/DropsUserCreator.class.php';
 require_once 'newsletter/DropsNewsletterReader.class.php';
 
 
@@ -47,7 +46,7 @@ class DropsNewsletterController extends DropsController
                 $dataHandler = new DropsUserDataHandler();
                 $newsletterReader = new DropsNewsletterReader();
                 $newsletterReader->setDataHandler($dataHandler);
-                $response = $userReader->run();
+                $response = $newsletterReader->run();
 
                 self::logResponse($response);
 
