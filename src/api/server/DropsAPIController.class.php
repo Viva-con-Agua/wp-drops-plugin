@@ -2,6 +2,7 @@
 
 require_once 'DropsController.class.php';
 require_once 'DropsUserController.class.php';
+require_once 'DropsNewsletterController.class.php';
 require_once 'DropsGeographyController.class.php';
 
 /**
