@@ -28,6 +28,8 @@ class DropsAPIController extends DropsController
 			return;
 		}
 	
+		die();
+
 		// DATAJSON
 		$this->createReceivedDataFromJson();		
 		//$this->createReceivedDataFromArray($_POST);		

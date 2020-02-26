@@ -157,7 +157,6 @@ function handleUserLogout() {
 }
 
 function handleAPIRequest() {
-    var_dump("HERE");
 	require_once 'src/api/server/DropsAPIController.class.php';
 	(new DropsAPIController)->run();
 }
