@@ -33,6 +33,7 @@ class DropsAPIController extends DropsController
 		//$this->createReceivedDataFromArray($_POST);		
 	
 		if (!$this->isValid()) {
+			die();
 			return;
 		}
 	
