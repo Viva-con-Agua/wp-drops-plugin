@@ -35,6 +35,7 @@ class DropsAPIController extends DropsController
 		$actionCall = $this->getParameter('action', $_GET);	
 	
 		if (!$this->isValid()) {
+			var_dump($this->data)
 			return;
 		}
 	
